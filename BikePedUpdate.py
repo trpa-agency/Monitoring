@@ -3,7 +3,7 @@ BikePedUpdate.py
 Created: March 11th, 2022
 Last Updated: March 11th, 2022
 Mason Bindl, Tahoe Regional Planning Agency
-
+Andrew McClary, Tahoe Regional Planning Agency
 This python script was developed to transform data from Trafx and Ecovision
 
 This script uses Python 3.x and was designed to be used with 
