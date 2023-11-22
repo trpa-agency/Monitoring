@@ -207,6 +207,17 @@ try:
 
     # combine data frames
     df = pd.concat([dfEco, dfTrafx])
+    #update station names so that counterid gets populated correctly.
+    #We don't have full control over the names so this is a workaround
+    station_lookup = {
+        'Shared-use path Sunnyside' : 'Shared-use Path - Sunnyside',
+    'Shared-Use Path - Homewood - @ Madden Creek Bridge' : 'Shared-use path - Homewood',
+    'Shared-Use Path - Truckee River - @ 1/4 mile past TC Lumber' : 'Shared-use path - Truckee River Trail',
+    'Shared-Use Path Sunnyside' : 'Shared-use path - Sunnyside',
+    'Pioneer Trail W of Larch - pneumatic tubes Formula': 'Pioneer Trail W of Larch - Pneumatic tubes'
+    }
+    df['counter_name']=df['counter_name'].replace(station_lookup)
+
     # drop NaN values
     df.dropna(subset = ['count_of_bike_ped'], inplace=True)
     # create the month field and set it's type
