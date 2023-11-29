@@ -49,7 +49,7 @@ outTable = "sde_tabular.SDE.bike_ped_counter_tabular"
 FIRSTstartTimer = datetime.now()
 
 # Create and open log file.
-complete_txt_path = os.path.join(working_folder, "BikePed_ETL_Log.txt")
+complete_txt_path = os.path.join(working_folder, "BikePed_ETL_Log_2.txt")
 print (complete_txt_path)
 log = open(complete_txt_path, "w")
 
@@ -158,11 +158,20 @@ try:
     startTimer = datetime.now()
     #---------------------------------------------------------------------------------------#
     
-    # drop fields
-    trafx.drop(trafx.columns[[25,26,27,28]], axis=1, inplace=True)
+    # drop fields - this should probably be made more conditional
+
+    # Specify the string you want to search for in column names
+    string_to_find = 'SPOT'
+
+    # Drop columns containing the specified string
+    columns_to_drop = [col for col in trafx.columns if string_to_find in col]
+    trafx = trafx.drop(columns=columns_to_drop)
+    #trafx.drop(trafx.columns[[25,26,27,28]], axis=1, inplace=True)
     
     # get a list of the fields that will be values
-    dfCol = trafx.iloc[:,1:24]
+    # number of columns
+    num_columns = trafx.shape[1]
+    dfCol = trafx.iloc[:,1:num_columns]
     trafxList = dfCol.columns.to_list()
     
     # transfrom data from wide to long format
@@ -171,30 +180,44 @@ try:
     # change the format of field to Date
     dfTrafx['Day'] = pd.to_datetime(dfTrafx['Day'])
     # change the format to MM-DD-YYYY
-    dfTrafx['Day'] = dfTrafx['Day'].dt.strftime('%m-%d-%Y')
+    dfTrafx['Day_Formatted'] = dfTrafx['Day'].dt.strftime('%m-%d-%Y')
     # rename fields
-    dfTrafx = dfTrafx.rename(columns={'Day':'month_day_year', 
+    dfTrafx = dfTrafx.rename(columns={'Day_Formatted':'month_day_year',
+                                      'Day':'count_date', 
                         'variable':'counter_name', 
                         'value':'count_of_bike_ped'})
 
     # # drop columns
     # eco.drop(eco.columns[[25]], axis=1, inplace=True)
     # get a list of the fields that will be values
-    dfCol = eco.iloc[:,1:24]
+    num_columns = eco.shape[1]
+    dfCol = eco.iloc[:,1:num_columns]
     ecoList = dfCol.columns.to_list()
     # transfrom data from wide to long format
     dfEco = pd.melt(eco.reset_index(), id_vars = ['Time'], value_vars = ecoList)
     # change the format of field to Date
     dfEco['Time'] = pd.to_datetime(dfEco['Time'])
     # change the format to MM-DD-YYYY
-    dfEco['Time'] = dfEco['Time'].dt.strftime('%m-%d-%Y')
+    dfEco['Time_Formatted'] = dfEco['Time'].dt.strftime('%m-%d-%Y')
     # rename fields
-    dfEco = dfEco.rename(columns={'Time':'month_day_year', 
+    dfEco = dfEco.rename(columns={'Time_Formatted':'month_day_year', 
+                                  'Time':'count_date',
                         'variable':'counter_name', 
                         'value':'count_of_bike_ped'})
 
     # combine data frames
     df = pd.concat([dfEco, dfTrafx])
+    #update station names so that counterid gets populated correctly.
+    #We don't have full control over the names so this is a workaround
+    station_lookup = {
+        'Shared-use path Sunnyside' : 'Shared-use Path - Sunnyside',
+    'Shared-Use Path - Homewood - @ Madden Creek Bridge' : 'Shared-use path - Homewood',
+    'Shared-Use Path - Truckee River - @ 1/4 mile past TC Lumber' : 'Shared-use path - Truckee River Trail',
+    'Shared-Use Path Sunnyside' : 'Shared-use path - Sunnyside',
+    'Pioneer Trail W of Larch - pneumatic tubes Formula': 'Pioneer Trail W of Larch - Pneumatic tubes'
+    }
+    df['counter_name']=df['counter_name'].replace(station_lookup)
+
     # drop NaN values
     df.dropna(subset = ['count_of_bike_ped'], inplace=True)
     # create the month field and set it's type
