@@ -1,0 +1,60 @@
+Barb goatgrass: {'Scientific': '(Aegilops triuncialis)', 'Priority': 1, 'S123': nan}
+Carolina horsenettle : {'Scientific': '(Solanum carolinense', 'Priority': 1, 'S123': nan}
+French broom : {'Scientific': 'Genista monspessulana', 'Priority': 1, 'S123': nan}
+Garlic mustard : {'Scientific': 'Alliaria petiolata', 'Priority': 1, 'S123': nan}
+Jointed goatgrass : {'Scientific': 'Aegilops cylindrical', 'Priority': 1, 'S123': nan}
+Leafy spurge : {'Scientific': 'Euphorbia virgatae', 'Priority': 1, 'S123': nan}
+Mediterranean sage : {'Scientific': 'Salvia aethiopis', 'Priority': 1, 'S123': nan}
+Medusahead : {'Scientific': 'Taeniatherum caput-medusae', 'Priority': 1, 'S123': 'medusahead'}
+Myrtle spurge : {'Scientific': 'Euphorbia myrsinites', 'Priority': 1, 'S123': nan}
+Oblong spurge : {'Scientific': 'Euphorbia oblongata', 'Priority': 1, 'S123': nan}
+Purple starthistle: {'Scientific': 'Centaurea calcitrap', 'Priority': 1, 'S123': 'purple_starthistle'}
+Spanish broom: {'Scientific': 'Spartium junceum', 'Priority': 1, 'S123': nan}
+Squarrose knapweed : {'Scientific': 'Centaurea virgata  ', 'Priority': 1, 'S123': nan}
+Stinkwort : {'Scientific': 'Dittrichia graveolens', 'Priority': 1, 'S123': 'stinkwort'}
+Tamarisk/saltcedar : {'Scientific': 'Tamarix spp.', 'Priority': 1, 'S123': 'saltcedar'}
+Black locust : {'Scientific': 'Robinia pseudoacacia', 'Priority': 2, 'S123': 'black_locust'}
+Bouncing Bet : {'Scientific': 'Saponaria officinalis', 'Priority': 2, 'S123': 'bouncing_bet'}
+Canada thistle : {'Scientific': 'Cirsium arvense', 'Priority': 2, 'S123': 'canada_thistle'}
+Diffuse knapweed : {'Scientific': 'Centaurea diffusa', 'Priority': 2, 'S123': 'diffuse_knapweed'}
+Dyer’s woad : {'Scientific': 'Isatis tinctoria', 'Priority': 2, 'S123': 'dyers_woad'}
+Hairy whitetop : {'Scientific': 'Lepidium appelianum', 'Priority': 2, 'S123': 'Hairy_whitetop'}
+Whitetop: {'Scientific': 'Lepidium draba', 'Priority': 2, 'S123': nan}
+Himalayan blackberry : {'Scientific': 'Rubus armeniacus', 'Priority': 2, 'S123': nan}
+Hoary alyssum : {'Scientific': 'Berteroa incana', 'Priority': 2, 'S123': nan}
+Hoary cress : {'Scientific': 'Cardaria species', 'Priority': 2, 'S123': 'hoary_cress'}
+Musk thistle  : {'Scientific': 'Carduus nutans', 'Priority': 2, 'S123': 'musk_thistle'}
+Poison hemlock: {'Scientific': 'Conium maculatum', 'Priority': 2, 'S123': 'Poison_hemlock'}
+Purple loosestrife : {'Scientific': 'Lythrum salicaria', 'Priority': 2, 'S123': 'purple_loosestrife'}
+Reed canarygrass : {'Scientific': 'Phalaris arundinacea', 'Priority': 2, 'S123': 'reed_canarygrass'}
+Rush skeletonweed : {'Scientific': 'Chondrilla juncea', 'Priority': 2, 'S123': 'rush_skeletonweed'}
+Russian knapweed : {'Scientific': 'Acroptilon repens', 'Priority': 2, 'S123': 'russian_knapweed'}
+Russian thistle : {'Scientific': 'Salsola tragus  ', 'Priority': 2, 'S123': nan}
+Spotted knapweed : {'Scientific': 'Centaurea stoebe ssp. Micranthos', 'Priority': 2, 'S123': 'spotted_knapweed'}
+Sulfur cinquefoil: {'Scientific': 'Potentilla recta', 'Priority': 2, 'S123': 'sulfur_cinquefoil'}
+Teasel : {'Scientific': 'Dipsacus fullonum', 'Priority': 2, 'S123': 'teasel'}
+Tree of Heaven : {'Scientific': 'Ailanthus altissima  ', 'Priority': 2, 'S123': 'tree_heaven'}
+Yellow starthistle : {'Scientific': 'Centaurea solstitialis', 'Priority': 2, 'S123': 'yellow_starthistle'}
+Puncturevine : {'Scientific': 'Tribulus terrestris', 'Priority': 2, 'S123': 'Puncturevine'}
+Scotch thistle : {'Scientific': 'Onopordum acanthium', 'Priority': 2, 'S123': 'scotch_thistle'}
+Bull thistle : {'Scientific': 'Cirsium vulgare', 'Priority': 3, 'S123': 'bull_thistle'}
+Scotch broom : {'Scientific': 'Cytisus scoparius', 'Priority': 3, 'S123': 'scotch_broom'}
+Common bindweed : {'Scientific': 'Convolvulus arvensis', 'Priority': 3, 'S123': 'common_bindweed'}
+Dalmatian toadflax : {'Scientific': 'Linaria dalmatica', 'Priority': 3, 'S123': 'dalmatian_toadflax'}
+Everlasting peavine : {'Scientific': 'Lathyrus latifolius', 'Priority': 3, 'S123': 'everlasting_peavine'}
+Klamathweed : {'Scientific': 'Hypericum perforatum', 'Priority': 3, 'S123': 'klamathweed'}
+Perennial pepperweed : {'Scientific': 'Lepidium latifolium', 'Priority': 3, 'S123': 'perennial_pepperweed'}
+Yellow toadflax : {'Scientific': 'Linaria vulgaris', 'Priority': 3, 'S123': 'yellow_toadflax'}
+Cheatgrass : {'Scientific': 'Bromus tectorum', 'Priority': 4, 'S123': 'cheatgrass'}
+False salsify: {'Scientific': 'Tragopogon dubius', 'Priority': 4, 'S123': 'False_salsify'}
+Oxeye daisy : {'Scientific': 'Chrysanthemum leucanthemum', 'Priority': 4, 'S123': 'oxeye_daisy'}
+Quackgrass : {'Scientific': 'Elymus repens', 'Priority': 4, 'S123': 'quackgrass'}
+White sweetclover : {'Scientific': 'Melilotus alba', 'Priority': 4, 'S123': 'White_sweetclover'}
+Wooly mullein : {'Scientific': 'Verbascum thapsus', 'Priority': 4, 'S123': 'Wooly_mullein'}
+Yellow sweetclover : {'Scientific': 'Melilotus officinalis', 'Priority': 4, 'S123': 'yellow_sweetclover'}
+Common mullein: {'Scientific': 'Verbascum thapsus', 'Priority': 4, 'S123': nan}
+Common st. johnswort: {'Scientific': 'Hypericum perforatum', 'Priority': 3, 'S123': nan}
+Nodding plumeless thistle: {'Scientific': 'Carduus nutans', 'Priority': 2, 'S123': nan}
+Sweetclover : {'Scientific': nan, 'Priority': 4, 'S123': nan}
+Broadleaf Pepperweed: {'Scientific': 'Lepidium latifolium', 'Priority': 3, 'S123': nan}
+Field Bindweed: {'Scientific': 'Convolvulus arvensis', 'Priority': 3, 'S123': nan}
