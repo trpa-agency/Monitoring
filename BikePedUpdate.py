@@ -214,7 +214,8 @@ try:
     'Shared-Use Path - Homewood - @ Madden Creek Bridge' : 'Shared-use path - Homewood',
     'Shared-Use Path - Truckee River - @ 1/4 mile past TC Lumber' : 'Shared-use path - Truckee River Trail',
     'Shared-Use Path Sunnyside' : 'Shared-use path - Sunnyside',
-    'Pioneer Trail W of Larch - pneumatic tubes Formula': 'Pioneer Trail W of Larch - Pneumatic tubes'
+    'Pioneer Trail W of Larch - pneumatic tubes Formula': 'Pioneer Trail W of Larch - Pneumatic tubes',
+    'Lodi and Barbara trail':'Lodi & Barbara trail'
     }
     df['counter_name']=df['counter_name'].replace(station_lookup)
 
