@@ -1,0 +1,629 @@
+Assessment_Unit_Name,SEZ_ID,SEZ_Type,Acres,AquaticOrganismPassage_Score_Change,Bank_Stability_Score_Change,Biotic_Integrity_Score_Change,Conifer_Encroachment_Score_Change,Ditches_Score_Change,Habitat_Fragmentation_Score_Change,Headcuts_Score_Change,Incision_Score_Change,Invasives_Scores_Change,VegetationVigor_Score_Change,Final_Percent_Change
+Bijou Park Creek meadows - 1,219,Non-Channeled Meadow,8.67367429,,,,0.0,0.0,0.0,3.0,,-9.0,-6.0,-16.666666330000005
+Fallen Leaf meadows - 2,155,Non-Channeled Meadow,64.33539001,,,,0.0,0.0,0.0,0.0,,-9.0,-3.0,-16.666666329999998
+Meeks Bay meadows - 1,205,Channeled Meadow,98.62457353,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,-9.0,0.0,-8.333333670000002
+Baldwin marsh - 1,160,Channeled Meadow,177.8882764,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,-6.0,0.0,-5.555555330000004
+Kahle meadows - 5,118,Channeled Meadow,25.69871246,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,-6.0,0.0,-5.555555890000008
+Kahle meadows - 7,119,Non-Channeled Meadow,11.16123546,,,,0.0,0.0,0.0,0.0,,-6.0,3.0,-4.166666329999998
+small meadow 5,29,Non-Channeled Meadow,1.65542655,,,,0.0,0.0,0.0,0.0,,-6.0,,-10.0
+small meadow 8,69,Non-Channeled Meadow,4.68500276,,,,0.0,0.0,0.0,0.0,,-6.0,0.0,-8.333332999999996
+Muskawi Drive meadows,83,Non-Channeled Meadow,12.00130783,,,,0.0,0.0,0.0,0.0,,-6.0,0.0,-8.333333670000002
+Bijou Park Creek meadows - 4,163,Non-Channeled Meadow,6.18043864,,,,0.0,0.0,0.0,0.0,,-6.0,-3.0,-12.5
+Kahle meadows - 6,469,Channeled Meadow,8.30975358,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,-6.0,,-3.8194440000000043
+Gardner meadow,150,Non-Channeled Meadow,15.2918274,,,,0.0,0.0,0.0,-3.0,,-6.0,0.0,-12.500000329999999
+Slaughterhouse Meadows - 1,6,Non-Channeled Meadow,21.17242668,,,,0.0,0.0,0.0,0.0,,-6.0,0.0,-8.333333670000002
+Bijou meadows - 3,164,Non-Channeled Meadow,85.49878917,,,,0.0,0.0,0.0,0.0,,-6.0,0.0,-8.333333330000002
+Lake Forest meadows - 2,186,Non-Channeled Meadow,8.14593054,,,,0.0,0.0,0.0,-3.0,,-6.0,0.0,-12.5
+Mount Rainier Drive meadows - 2,216,Non-Channeled Meadow,4.13673643,,,,,0.0,0.0,0.0,,-6.0,,-12.5
+Bijou Park Creek meadows - 3,167,Non-Channeled Meadow,9.90168816,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166667000000004
+Meeks Bay meadows - 3,36,Channeled Meadow,67.56187018,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,-3.0,0.0,-2.777777669999992
+Trout Creek meadows - above Pioneer 4,104,Channeled Meadow,15.51740817,0.0,0.0,0.0,0.0,0.0,0.0,-9.0,9.0,-3.0,3.0,0.0
+Trout Creek meadows - above Pioneer 2,106,Channeled Meadow,19.76871171,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.0,-3.0,,-5.55555511
+Bijou Park Creek meadows - 2,166,Non-Channeled Meadow,15.0357855,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166666669999998
+Trout Creek meadows - above Fountain Place,103,Channeled Meadow,13.13075813,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,-3.0,,-3.3000000598804036e-07
+Angora meadows - 1,87,Channeled Meadow,23.00964571,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.0,,-2.77777811
+Angora meadows tributary - 6,146,Non-Channeled Meadow,17.57865468,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166666999999997
+Fallen Leaf meadows - 3,147,Non-Channeled Meadow,7.07897345,,,,0.0,0.0,0.0,0.0,,-3.0,-3.0,-8.333332999999996
+Angora meadows - 8,88,Channeled Meadow,28.76268542,0.0,0.0,0.0,0.0,0.0,0.0,-6.0,-9.0,-3.0,,-16.666666329999998
+Saxon Creek tributary meadows - 5,197,Non-Channeled Meadow,2.16350245,,,,0.0,0.0,0.0,0.0,,-3.0,,-5.0
+Susquehana meadows - 2,107,Non-Channeled Meadow,7.77618334,,,,0.0,0.0,0.0,0.0,,-3.0,,-5.0
+Blackwood meadows - 1,66,Non-Channeled Meadow,5.04776129,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166667000000004
+Trout Creek - Highland Woods,109,Channeled Meadow,37.44722069,0.0,0.0,3.0,0.0,0.0,0.0,0.0,0.0,-3.0,0.0,0.0
+Saxon Creek meadows - above Fountain Place 1,2,Channeled Meadow,12.80564724,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.0,,-2.777777560000004
+Buddhas meadow,168,Non-Channeled Meadow,1.17717686,,,,0.0,0.0,0.0,0.0,,-3.0,,-5.0
+Pope marsh meadow,483,Non-Channeled Meadow,222.6885918,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166666669999998
+Osgood Swamp,482,Non-Channeled Meadow,15.00059039,,,,0.0,0.0,0.0,0.0,,-3.0,6.0,4.166666669999998
+small meadow 1,11,Channeled Meadow,5.04034473,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.0,-3.0,,-5.555555999999996
+Mill Creek meadows,234,Non-Channeled Meadow,5.60577465,,,,,0.0,0.0,0.0,,-3.0,,-6.25
+Christmas Valley meadows - 2,134,Channeled Meadow,53.06064813,0.0,-3.0,3.0,0.0,0.0,0.0,0.0,3.0,-3.0,0.0,0.0
+Spooner meadows - 3,120,Non-Channeled Meadow,12.62033539,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166666329999998
+small meadow 6,17,Non-Channeled Meadow,3.87371929,,,,0.0,0.0,0.0,0.0,,-3.0,,-5.0
+UTR - Reach 6,84,Channeled Meadow,97.84910187,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,-3.0,0.0,0.0
+Bijou meadows - 1,115,Non-Channeled Meadow,30.1671972,,,,0.0,0.0,0.0,0.0,,-3.0,-3.0,-8.333332999999996
+Bijou meadows - private,114,Non-Channeled Meadow,13.73122967,,,,0.0,0.0,0.0,0.0,,-3.0,-3.0,-8.333333670000002
+Blackwood meadows - 3,65,Non-Channeled Meadow,16.47466499,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166667000000004
+Christmas Valley meadows - 3,130,Channeled Meadow,12.64768562,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.0,0.0,-2.5
+Tallac meadows,157,Non-Channeled Meadow,31.82403537,,,,0.0,0.0,0.0,0.0,,-3.0,0.0,-4.166666669999998
+Tahoe Keys,162,Non-Channeled Meadow,491.2033174,,,,,,0.0,,,0.0,,
+Tallac marsh,159,Non-Channeled Meadow,17.81509124,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Saxon Creek meadows - below Fountain Place,1,Channeled Meadow,16.6617969,0.0,-6.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-5.55555511
+Tahoe Island meadows - 2,156,Non-Channeled Meadow,2.42433985,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Fallen Leaf meadows - 1,154,Non-Channeled Meadow,30.54248331,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Washoan Blvd meadows,145,Non-Channeled Meadow,5.25425032,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Angora meadows - 5,144,Non-Channeled Meadow,16.84109411,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.29999998882613e-07
+Angora meadows - 4,143,Non-Channeled Meadow,25.86377345,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Saxon Creek tributary meadows - 4,140,Non-Channeled Meadow,3.62843732,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Saxon Creek tributary meadows - 6,139,Non-Channeled Meadow,3.1514295,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Upper Truckee River - Meyers,138,Non-Channeled Meadow,23.43242546,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Trout Creek headwaters meadows - 1,137,Non-Channeled Meadow,12.21172645,,,,0.0,0.0,0.0,-3.0,,0.0,0.0,-4.166666669999998
+Christmas Valley meadows - 1,136,Channeled Meadow,45.05938098,0.0,0.0,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.5
+small meadow 113,135,Channeled Meadow,1.40063471,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+small meadow 112,133,Non-Channeled Meadow,8.89933108,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166666669999998
+small meadow 111,132,Channeled Meadow,1.27240399,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Benwood meadows - 2,131,Channeled Meadow,11.77915389,0.0,0.0,,0.0,0.0,0.0,-9.0,0.0,0.0,0.0,-8.333333440000004
+Tahoe Island meadows - 1,158,Non-Channeled Meadow,11.25590091,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Elks Club meadows - 1,141,Non-Channeled Meadow,4.4634315,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+small meadow 29,174,Non-Channeled Meadow,4.14672464,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Burke Creek meadows - 1,171,Channeled Meadow,12.93323102,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.5
+Meeks Bay meadows - 4,206,Non-Channeled Meadow,26.66307546,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166666669999998
+Meeks Bay meadows - 2,207,Channeled Meadow,52.34618929,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.3000000598804036e-07
+Meiss meadows - 4,210,Channeled Meadow,18.49905463,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,0.0,,2.777777439999994
+Golden Bear meadows - 1,212,Non-Channeled Meadow,15.28892584,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Nottaway Drive meadows,213,Non-Channeled Meadow,2.13086544,,,,,0.0,0.0,0.0,,0.0,,0.0
+Angora meadows tributary - 5,214,Non-Channeled Meadow,17.25961656,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Mount Rainier Drive meadows - 1,215,Non-Channeled Meadow,3.26952233,,,,,0.0,0.0,0.0,,0.0,,0.0
+Angora meadows tributary - 1,217,Non-Channeled Meadow,12.99653376,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.29999998882613e-07
+Meyers meadow,218,Non-Channeled Meadow,17.17511438,,,,0.0,0.0,0.0,3.0,,0.0,0.0,4.166666669999998
+Tahoe Valley meadows - 2,228,Non-Channeled Meadow,7.53710753,,,,,0.0,0.0,0.0,,0.0,,0.0
+South Lake Tahoe - wetland 1,229,Non-Channeled Meadow,6.3095528,,,,,0.0,0.0,0.0,,0.0,,0.0
+Hell Hole meadows - 1,230,Channeled Meadow,24.59165875,0.0,-3.0,,0.0,0.0,0.0,0.0,-3.0,0.0,,-6.25
+Saxon Creek tributary meadows - 7,231,Non-Channeled Meadow,6.443192,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+small meadow 82,232,Non-Channeled Meadow,2.71763795,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Kahle meadows - 4,468,Non-Channeled Meadow,49.7177122,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Colony Inn meadows - upper,485,Non-Channeled Meadow,4.20940354,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Lake Forest meadows - 4,487,Channeled Meadow,5.55078294,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,2.777777779999994
+Kahle meadows - 2,204,Non-Channeled Meadow,15.86993599,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+High meadows - 1,203,Channeled Meadow,25.50082119,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.555555560000002
+High meadows - 6,199,Channeled Meadow,5.88324527,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Golden Bear meadows - 2,196,Non-Channeled Meadow,5.74730858,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Kahle meadows - 3,172,Channeled Meadow,28.42269598,0.0,-3.0,0.0,0.0,0.0,0.0,0.0,,0.0,,2.083333000000003
+small meadow 58,173,Non-Channeled Meadow,3.24143298,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+small meadow 30,175,Non-Channeled Meadow,1.59129377,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Buck Lake meadows,176,Channeled Meadow,11.94161226,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Spooner meadows - 2,179,Channeled Meadow,27.61295231,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.666666669999998
+Slaughterhouse meadows - 2,180,Channeled Meadow,59.50687434,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,2.5
+small meadow 116,181,Non-Channeled Meadow,5.06024877,,,,0.0,0.0,0.0,-3.0,,0.0,-3.0,-8.333333330000002
+Paige meadows,182,Non-Channeled Meadow,79.84195938,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Casino meadows,170,Non-Channeled Meadow,4.38677416,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Lake Forest meadows - 3,184,Channeled Meadow,9.55277038,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Snow Creek wetlands - 1,188,Channeled Meadow,28.35773409,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.3000000598804036e-07
+Snow Creek wetlands - 2,189,Channeled Meadow,14.51203223,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Incline Lake meadows - 2,190,Channeled Meadow,11.38879079,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-3.3000000598804036e-07
+Third Creek meadows - 1,191,Channeled Meadow,12.10739217,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Incline Lake meadows - 1,192,Non-Channeled Meadow,62.53687738,,,,0.0,0.0,0.0,0.0,,0.0,6.0,8.333333670000002
+Ginny Lake Meadows,193,Channeled Meadow,19.30116122,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Third Creek meadows - 6,194,Non-Channeled Meadow,4.35581051,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Third Creek meadows - 4,195,Non-Channeled Meadow,1.21867023,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Lake Forest meadows - 1,185,Non-Channeled Meadow,39.01379982,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Benwood meadows - 1,129,Channeled Meadow,14.11896251,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Meiss meadows - 2,122,Non-Channeled Meadow,32.52276057,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Big meadow - 7,126,Non-Channeled Meadow,3.42359818,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Third Creek meadows - 3,34,Channeled Meadow,10.7969339,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Griff Creek meadows,35,Channeled Meadow,8.91469367,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.3000000598804036e-07
+Big Meadow - 5,37,Non-Channeled Meadow,5.81612626,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Big Meadow - 3,38,Non-Channeled Meadow,21.692175,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Big Meadow - 4,39,Channeled Meadow,14.58517405,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Big Meadow - 6,40,Non-Channeled Meadow,2.4256453,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+small meadow 52,41,Channeled Meadow,5.21518854,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+small meadow 51,42,Channeled Meadow,1.58953707,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Marlette Lake meadows,32,Channeled Meadow,7.22200681,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+small meadow 95,43,Channeled Meadow,1.72180632,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.1000000199601345e-07
+Star Lake meadows,45,Channeled Meadow,6.94765846,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+small meadow 56,46,Non-Channeled Meadow,1.80223805,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Big Meadow - 1,47,Channeled Meadow,51.10986184,0.0,-3.0,-6.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-7.5
+Big Meadow - 2,48,Non-Channeled Meadow,26.97185585,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Haypress Meadows,50,Non-Channeled Meadow,27.6825951,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+small meadow 25,55,Channeled Meadow,11.03488531,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+small meadow 24,56,Non-Channeled Meadow,2.71922815,,,,0.0,0.0,0.0,-3.0,,0.0,0.0,-4.166666669999998
+small meadow 26,57,Non-Channeled Meadow,5.08838304,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+small meadow 96,44,Non-Channeled Meadow,1.69889721,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+small meadow 92,31,Channeled Meadow,27.6355194,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-4.399999937731991e-07
+Deer Creek meadows,30,Non-Channeled Meadow,4.63371504,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+small meadow 17,28,Channeled Meadow,9.65915033,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Washoe State Parks meadow - 1,4,Non-Channeled Meadow,35.71823941,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Upper Truckee River - Tahoe Paradise,7,Channeled Meadow,86.99413004,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-8.333333330000002
+Hell Hole Meadows - 2,8,Channeled Meadow,3.47216781,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,-6.25
+small meadow 2,10,Non-Channeled Meadow,2.55514212,,,,0.0,0.0,0.0,0.0,,0.0,3.0,4.166666329999998
+North Logan House meadows,12,Non-Channeled Meadow,1.26233969,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Logan House meadow,13,Non-Channeled Meadow,1.29963091,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+small meadow 59,14,Non-Channeled Meadow,14.01937874,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Third Creek meadows - 8,15,Channeled Meadow,5.77376863,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Third Creek meadows - 7,16,Channeled Meadow,5.42387104,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+small meadow 15,18,Channeled Meadow,6.77018654,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,3.0,2.7777773300000064
+small meadow 14,19,Channeled Meadow,4.30988916,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.200000039920269e-07
+small meadow 13,20,Channeled Meadow,6.94124927,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.200000039920269e-07
+small meadow 16,21,Channeled Meadow,2.3943633,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.200000039920269e-07
+small meadow 54,22,Non-Channeled Meadow,4.4283771,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+small meadow 50,23,Channeled Meadow,3.67960013,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-2.200000039920269e-07
+Freel Meadows - 2,24,Non-Channeled Meadow,4.07872589,,,,0.0,0.0,0.0,0.0,,0.0,-6.0,-8.333332999999996
+Freel Meadows - 1,25,Non-Channeled Meadow,11.77884238,,,,0.0,0.0,0.0,0.0,,0.0,-6.0,-8.333333670000002
+Quail Creek meadow,26,Non-Channeled Meadow,10.29880113,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166666669999998
+small meadow 7,27,Channeled Meadow,10.2458825,0.0,0.0,,0.0,0.0,0.0,-9.0,-3.0,0.0,3.0,-8.33333322
+Grass Lake meadow,127,Non-Channeled Meadow,256.3861856,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166667000000004
+small meadow 28,59,Channeled Meadow,5.92061196,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.3000000598804036e-07
+small meadow 27,58,Non-Channeled Meadow,2.28269073,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166667000000004
+Ward Creek meadow,625,Non-Channeled Meadow,11.71853253,,,,,0.0,0.0,0.0,,0.0,,0.0
+Angora meadows tributary - 8,95,Non-Channeled Meadow,3.69657526,,,,0.0,0.0,0.0,0.0,,0.0,,9.166666999999997
+small meadow 105,125,Non-Channeled Meadow,20.31304373,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Meiss meadows - 3,124,Channeled Meadow,33.63455818,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+Meiss meadows - 1,123,Channeled Meadow,108.2595671,0.0,0.0,-3.0,0.0,0.0,0.0,0.0,-3.0,0.0,,-5.55555511
+small meadow 20,623,Channeled Meadow,2.48296065,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,,0.6944440000000043
+Angora meadows tributary - 3,97,Non-Channeled Meadow,10.98807496,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Spooner meadows - 5,121,Non-Channeled Meadow,16.00492013,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Van Sickle meadows,117,Non-Channeled Meadow,3.63429104,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Washoe State Parks meadow - 2,98,Non-Channeled Meadow,24.25093153,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Angora meadows tributary - 2,99,Non-Channeled Meadow,16.56854361,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Saxon Creek tributary meadows - 3,100,Non-Channeled Meadow,5.37387124,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Saxon Creek tributary meadows - 1,101,Channeled Meadow,8.12302011,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.1000000199601345e-07
+Saxon Creek meadows - above Fountain Place 2,102,Channeled Meadow,31.91865807,0.0,0.0,0.0,0.0,0.0,0.0,-6.0,0.0,0.0,0.0,-5.0
+Bijou meadows - 2,116,Non-Channeled Meadow,25.42474659,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Heavenly Valley Creek meadows - 1,111,Channeled Meadow,9.565678,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-3.29999998882613e-07
+Angora meadows tributary - 4,94,Non-Channeled Meadow,3.2020859,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+Angora meadows tributary - 7,93,Non-Channeled Meadow,2.50183684,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Angora meadows - 9,92,Non-Channeled Meadow,21.22323963,,,,0.0,0.0,0.0,0.0,,0.0,0.0,3.3000000598804036e-07
+Angora meadows - 3,91,Channeled Meadow,36.7486704,0.0,-3.0,0.0,0.0,0.0,0.0,0.0,-3.0,0.0,0.0,-5.0
+General Creek meadows,61,Non-Channeled Meadow,4.10970557,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+small meadow 98,62,Non-Channeled Meadow,1.73418434,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+small meadow 10,64,Non-Channeled Meadow,2.35033845,,,,0.0,0.0,0.0,0.0,,0.0,-3.0,-4.166667000000004
+small meadow 21,67,Non-Channeled Meadow,3.46316302,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+small meadow 9,68,Channeled Meadow,2.89148045,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+small meadow 99,75,Non-Channeled Meadow,9.75815184,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Fallen Leaf meadows - 4,76,Non-Channeled Meadow,6.68004118,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+Trout Creek meadows - above Pioneer 3,105,Channeled Meadow,19.73503942,0.0,-3.0,-9.0,0.0,0.0,0.0,0.0,3.0,0.0,,-8.33333356
+small meadow 100,77,Non-Channeled Meadow,1.47709866,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Sky meadows,79,Non-Channeled Meadow,6.01752773,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+UTR - Reach 5,80,Channeled Meadow,112.9914156,0.0,0.0,-9.0,0.0,0.0,0.0,0.0,-3.0,0.0,,-9.166666669999998
+UTR - Airport reach,82,Channeled Meadow,33.10235462,0.0,-3.0,-3.0,0.0,0.0,0.0,-6.0,0.0,0.0,0.0,-10.0
+Elks Club meadows - 2,85,Non-Channeled Meadow,11.84269196,,,,0.0,0.0,0.0,0.0,,0.0,0.0,-3.3000000598804036e-07
+UTR - golf course meadows,86,Channeled Meadow,204.9612621,0.0,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,2.777777669999999
+Angora meadows - 7,89,Non-Channeled Meadow,10.20091958,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0
+UTR Marsh - UTR side,78,Channeled Meadow,258.7538416,0.0,0.0,-3.0,0.0,0.0,0.0,0.0,3.0,0.0,0.0,0.0
+Susquehana meadows - 1,108,Non-Channeled Meadow,11.81331339,,,,0.0,0.0,0.0,0.0,,0.0,,0.0
+Burke Creek meadows - 2,3,Non-Channeled Meadow,4.91902735,,,,0.0,0.0,0.0,0.0,,3.0,-3.0,3.3000000598804036e-07
+Glenbrook meadows - 2,178,Non-Channeled Meadow,15.54675352,,,,0.0,0.0,0.0,0.0,,3.0,0.0,4.166667000000004
+Tahoe Vista meadows,227,Non-Channeled Meadow,2.91222567,,,,,0.0,0.0,0.0,,3.0,,6.25
+Lake Forest meadows - 5,223,Non-Channeled Meadow,9.61638072,,,,0.0,0.0,0.0,0.0,,3.0,0.0,4.166667000000004
+Trout Creek meadows - above Pioneer 1,148,Channeled Meadow,19.95053366,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,0.0,2.5
+Trout Creek above Black Bart,149,Channeled Meadow,42.29648567,0.0,0.0,-6.0,0.0,0.0,0.0,0.0,-3.0,3.0,0.0,-5.0
+Sierra Tract wetlands,211,Non-Channeled Meadow,1.21128115,,,,,0.0,0.0,0.0,,3.0,,6.25
+Glenbrook meadows - 1,177,Channeled Meadow,31.88832884,0.0,0.0,0.0,0.0,0.0,0.0,0.0,9.0,3.0,3.0,12.5
+Heavenly Valley Creek meadows - 3,152,Channeled Meadow,19.03436049,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,0.0,2.5
+Tahoe Valley meadows - 1,153,Non-Channeled Meadow,8.89408504,,,,0.0,0.0,0.0,0.0,,3.0,,5.0
+Trout Creek below Black Bart,161,Channeled Meadow,80.24445566,0.0,0.0,3.0,0.0,0.0,0.0,0.0,0.0,3.0,0.0,5.0
+Cold Creek - Highland Woods,110,Channeled Meadow,31.10071826,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,3.0,0.0,2.77777811
+UTR - Johnson meadows - 2,151,Channeled Meadow,180.8632692,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,3.0,-3.0,2.5
+small meadow 93,33,Non-Channeled Meadow,4.8980316,,,,,,,,,,,
+small meadow 35,49,Non-Channeled Meadow,2.25017528,,,,,,,,,,,
+small meadow 32,51,Non-Channeled Meadow,6.51222183,,,,,,,,,,,
+small meadow 36,52,Non-Channeled Meadow,5.72190479,,,,,,,,,,,
+small meadow 22,53,Non-Channeled Meadow,4.52406808,,,,,,,,,,,
+small meadow 23,54,Non-Channeled Meadow,3.37371139,,,,,,,,,,,
+Rubicon Meadows,60,Channeled Meadow,21.71561746,,,,,,,,,,,
+small meadow 19,63,Non-Channeled Meadow,3.41768423,,,,,,,,,,,
+small meadow 3,70,Non-Channeled Meadow,3.5719389,,,,,,,,,,,
+McFual meadow,71,Channeled Meadow,16.53439918,,,,,,,,,,,
+Lakeshore meadows,72,Non-Channeled Meadow,37.36079944,,,,,,,,,,,
+small meadow 57,73,Non-Channeled Meadow,12.00775326,,,,,,,,,,,
+small meadow 40,74,Non-Channeled Meadow,2.41702187,,,,,,,,,,,
+Colony Inn meadows - lower,169,Non-Channeled Meadow,12.46093472,,,,,,0.0,,,,,
+Lake Forest meadows - 6,183,Channeled Meadow,20.80161459,,,,,,0.0,,,,,
+High meadows - 2,198,Channeled Meadow,18.91662824,,,,,,,,,,,
+High Meadows - 3,200,Non-Channeled Meadow,9.9967913,,,,,,,,,,,
+High meadows - 5,201,Non-Channeled Meadow,4.05638377,,,,,,,,,,,
+Ski Run meadows,220,Non-Channeled Meadow,7.35755013,,,,,,,,,,,
+Edgewood meadows,221,Non-Channeled Meadow,117.066634,,,,,,0.0,,,,,
+Kingsbury meadows,222,Non-Channeled Meadow,11.99105654,,,,,,0.0,,,,,
+Tahoe City meadow,224,Non-Channeled Meadow,28.5909144,,,,,,0.0,,,,,
+Christmas Valley meadows - 4,225,Non-Channeled Meadow,19.88222308,,,,,,,,,,,
+Bijou meadows - tributary 1,226,Non-Channeled Meadow,0.99334339,,,,,,0.0,,,,,
+Meeks Bay Lagoon,235,Channeled Meadow,13.10587666,0.0,,,,,0.0,,,,,
+UTR - upper,236,Riverine (Perennial),7.63100937,0.0,0.0,-6.0,,,0.0,0.0,,,,-10.0
+Big Meadow Creek - upper,237,Riverine (Perennial),1.93592485,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - middle,238,Riverine (Perennial),6.85073012,0.0,-6.0,-6.0,,,0.0,0.0,,,,-29.166667000000004
+UTR - Christmas Valley 3,239,Riverine (Perennial),4.08987565,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,-4.166666329999998
+Echo Creek - upper,240,Riverine (Perennial),1.79675394,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Saxon Creek - headwaters,241,Riverine (Perennial),5.69538565,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Trout Creek - upper,242,Riverine (Perennial),6.32458011,0.0,-3.0,-3.0,,,0.0,0.0,,,,-8.333332999999996
+Eagle Creek,243,Riverine (Perennial),10.24378871,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cascade Creek - upper,244,Riverine (Perennial),3.04938277,0.0,0.0,-6.0,,,0.0,0.0,,,,-10.0
+Heavenly Valley Creek - upper,245,Riverine (Perennial),2.34959296,,,,,,,,,,,
+Tallac Creek - tributary,246,Riverine (Perennial),4.12323533,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cascade Creek - lower,247,Riverine (Perennial),1.05476881,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Meeks Creek - upper,248,Riverine (Perennial),5.62955437,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,-4.166667000000004
+Burke Creek - upper,249,Riverine (Perennial),3.02826662,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-0.0006666700000010906
+Lonely Gulch Creek - upper,250,Riverine (Perennial),2.0257507,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+McKinney Creek - upper,251,Riverine (Perennial),3.08319924,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+General Creek - middle,252,Riverine (Perennial),7.37890639,0.0,-6.0,3.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Logan House Creek - upper,253,Riverine (Perennial),2.96703876,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Homewood Canyon Creek - upper,254,Riverine (Perennial),2.10356433,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+North Logan House Creek,255,Riverine (Perennial),2.71150031,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glenbrook Creek - middle,256,Riverine (Perennial),1.74007149,0.0,0.0,,,,0.0,0.0,,,,2.5
+Ward Creek - upper,257,Riverine (Perennial),10.70810532,0.0,0.0,-3.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Dollar Creek - upper,258,Riverine (Perennial),3.08329959,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Watson Creek,259,Riverine (Perennial),4.68248151,0.0,0.0,-9.0,,,0.0,0.0,,,,-11.666667000000004
+Griff Creek - lower,260,Riverine (Perennial),1.6215464,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Mill Creek - upper,261,Riverine (Perennial),2.42674652,,,,,,,,,,,
+First Creek - upper,262,Riverine (Perennial),2.48286936,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Second Creek - upper,263,Riverine (Perennial),5.40012971,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Woods Creek - upper,264,Riverine (Perennial),5.08511446,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Angora Creek - tributary,265,Riverine (Perennial),1.79969718,0.0,3.0,0.0,,,0.0,-3.0,0.0,,,-3.3000000598804036e-07
+Angora Creek - upper,266,Riverine (Perennial),1.66714071,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Big Meadow Creek - lower,267,Riverine (Perennial),2.15415362,0.0,0.0,0.0,,,0.0,0.0,,,,-1.666667000000004
+Big Meadow Creek - upper 2,268,Riverine (Perennial),3.51459693,0.0,0.0,-6.0,,,0.0,0.0,,,,-8.333332999999996
+Blackwood Creek - lower 1,269,Riverine (Perennial),1.73377503,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Blackwood Creek - middle 2,270,Riverine (Perennial),3.24687237,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Blackwood Creek - middle 4,271,Riverine (Perennial),2.86705704,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166666329999998
+Blackwood Creek - Upper 2,272,Riverine (Perennial),4.96494544,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Blackwood Creek - upper 3,273,Riverine (Perennial),4.81671145,0.0,-6.0,0.0,,,0.0,0.0,0.0,,,-8.333333330000002
+Burke Creek - middle,274,Riverine (Perennial),0.50046284,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Burton Creek - upper,275,Riverine (Perennial),6.92024428,0.0,0.0,0.0,,,0.0,0.0,-6.0,,,-8.333332999999996
+Cold Creek - middle,276,Riverine (Perennial),1.21878881,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Cold Creek - tributary 3,277,Riverine (Perennial),4.45770056,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cold Creek - tributary 2,278,Riverine (Perennial),1.8641437,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cold Creek - upper,279,Riverine (Perennial),4.71475185,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Deer Creek - headwaters,280,Riverine (Perennial),1.78143483,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Deer Creek - upper,281,Riverine (Perennial),1.21484477,0.0,0.0,0.0,,,0.0,3.0,,,,-5.0
+Deer Creek - lower,282,Riverine (Perennial),0.35800063,0.0,0.0,0.0,,,0.0,0.0,,,,5.833332999999996
+Deer Creek - middle,283,Riverine (Perennial),0.86739333,0.0,0.0,6.0,,,0.0,0.0,,,,10.0
+Deer Creek - middle 2,284,Riverine (Perennial),0.77770713,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Dollar Creek - lower,285,Riverine (Perennial),0.25467767,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Echo Creek - below lake,286,Riverine (Perennial),1.9985397,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Edgewood Creek - middle,287,Riverine (Perennial),4.06150088,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166666669999998
+First Creek - lower,288,Riverine (Perennial),0.60587673,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+General Creek - lower,289,Riverine (Perennial),0.46197501,0.0,-3.0,0.0,,,0.0,0.0,-3.0,,,-8.333333330000002
+General Creek - upper,290,Riverine (Perennial),4.52494366,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glen Alpine Creek - lower,291,Riverine (Perennial),2.46219122,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glenbrook Creek - upper,292,Riverine (Perennial),2.60662346,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Griff Creek - tributary,293,Riverine (Perennial),3.1216554,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Griff Creek - upper,294,Riverine (Perennial),3.03660832,0.0,0.0,3.0,,,0.0,0.0,,,,5.0
+Heavenly Valley Creek - middle,295,Riverine (Perennial),2.86362161,0.0,-3.0,-9.0,,,0.0,0.0,,,,-20.0
+Hidden Valley Creek - lower,296,Riverine (Perennial),2.53189454,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Hidden Valley Creek - upper,297,Riverine (Perennial),1.81005885,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Incline Creek - lower,298,Riverine (Perennial),0.42746476,0.0,0.0,0.0,,,0.0,0.0,,,,1.666667000000004
+Incline Creek - middle 1,299,Riverine (Perennial),0.40822149,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Incline Creek - middle 2,300,Riverine (Perennial),0.76890084,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Incline Creek - ski run,301,Riverine (Perennial),0.41712681,0.0,,0.0,,,0.0,,,,,
+Incline Creek - upper,302,Riverine (Perennial),3.98104862,0.0,0.0,0.0,,,0.0,0.0,,,,-4.166667000000004
+Logan House Creek - lower,303,Riverine (Perennial),0.5117334,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Lonely Gulch Creek - lower,304,Riverine (Perennial),0.13706078,0.0,3.0,0.0,,,0.0,0.0,,,,5.0
+Lonely Gulch Creek - middle,305,Riverine (Perennial),0.72842419,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Madden Creek,306,Riverine (Perennial),3.41657504,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Marlette Creek - lower,307,Riverine (Perennial),0.75265318,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Marlette Creek - south fork (upper),308,Riverine (Perennial),2.30018149,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+McFaul Creek - lower,309,Riverine (Perennial),0.653572,,,,,,,,,,,
+McKinney Creek - lower,310,Riverine (Perennial),1.08910812,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166667000000004
+McKinney Creek - middle,311,Riverine (Perennial),2.38178705,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Mill Creek - lower,312,Riverine (Perennial),0.66747696,0.0,0.0,,,,0.0,0.0,,,,0.0
+North Zephyr Creek - tributary,313,Riverine (Perennial),2.69212852,0.0,-3.0,0.0,,,0.0,-9.0,-3.0,,,-20.833333330000002
+North Zephyr Creek - lower,314,Riverine (Perennial),0.48633653,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+North Zephyr Creek - upper,315,Riverine (Perennial),4.09631699,0.0,0.0,0.0,,,0.0,-9.0,0.0,,,-12.5
+Osgood Creek - above road,316,Riverine (Perennial),1.56247884,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Osgood Creek - below road,317,Riverine (Perennial),0.57701317,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Quail Creek - lower,318,Riverine (Perennial),0.15921205,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.29999998882613e-07
+Quail Creek - upper,319,Riverine (Perennial),1.28534912,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Rosewood Creek - lower,320,Riverine (Perennial),0.91067146,0.0,0.0,,,,0.0,0.0,0.0,,,-1.666667000000004
+Rosewood Creek - middle 1,321,Riverine (Perennial),0.4074702,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Rosewood Creek - middle 2,322,Riverine (Perennial),0.46883042,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Rosewood Creek - middle 3,323,Riverine (Perennial),0.59029256,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Rubicon Creek,324,Riverine (Perennial),2.44163697,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Rubicon Creek - tributary,325,Riverine (Perennial),2.44698308,0.0,0.0,,,,0.0,0.0,,,,0.0
+Second Creek - lower,326,Riverine (Perennial),0.44695423,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Second Creek - lower 2,327,Riverine (Perennial),0.40363229,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Second Creek - middle,328,Riverine (Perennial),0.24910706,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Secret Harbor Creek - lower,329,Riverine (Perennial),0.91630525,0.0,0.0,,,,0.0,0.0,,,,0.0
+Secret Harbor Creek - upper,330,Riverine (Perennial),2.61144095,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Slaughterhouse Creek - lower,331,Riverine (Perennial),1.60037162,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Slaughterhouse Creek - middle,332,Riverine (Perennial),1.17502928,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Slaughterhouse Creek - upper,333,Riverine (Perennial),1.56706389,,,,,,,,,,,
+Tallac Creek - abv highway - 1,334,Riverine (Perennial) + Forested,83.47135769,0.0,-6.0,0.0,,,0.0,-9.0,-3.0,,,-25.0
+Taylor Creek,335,Riverine (Perennial),4.36830019,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Third Creek - headwaters,336,Riverine (Perennial),3.41988792,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - lower,337,Riverine (Perennial),0.43586041,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - lower 2,338,Riverine (Perennial),0.45022416,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle 1,339,Riverine (Perennial),1.4254921,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle,340,Riverine (Perennial),1.44587918,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle 2,341,Riverine (Perennial),1.02199767,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - upper 1,342,Riverine (Perennial),2.5923008,0.0,3.0,0.0,,,0.0,0.0,,,,2.5
+Third Creek - upper 2,343,Riverine (Perennial),1.89987085,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Third Creek - upper 3,344,Riverine (Perennial),0.67614323,0.0,0.0,,,,0.0,0.0,,,,0.0
+Trout Creek - tributary 2,345,Riverine (Perennial),3.86544764,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Trout Creek - tributary 3,346,Riverine (Perennial),3.70591509,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - Christmas Valley 1,347,Riverine (Perennial),5.58425484,0.0,0.0,-3.0,,,0.0,0.0,0.0,,,-4.166666669999998
+UTR - tributary 3,348,Riverine (Perennial),5.00755311,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - tributary 1,349,Riverine (Perennial),4.17155596,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - Washoe Meadows,350,Riverine (Perennial),3.53144557,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Ward Creek - lower,351,Riverine (Perennial),1.27806806,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Ward Creek - middle,352,Riverine (Perennial),13.68579446,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Woods Creek - lower,353,Riverine (Perennial),0.68539243,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Woods Creek - middle,354,Riverine (Perennial),1.11360806,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glen Alpine Creek - upper,355,Riverine (Perennial),10.87696145,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Grass Lake Creek,356,Riverine (Perennial),3.38370318,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Meiss meadows - 1,357,Riverine (Perennial),3.43943546,0.0,0.0,-3.0,,,0.0,0.0,-3.0,,,-8.333333670000002
+Christmas Valley meadows - 2,358,Riverine (Perennial),3.20588447,0.0,-3.0,3.0,,,0.0,0.0,3.0,,,4.166667000000004
+Christmas Valley meadows - 1,359,Riverine (Perennial),3.55537361,0.0,0.0,3.0,,,0.0,0.0,0.0,,,4.166666329999998
+Trout Creek meadows - above Fountain Place,360,Riverine (Perennial),0.92579741,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166667000000004
+Trout Creek meadows - above Pioneer 3,361,Riverine (Perennial),1.32523748,0.0,-3.0,-9.0,,,0.0,0.0,6.0,,,-8.333333330000002
+Taylor Creek marsh,362,Riverine (Perennial),0.73214495,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+UTR marsh - Trout Creek side,363,Riverine (Perennial),4.12865092,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+small meadow 14,364,Riverine (Perennial),0.21214379,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Slaughterhouse meadows - 2,365,Riverine (Perennial),4.06753465,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Antone meadows,366,Riverine (Perennial),2.31546189,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Snow Creek wetlands - 1,367,Riverine (Perennial),1.36263561,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Saxon Creek meadows - below Fountain Place,368,Riverine (Perennial),0.75243499,0.0,-6.0,0.0,,,0.0,0.0,0.0,,,-8.333333670000002
+Saxon Creek meadows - above Fountain Place 1,369,Riverine (Perennial),0.99903353,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Upper Truckee River - Tahoe Paradise,370,Riverine (Perennial),4.6167759,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Hell Hole Meadows - 2,371,Riverine (Perennial),0.25939291,0.0,0.0,,,,0.0,0.0,0.0,,,-35.0
+Trout Creek headwaters meadows - 2,372,Riverine (Perennial),1.08269588,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+small meadow 1,373,Riverine (Perennial),0.2951585,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,-4.166667000000004
+Ginny Lake Meadows,374,Riverine (Perennial),1.06440382,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Third Creek meadows - 8,375,Riverine (Perennial),0.10282014,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Third Creek meadows - 7,376,Riverine (Perennial),0.2317192,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 15,377,Riverine (Perennial),0.45360208,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 13,378,Riverine (Perennial),0.45357359,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 16,379,Riverine (Perennial),0.17267895,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 50,380,Riverine (Perennial),0.21915617,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 111,381,Riverine (Perennial),0.11073504,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 7,382,Riverine (Perennial),0.72585369,0.0,0.0,,,,0.0,-9.0,-3.0,,,-20.0
+small meadow 17,383,Riverine (Perennial),0.36741271,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 92,384,Riverine (Perennial),0.89197435,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Marlette Lake meadows,385,Riverine (Perennial),0.25347205,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Third Creek meadows - 3,386,Riverine (Perennial),0.19250997,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Griff Creek meadows,387,Riverine (Perennial),0.42294598,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Meeks Bay meadows - 3,388,Riverine (Perennial),0.74041328,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Big Meadow - 4,389,Riverine (Perennial),0.37484231,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 52,390,Riverine (Perennial),0.28981873,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+small meadow 95,391,Riverine (Perennial),0.26899742,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Star Lake meadows,392,Riverine (Perennial),0.15936454,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Big Meadow - 1,393,Riverine (Perennial),1.33054093,0.0,-3.0,-6.0,,,0.0,0.0,3.0,,,-8.333333330000002
+Rubicon Meadows,394,Riverine (Perennial),0.11957396,,,,,,,,,,,
+McFual meadow,395,Riverine (Perennial),0.52719153,,,,,,,,,,,
+UTR Marsh - UTR side,396,Riverine (Perennial),7.24445674,0.0,0.0,-3.0,,,0.0,0.0,3.0,,,3.3000000598804036e-07
+UTR - Reach 5,397,Riverine (Perennial),6.86428584,0.0,0.0,-9.0,,,0.0,0.0,-3.0,,,-16.666667000000004
+UTR - Johnson meadows - 2,398,Riverine (Perennial),6.22523394,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166667000000004
+UTR - Johnson meadows - 3,399,Riverine (Perennial),1.98665398,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+UTR - Airport reach,400,Riverine (Perennial),3.1864023,0.0,-3.0,-3.0,,,0.0,-6.0,0.0,,,-16.666666669999998
+UTR - Reach 6,401,Riverine (Perennial),4.20793486,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166666669999998
+UTR - golf course meadows,402,Riverine (Perennial),5.7065917,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166667000000004
+Angora meadows - 1,403,Riverine (Perennial),0.70774205,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Angora meadows - 8,404,Riverine (Perennial),0.83229062,0.0,0.0,0.0,,,0.0,-6.0,0.0,,,-8.33666667
+Angora meadows - 2,405,Riverine (Perennial),1.05274975,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Angora meadows - 3,406,Riverine (Perennial),0.48010025,0.0,-3.0,0.0,,,0.0,0.0,-3.0,,,-8.333332999999996
+Saxon Creek tributary meadows - 1,407,Riverine (Perennial),0.84603841,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Saxon Creek meadows - above Fountain Place 2,408,Riverine (Perennial),0.87739053,0.0,0.0,0.0,,,0.0,-6.0,0.0,,,-8.333333330000002
+Trout Creek meadows - above Pioneer 4,409,Riverine (Perennial),1.09337601,0.0,0.0,0.0,,,0.0,-9.0,9.0,,,0.0
+Trout Creek meadows - above Pioneer 2,410,Riverine (Perennial),1.92177498,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Trout Creek meadows - above Pioneer 1,411,Riverine (Perennial),1.97293898,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Trout Creek - Highland Woods,412,Riverine (Perennial),2.15637926,0.0,0.0,3.0,,,0.0,0.0,0.0,,,4.166666669999998
+Cold Creek - Highland Woods,413,Riverine (Perennial),2.08532733,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Heavenly Valley Creek meadows - 1,414,Riverine (Perennial),0.31878673,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.29999998882613e-07
+Heavenly Valley Creek meadows - 2,415,Riverine (Perennial),0.49237038,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Heavenly Valley Creek meadows - 3,416,Riverine (Perennial),0.33472587,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Heavenly Valley Creek meadows - 4,417,Riverine (Perennial),0.15860037,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Kahle meadows - 5,418,Riverine (Perennial),0.83290897,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Meiss meadows - 3,419,Riverine (Perennial),0.70084524,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Benwood meadows - 1,420,Riverine (Perennial),0.25494325,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Christmas Valley meadows - 3,421,Riverine (Perennial),0.75632849,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Benwood meadows - 2,422,Riverine (Perennial),0.23030001,0.0,0.0,,,,0.0,-9.0,0.0,,,-15.0
+small meadow 113,423,Riverine (Perennial),0.13535471,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Angora meadows - 6,424,Riverine (Perennial),0.47860129,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Trout Creek above Black Bart,425,Riverine (Perennial),2.54427547,0.0,0.0,-6.0,,,0.0,0.0,-3.0,,,-12.500000329999999
+Baldwin marsh - 1,426,Riverine (Perennial),1.17117597,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Trout Creek below Black Bart,427,Riverine (Perennial),4.1309517,0.0,0.0,3.0,,,0.0,0.0,0.0,,,4.166666669999998
+Burke Creek meadows - 1,428,Riverine (Perennial),0.66501755,0.0,0.0,,,,0.0,0.0,0.0,,,5.833332999999996
+Buck Lake meadows,429,Riverine (Perennial),0.39456745,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Glenbrook meadows - 1,430,Riverine (Perennial),0.4662248,0.0,0.0,0.0,,,0.0,0.0,9.0,,,12.499999669999994
+Spooner meadows - 2,431,Riverine (Perennial),0.81026105,0.0,0.0,,,,0.0,0.0,0.0,,,4.166667000000004
+Lake Forest meadows - 3,432,Riverine (Perennial),0.13316861,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Snow Creek wetlands - 2,433,Riverine (Perennial),0.65622514,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Incline Lake meadows - 2,434,Riverine (Perennial),0.23426483,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Third Creek meadows - 1,435,Riverine (Perennial),0.8138394,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+High meadows - 2,436,Riverine (Perennial),0.30405589,,,,,,,,,,,
+High meadows - 6,437,Riverine (Perennial),0.40639505,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+High meadows - 4,438,Riverine (Perennial),0.39815102,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+High meadows - 1,439,Riverine (Perennial),0.92584974,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Meeks Bay meadows - 2,440,Riverine (Perennial),0.59304316,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Meeks Bay meadows - 1,441,Riverine (Perennial),1.62421843,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Meiss meadows - 4,442,Riverine (Perennial),0.47603107,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166666669999998
+Meiss meadows - 5,443,Riverine (Perennial),0.98378146,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Hell Hole meadows - 1,444,Riverine (Perennial),0.49397233,0.0,-3.0,,,,0.0,0.0,-3.0,,,-10.0
+Spooner meadows - 1,445,Riverine (Perennial),1.42880913,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Angora tributary,446,Forested,27.89457591,,0.0,,,0.0,0.0,0.0,,,,0.0
+Meyers tributary - 1,447,Forested,0.90128968,,0.0,,,0.0,0.0,-3.0,,,,-6.25
+West Shore tributary - 2 - upper,448,Forested,11.69673578,,0.0,,,0.0,0.0,0.0,,,,0.0
+Tahoe City tributary - 1,449,Forested,11.04271618,,0.0,,,0.0,0.0,0.0,,,,0.0
+Tahoe City tributary - 2,450,Riverine (Perennial),13.1185038,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Snow Creek tributary - 1,451,Forested,12.38515516,,-3.0,,,0.0,0.0,0.0,,,,-6.25
+Snow Creek tributary - 2,452,Forested,32.10920735,,0.0,,,0.0,0.0,0.0,,,,0.0
+McKinney tributary - 2,453,Forested,17.1112505,,0.0,,,0.0,0.0,0.0,,,,0.0
+West Shore tributary - 4,454,Forested,1.45432449,,0.0,,,0.0,0.0,0.0,,,,0.0
+West Shore tributary - 1,455,Forested,5.36411567,,-3.0,,,0.0,0.0,0.0,,,,-6.25
+West Shore tributary - 3,456,Forested,0.69098309,,0.0,,,0.0,0.0,-3.0,,,,-6.25
+Incline Village tributary - 4,457,Forested,12.20682831,,0.0,,,0.0,0.0,0.0,,,,0.0
+Incline Village tributary - 1,458,Forested,9.70529935,,0.0,,,0.0,0.0,0.0,,,,0.0
+Incline Village tributary - 2,459,Forested,11.97542411,,0.0,,,0.0,0.0,0.0,,,,0.0
+Incline Village tributary - 3,460,Forested,11.10932908,,0.0,,,0.0,0.0,0.0,,,,0.0
+Burke Creek tributary,461,Forested,17.44225011,,0.0,,,0.0,0.0,0.0,,,,0.0
+Edgewood Creek tributary - 2 - headwaters,462,Forested,35.40355611,,0.0,,,0.0,0.0,0.0,,,,0.0
+South Lake Tahoe tributary - 1,463,Forested,6.71611087,,0.0,,,0.0,0.0,0.0,,,,0.0
+South Lake Tahoe tributary - 2,464,Forested,9.87993393,,0.0,,,0.0,0.0,-9.0,,,,-18.75
+Cold Creek tributary - 4,465,Forested,6.71796716,,0.0,,,0.0,0.0,0.0,,,,0.0
+Cold Creek tributary - 5,466,Forested,3.23529504,,0.0,,,0.0,0.0,0.0,,,,0.0
+Meyers tributary - 2,467,Riverine (Perennial),1.45973025,,-3.0,,,,0.0,-3.0,,,,-4.166666999999997
+Blackwood Creek - lower 2,470,Riverine (Perennial),3.33716742,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Blackwood Creek - middle 3,471,Riverine (Perennial),0.61740118,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Kahle meadows - 3,472,Riverine (Perennial),0.48563317,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Meeks Bay Lagoon,473,Riverine (Perennial),1.90822504,0.0,,,,,,,,,,
+Kahle meadows - 6,474,Riverine (Perennial),0.43128566,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+North Zephyr Creek - middle,475,Riverine (Perennial),0.36978409,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Edgewood Creek tributary - 2 - lower,476,Riverine (Perennial),3.89895481,,0.0,,,,0.0,0.0,0.0,,,0.0
+Marlette Creek - old dam site,477,Riverine (Perennial),0.3084368,0.0,0.0,,,,0.0,0.0,0.0,,,5.0
+Tallac Creek - abv highway - 2,478,Riverine (Perennial),0.1883849,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.29999998882613e-07
+Blackwood Creek - middle 1,479,Riverine (Perennial),3.18365731,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166666329999998
+Homewood Canyon Creek - lower,480,Riverine (Perennial),0.14217771,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.16333333
+Blackwood Creek - Upper 1,481,Riverine (Perennial),3.13314341,0.0,0.0,0.0,,,0.0,0.0,6.0,,,8.333333670000002
+South Lake Tahoe airport,484,Channeled Meadow,113.7100572,,,,,,0.0,,,,,
+Kahle meadows - 8,486,Channeled Meadow,52.29860173,,,,,,0.0,,,,,
+Bijou Park Creek meadows - 6,488,Non-Channeled Meadow,4.36729503,,,,,,0.0,,,,,
+Bijou Park Creek meadows - 5,489,Non-Channeled Meadow,1.28355979,,,,,,0.0,,,,,
+UTR - upper,490,Riverine (Perennial) + Forested,82.5607036,0.0,0.0,-6.0,,,0.0,0.0,,,,-10.0
+Big Meadow Creek - upper,491,Riverine (Perennial) + Forested,64.11990562,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - middle,492,Riverine (Perennial) + Forested,79.34578945,0.0,-6.0,-6.0,,,0.0,0.0,,,,-29.166667000000004
+UTR - Christmas Valley 3,493,Riverine (Perennial) + Forested,27.17252438,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,-4.166666329999998
+Echo Creek - upper,494,Riverine (Perennial) + Forested,19.03038255,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Saxon Creek - headwaters,495,Riverine (Perennial) + Forested,65.50737798,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Trout Creek - upper,496,Riverine (Perennial) + Forested,88.66356091,0.0,-3.0,-3.0,,,0.0,0.0,,,,-8.333332999999996
+Eagle Creek,497,Riverine (Perennial) + Forested,82.87667862,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cascade Creek - upper,498,Riverine (Perennial) + Forested,56.59171957,0.0,0.0,-6.0,,,0.0,0.0,,,,-10.0
+Heavenly Valley Creek - upper,499,Riverine (Perennial) + Forested,32.07358263,,,,,,,,,,,
+Tallac Creek - tributary,500,Riverine (Perennial) + Forested,65.82728414,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cascade Creek - lower,501,Riverine (Perennial) + Forested,17.14655738,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Meeks Creek - upper,502,Riverine (Perennial) + Forested,111.5036255,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,-4.166667000000004
+Burke Creek - upper,503,Riverine (Perennial) + Forested,36.24746284,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Lonely Gulch Creek - upper,504,Riverine (Perennial) + Forested,46.49377413,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+McKinney Creek - upper,505,Riverine (Perennial) + Forested,25.40654495,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+General Creek - middle,506,Riverine (Perennial) + Forested,208.2606348,0.0,-6.0,3.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Logan House Creek - upper,507,Riverine (Perennial) + Forested,42.37177337,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Homewood Canyon Creek - upper,508,Riverine (Perennial) + Forested,22.70255987,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+North Logan House Creek,509,Riverine (Perennial) + Forested,55.53782845,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glenbrook Creek - middle,510,Riverine (Perennial) + Forested,38.90186434,0.0,0.0,,,,0.0,0.0,,,,2.5
+Ward Creek - upper,511,Riverine (Perennial) + Forested,85.55464216,0.0,0.0,-3.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Dollar Creek - upper,512,Riverine (Perennial) + Forested,41.37298474,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Watson Creek,513,Riverine (Perennial) + Forested,67.57191609,0.0,0.0,-9.0,,,0.0,0.0,,,,-11.666667000000004
+Griff Creek - lower,514,Riverine (Perennial) + Forested,28.27194454,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Mill Creek - upper,515,Riverine (Perennial) + Forested,22.89866662,,,,,,,,,,,
+First Creek - upper,516,Riverine (Perennial) + Forested,25.99484753,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Second Creek - upper,517,Riverine (Perennial) + Forested,22.14845658,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Woods Creek - upper,518,Riverine (Perennial) + Forested,28.33248154,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Angora Creek - tributary,519,Riverine (Perennial) + Forested,71.03002634,0.0,3.0,0.0,,,0.0,-3.0,0.0,,,-3.3000000598804036e-07
+Angora Creek - upper,520,Riverine (Perennial) + Forested,39.33341298,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Big Meadow Creek - lower,521,Riverine (Perennial) + Forested,43.3427915,0.0,0.0,0.0,,,0.0,0.0,,,,-1.666667000000004
+Big Meadow Creek - upper 2,522,Riverine (Perennial) + Forested,63.46710201,0.0,0.0,-6.0,,,0.0,0.0,,,,-8.333332999999996
+Blackwood Creek - lower 1,523,Riverine (Perennial) + Forested,3.03361719,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Blackwood Creek - middle 2,524,Riverine (Perennial) + Forested,23.4266991,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Blackwood Creek - middle 4,525,Riverine (Perennial) + Forested,22.88793636,0.0,0.0,0.0,,,0.0,0.0,3.0,,,4.166666329999998
+Blackwood Creek - Upper 2,526,Riverine (Perennial) + Forested,14.94224887,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+Blackwood Creek - upper 3,527,Riverine (Perennial) + Forested,56.19323159,0.0,-6.0,0.0,,,0.0,0.0,0.0,,,-8.333333330000002
+Burke Creek - middle,528,Riverine (Perennial) + Forested,6.90532944,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Burton Creek - upper,529,Riverine (Perennial) + Forested,30.54906615,0.0,0.0,0.0,,,0.0,0.0,-6.0,,,-8.333332999999996
+Cold Creek - middle,530,Riverine (Perennial) + Forested,14.83532794,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Cold Creek - tributary 3,531,Riverine (Perennial) + Forested,83.54491241,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cold Creek - tributary 1,532,Riverine (Perennial) + Forested,33.47384342,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Cold Creek - tributary 2,533,Riverine (Perennial) + Forested,29.60035746,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Cold Creek - upper,534,Riverine (Perennial) + Forested,63.55055424,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Deer Creek - headwaters,535,Riverine (Perennial) + Forested,25.08905617,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Deer Creek - upper,536,Riverine (Perennial) + Forested,18.6346183,0.0,0.0,0.0,,,0.0,3.0,,,,-5.0
+Deer Creek - lower,537,Riverine (Perennial) + Forested,3.37907006,0.0,0.0,0.0,,,0.0,0.0,,,,5.833332999999996
+Deer Creek - middle,538,Riverine (Perennial) + Forested,9.66427191,0.0,0.0,6.0,,,0.0,0.0,,,,10.0
+Deer Creek - middle 2,539,Riverine (Perennial) + Forested,8.40504955,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Dollar Creek - lower,540,Riverine (Perennial) + Forested,4.64388601,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Echo Creek - below lake,541,Riverine (Perennial) + Forested,36.74068166,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Edgewood Creek - middle,542,Riverine (Perennial) + Forested,76.02411058,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166666669999998
+First Creek - lower,543,Riverine (Perennial) + Forested,7.90371446,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+General Creek - lower,544,Riverine (Perennial) + Forested,19.12564694,0.0,-3.0,0.0,,,0.0,0.0,-3.0,,,-8.333333330000002
+General Creek - upper,545,Riverine (Perennial) + Forested,33.54803938,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glen Alpine Creek - lower,546,Riverine (Perennial) + Forested,9.6968602,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Glenbrook Creek - upper,547,Riverine (Perennial) + Forested,48.98372747,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Griff Creek - tributary,548,Riverine (Perennial) + Forested,66.31208748,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Griff Creek - upper,549,Riverine (Perennial) + Forested,59.49336528,0.0,0.0,3.0,,,0.0,0.0,,,,5.0
+Heavenly Valley Creek - middle,550,Riverine (Perennial) + Forested,35.24924067,0.0,-3.0,-9.0,,,0.0,0.0,,,,-20.0
+Hidden Valley Creek - lower,551,Riverine (Perennial) + Forested,45.30355456,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Hidden Valley Creek - upper,552,Riverine (Perennial) + Forested,13.41069871,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Incline Creek - lower,553,Riverine (Perennial) + Forested,5.74596839,0.0,0.0,0.0,,,0.0,0.0,,,,1.666667000000004
+Incline Creek - middle 1,554,Riverine (Perennial) + Forested,5.94516942,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Incline Creek - middle 2,555,Riverine (Perennial) + Forested,11.25812834,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Incline Creek - ski run,556,Riverine (Perennial) + Forested,8.00323491,,,0.0,,,0.0,,,,,
+Incline Creek - upper,557,Riverine (Perennial) + Forested,52.78490649,0.0,0.0,0.0,,,0.0,0.0,,,,-4.166667000000004
+Logan House Creek - lower,558,Riverine (Perennial) + Forested,5.89445734,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Lonely Gulch Creek - lower,559,Riverine (Perennial) + Forested,1.2945257,0.0,3.0,0.0,,,0.0,0.0,,,,5.0
+Lonely Gulch Creek - middle,560,Riverine (Perennial) + Forested,10.173873,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Madden Creek,561,Riverine (Perennial) + Forested,88.90227451,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Marlette Creek - lower,562,Riverine (Perennial) + Forested,8.7416628,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Marlette Creek - south fork (upper),563,Riverine (Perennial) + Forested,32.05914082,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Marlette Creek - old dam site,564,Riverine (Perennial) + Forested,6.86239935,0.0,0.0,,,,0.0,0.0,0.0,,,5.0
+McFaul Creek - lower,565,Riverine (Perennial) + Forested,9.38971873,,,,,,,,,,,
+McKinney Creek - lower,566,Riverine (Perennial) + Forested,19.08898983,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166667000000004
+McKinney Creek - middle,567,Riverine (Perennial) + Forested,45.60482869,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Mill Creek - lower,568,Riverine (Perennial) + Forested,7.22774947,0.0,0.0,,,,0.0,0.0,,,,0.0
+North Zephyr Creek - tributary,569,Riverine (Perennial) + Forested,39.71990747,0.0,-3.0,0.0,,,0.0,-9.0,-3.0,,,-20.833333330000002
+North Zephyr Creek - lower,570,Riverine (Perennial) + Forested,8.96918325,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+North Zephyr Creek - upper,571,Riverine (Perennial) + Forested,53.0590211,0.0,0.0,0.0,,,0.0,-9.0,0.0,,,-12.5
+Osgood Creek - above road,572,Riverine (Perennial) + Forested,60.89500777,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Osgood Creek - below road,573,Riverine (Perennial) + Forested,9.3101077,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666329999998
+Quail Creek - lower,574,Riverine (Perennial) + Forested,3.05084486,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.29999998882613e-07
+Quail Creek - upper,575,Riverine (Perennial) + Forested,21.04170629,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Rosewood Creek - lower,576,Riverine (Perennial) + Forested,10.53098681,0.0,0.0,,,,0.0,0.0,0.0,,,-1.666667000000004
+Third Creek - lower,577,Riverine (Perennial) + Forested,7.53960544,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - lower 2,578,Riverine (Perennial) + Forested,5.87214761,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle 1,579,Riverine (Perennial) + Forested,18.73297857,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle 2,580,Riverine (Perennial) + Forested,12.47675881,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - middle,581,Riverine (Perennial) + Forested,4.72859581,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Third Creek - upper 1,582,Riverine (Perennial) + Forested,14.22677632,0.0,3.0,0.0,,,0.0,0.0,,,,2.5
+Third Creek - upper 3,583,Riverine (Perennial) + Forested,27.12909311,0.0,0.0,,,,0.0,0.0,,,,0.0
+Third Creek - upper 2,584,Riverine (Perennial) + Forested,10.97152986,0.0,0.0,-3.0,,,0.0,0.0,,,,-5.0
+Third Creek - headwaters,585,Riverine (Perennial) + Forested,21.28190562,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Rosewood Creek - middle 1,586,Riverine (Perennial) + Forested,6.65390147,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Rosewood Creek - middle 2,587,Riverine (Perennial) + Forested,5.53091044,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Rosewood Creek - middle 3,588,Riverine (Perennial) + Forested,6.05014079,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Woods Creek - lower,589,Riverine (Perennial) + Forested,6.10652527,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Woods Creek - middle,590,Riverine (Perennial) + Forested,13.19994377,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Second Creek - lower,591,Riverine (Perennial) + Forested,3.28151476,0.0,-3.0,0.0,,,0.0,0.0,,,,-5.0
+Second Creek - lower 2,592,Riverine (Perennial) + Forested,4.8253114,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Second Creek - middle,593,Riverine (Perennial) + Forested,2.7859498,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Ward Creek - lower,594,Riverine (Perennial) + Forested,7.96771445,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Ward Creek - middle,595,Riverine (Perennial) + Forested,73.88915783,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Blackwood Creek - lower 2,596,Riverine (Perennial) + Forested,20.56364299,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Blackwood Creek - middle 1,597,Riverine (Perennial) + Forested,30.17448132,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.166666329999998
+Blackwood Creek - middle 3,598,Riverine (Perennial) + Forested,5.50550993,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Blackwood Creek - Upper 1,599,Riverine (Perennial) + Forested,18.80036025,0.0,0.0,0.0,,,0.0,0.0,-3.0,,,8.333333670000002
+Homewood Canyon Creek - lower,600,Riverine (Perennial) + Forested,3.08535362,0.0,3.0,0.0,,,0.0,0.0,0.0,,,4.16333333
+Rubicon Creek,601,Riverine (Perennial) + Forested,29.75901005,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Rubicon Creek - tributary,602,Riverine (Perennial) + Forested,35.59742449,0.0,0.0,,,,0.0,0.0,,,,0.0
+Tallac Creek - abv highway - 1,603,Riverine (Perennial),3.60314139,0.0,-6.0,0.0,,,0.0,-9.0,-3.0,,,-25.0
+Tallac Creek - abv highway - 2,604,Riverine (Perennial) + Forested,4.27247572,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.29999998882613e-07
+Taylor Creek,605,Riverine (Perennial) + Forested,34.66874196,0.0,-3.0,0.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Glen Alpine Creek - upper,606,Riverine (Perennial) + Forested,124.7075965,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+UTR - Washoe Meadows,607,Riverine (Perennial) + Forested,24.15619725,0.0,0.0,0.0,,,0.0,0.0,0.0,,,-3.3000000598804036e-07
+UTR - Christmas Valley 1,608,Riverine (Perennial) + Forested,41.07068014,0.0,0.0,-3.0,,,0.0,0.0,0.0,,,-4.166666669999998
+Grass Lake Creek,609,Riverine (Perennial) + Forested,61.87674987,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - tributary 1,610,Riverine (Perennial) + Forested,91.14709198,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+UTR - tributary 3,611,Riverine (Perennial) + Forested,87.20159866,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Trout Creek - tributary 3,612,Riverine (Perennial) + Forested,42.07504765,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Trout Creek - tributary 2,613,Riverine (Perennial) + Forested,62.17773883,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Slaughterhouse Creek - lower,614,Riverine (Perennial) + Forested,13.69227729,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+North Zephyr Creek - middle,615,Riverine (Perennial) + Forested,5.82905367,0.0,0.0,0.0,,,0.0,0.0,0.0,,,0.0
+Slaughterhouse Creek - middle,616,Riverine (Perennial) + Forested,23.3196438,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Slaughterhouse Creek - upper,617,Riverine (Perennial) + Forested,21.92735456,,,,,,,,,,,
+Secret Harbor Creek - lower,618,Riverine (Perennial) + Forested,9.69288859,0.0,0.0,,,,0.0,0.0,,,,0.0
+Secret Harbor Creek - upper,619,Riverine (Perennial) + Forested,29.84639974,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+Carnelian Canyon Creek - lower,620,Riverine (Perennial) + Forested,20.48283416,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Carnelian Canyon Creek - upper,621,Riverine (Perennial) + Forested,28.36335759,0.0,0.0,,,,0.0,0.0,0.0,,,0.0
+Skylandia SEZ,622,Forested,2.69521527,,0.0,,,0.0,0.0,0.0,,,,0.0
+Lake Forest tributary,624,Riverine (Perennial),1.91400137,,0.0,,,,0.0,0.0,,,,-3.3000000598804036e-07
+McKinney tributary - 1,626,Forested,5.78558034,,0.0,,,0.0,0.0,0.0,,,,0.0
+South Lake Tahoe tributary - 3,627,Forested,11.47517045,,0.0,,,0.0,0.0,0.0,,,,0.0
+Edgewood Creek tributary - 3 - lower,628,Forested,6.90169995,,0.0,,,0.0,0.0,0.0,,,,0.0
+Edgewood Creek tributary - 3 - upper,629,Forested,7.36239836,,0.0,,,0.0,0.0,0.0,,,,0.0
+Marlette Creek - upper,630,Riverine (Perennial),1.39147927,0.0,-6.0,,,,0.0,0.0,,,,-18.75
+Marlette Creek - upper,631,Riverine (Perennial) + Forested,18.12168346,0.0,-6.0,,,,0.0,0.0,,,,-18.75
+Tahoe Paradise golf course,632,Non-Channeled Meadow,49.16921907,,,,,,,,,,,
+Burton Creek - lower,633,Riverine (Perennial) + Forested,10.6147923,0.0,0.0,,,,0.0,0.0,0.0,,,-9.166667000000004
+Burton Creek - lower,634,Riverine (Perennial),0.61758157,0.0,0.0,,,,0.0,0.0,0.0,,,-9.166667000000004
+Edgewood Creek tributary - 2 - upper,635,Forested,16.61422696,,0.0,,,0.0,0.0,-3.0,,,,-6.25
+Incline Creek - middle 3,636,Riverine (Perennial) + Forested,4.72740234,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Incline Creek - middle 3,637,Riverine (Perennial),0.27454,0.0,0.0,0.0,,,0.0,0.0,,,,0.0
+Lake Forest meadows - 4,638,Riverine (Perennial),0.09445235,0.0,0.0,0.0,,,0.0,0.0,0.0,,,3.3000000598804036e-07
+West Shore tributary - 2 - lower,639,Forested,0.56697472,,0.0,,,0.0,0.0,0.0,,,,0.0
+Saxon Creek - upper,640,Riverine (Perennial),1.35023935,0.0,0.0,-6.0,,,0.0,0.0,3.0,,,-4.166666329999998
+Saxon Creek - upper,641,Riverine (Perennial) + Forested,20.88510931,0.0,0.0,-6.0,,,0.0,0.0,3.0,,,-4.166666329999998
+Marlette Creek - south fork (lower),642,Riverine (Perennial) + Forested,2.53350213,0.0,0.0,,,,0.0,0.0,0.0,,,-16.6
+Marlette Creek - south fork (lower),643,Riverine (Perennial),0.26851772,0.0,0.0,,,,0.0,0.0,0.0,,,-16.6
