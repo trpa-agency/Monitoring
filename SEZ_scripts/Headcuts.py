@@ -45,7 +45,7 @@ def get_newheadcut_data_collect():
     # get BMP Status data as dataframe from BMP SQL Database
     with engine.begin() as conn:
         # create dataframe from sql query is incision ratio the correct value to get (maybe use raw scores instead)
-        df  = pd.read_sql('SELECT ParentGlobalID, headcut_depth FROM sde_collection.SDE.sez_stream_headcut', conn)
+        df  = pd.read_sql('SELECT ParentGlobalID, headcut_depth FROM sde_collection.SDE.sez_stream_headcut_evw', conn)
     return df
 
 #Get general survey data from sde.collect
@@ -56,10 +56,9 @@ def get_sezsurvey_data():
     # get BMP Status data as dataframe from BMP SQL Database
     with engine.begin() as conn:
         # create dataframe from sql the correct value to get (maybe use raw scores instead)
-        dfsurvey  = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, headcuts_number_of_headcuts, survey_date FROM sde_collection.SDE.sez_survey', conn)
+        dfsurvey  = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, headcuts_number_of_headcuts, survey_date FROM sde_collection.SDE.sez_survey_evw', conn)
     return dfsurvey
 
-import pandas as pd
 
 def get_combined_survey_and_headcut_data():
     # Connect to SDE Collect to grab raw data
@@ -67,11 +66,11 @@ def get_combined_survey_and_headcut_data():
 
     # Get the first dataset (sez_survey data)
     with engine.begin() as conn:
-        dfsurvey = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, headcuts_number_of_headcuts, survey_date FROM sde_collection.SDE.sez_survey', conn)
+        dfsurvey = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, headcuts_number_of_headcuts, survey_date FROM sde_collection.SDE.sez_survey_evw', conn)
 
     # Get the second dataset (sez_stream_headcut data)
     with engine.begin() as conn:
-        dfheadcut = pd.read_sql('SELECT ParentGlobalID, headcut_depth FROM sde_collection.SDE.sez_stream_headcut', conn)
+        dfheadcut = pd.read_sql('SELECT ParentGlobalID, headcut_depth FROM sde_collection.SDE.sez_stream_headcut_evw', conn)
 
     # Join the two DataFrames on GlobalID and ParentGlobalID
     headcutdf = pd.merge(dfsurvey, dfheadcut, how='left', left_on='GlobalID', right_on='ParentGlobalID')

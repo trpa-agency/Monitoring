@@ -5,20 +5,20 @@
 # import necessary libraries
 # base packages
 import os
-import sys
+#import sys
 from datetime import datetime
 import pathlib
 #data packages
 #from functools import reduce
 #import sys??
-import sqlalchemy as sa
+#import sqlalchemy as sa
 import pandas as pd
 import numpy as np
 #mapping packages
 import arcpy
 from arcgis import GIS
 from arcgis.features import FeatureLayer
-import requests
+#import requests
 from arcgis.geometry import SpatialReference
 # external connection packages
 from sqlalchemy.engine import URL
@@ -151,6 +151,18 @@ def get_conn(db):
 
 #Connection to SDE Collect Staging Tables for Graded Data
 
+#Used for USFS rest service
+## Gets spatially enabled dataframe with query
+#def get_fs_data_spatial_query(service_url, query_params):
+ #   feature_layer = FeatureLayer(service_url)
+  #  query_result = feature_layer.query(query_params).sdf
+   # return query_result
+def get_fs_data_spatial_query(service_url, query_params):
+        # Initialize the feature layer from the given URL
+        feature_layer = FeatureLayer(service_url)
+        # Perform the query and retrieve the results as a Spatially Enabled DataFrame (sdf)
+        query_result = feature_layer.query(query_params).sdf  # Pass the query directly
+        return query_result
 
 # Gets data with query from the TRPA server
 def get_fs_data_query(service_url, query_params):

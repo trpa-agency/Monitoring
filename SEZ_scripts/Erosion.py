@@ -1,4 +1,4 @@
-from SEZ_scripts.utils import *
+from utils import *
 #global variable
 #get path to save file
 #outchart=local_path.parents{1}/ '2023/SEZ/Analysis blah blah
@@ -10,24 +10,18 @@ def get_erosion_data():
     # get BMP Status data as dataframe from BMP SQL Database
     with engine.begin() as conn:
         # create dataframe from sql query
-        df  = pd.read_sql('SELECT Assessment_Unit_Name, Shape.STLength(), Bank_Type, Survey_Date FROM ##!!sde.Collect.SDE.Monitoring', conn)
+        df  = pd.read_sql('SELECT Assessment_Unit_Name, Shape.STLength(), Bank_Type, Survey_Date FROM sde_collection.SDE.Stream_Erosion_evw', conn)
     return df
 #Clean Up Raw Erosion Data
-def process_erosion(df):
-    #convert df to pandas or is it already there?
-    #do i need to add SEZ ID? If I end up needing it place here
+def process_grade_erosion(df, year):
+    
     # Replace NaN values in 'Assessment_Unit_Name' column with 'Skylandia SEZ'
     #erosiondf['Assessment_Unit_Name'] = erosiondf['Assessment_Unit_Name'].fillna('Skylandia SEZ')
     # Replace specific values in 'Assessment_Unit_Name' column
     df['Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
 
-
-    #Add SEZ_ID column using lookup dictionary
-    #erosiondf['SEZ_ID'] = erosiondf['Assessment_Unit_Name'].map(lambda x: lookup_dict.get(x, {}).get('SEZ_ID', None))
-
     #This code is for the excel look up dictionary
     df['SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
-
 
     # Fill NaN values with a specific value, such as 0
     df['SEZ_ID'] = df['SEZ_ID'].fillna(0)
@@ -42,14 +36,13 @@ def process_erosion(df):
 
     #calculate year column 
     df['Year'] = df['Survey_Date'].dt.year
-
+    df['Year']=year
     #----------------------------------------------------------------#
     #Process Data
     #----------------------------------------------------------------#
 
     # Initialize variables
     df['bank_multiplier'] = df['Bank_Type'].apply(lambda x: 2 if x == 'Both Banks' else (1 if x == 'One Bank' else 0))
-
 
     # Calculate the product of 'Shape.STLength()' and 'bank_multiplier' to get the eroded banks per row
     df['eroded_banks_per_row'] = df['Shape.STLength()'] * df['bank_multiplier']
@@ -71,15 +64,6 @@ def process_erosion(df):
 
     df['Bank_Stability_Data_Source'] = 'TRPA' 
     #print some kind of QA tool here?
-    return df
-#DO QA Before you post data t0 table
-def post_erosion(df):
-    # Define the name of the feature class
-    feature_class_name = 'bank_stability'
-
-    # Define the full path to the feature class--grab from sde collect
-    feature_class_path = stage_bank_stability 
-
     #Field Mapping
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
@@ -92,16 +76,35 @@ def post_erosion(df):
     }
 
     # Rename fields based on field mappings
-    bank_stabilitydf = df.rename(columns=field_mapping).drop(columns=[col for col in df.columns if col not in field_mapping])
+    readydf = df.rename(columns=field_mapping).drop(columns=[col for col in df.columns if col not in field_mapping])
 
-    readydf = bank_stabilitydf.groupby(['SEZ_ID', 'Year']).first().reset_index()   
+    #readydf = bank_stabilitydf.groupby(['SEZ_ID', 'Year']).first().reset_index()   
+    return readydf
+
+#DO QA Before you post data t0 table
+#draft=false if you want to do QA and draft
+def post_erosion(readydf, draft= False):
+    if draft == True:
+        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processederosiondata.csv", index=False)
+        # or post to SEZ.gdb?? staging table?
+        # Convert DataFrame to a list of dictionaries
+        #staging_table= stage_bank_stabilitygdb
+        #data = readydf.to_dict(orient='records')
+
+        # Append data to staging table directly
+        #field_names = list(readydf.columns)
+        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
+         #   for row in data:
+          #      cursor.insertRow([row[field] for field in field_names])
+
+        #print(f"Draft data appended to {staging_table} successfully.")
+
+    elif draft == False:
     # Convert DataFrame to a list of dictionaries
-    data = readydf.to_dict(orient='records')
+        data = readydf.to_dict(orient='records')
 
     # Get the field names from the field mapping
     field_names = list(readydf.columns)
-
-   
     
     # Append data to existing table
     with arcpy.da.InsertCursor(stage_bank_stability, field_names) as cursor:

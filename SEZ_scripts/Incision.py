@@ -1,4 +1,4 @@
-from SEZ_scripts.utils import *
+from utils import *
 
 #Get Erosion Data from SDE Collect
 def get_incision_data():
@@ -7,22 +7,27 @@ def get_incision_data():
     # get BMP Status data as dataframe from BMP SQL Database
     with engine.begin() as conn:
         # create dataframe from sql query is incision ratio the correct value to get (maybe use raw scores instead)
-        df  = pd.read_sql('SELECT Assessment_Unit_Name, incision_ratio, survey_date FROM sde.SDE.Survey', conn)
+        df  = pd.read_sql('SELECT Assessment_Unit_Name, incision_ratio, survey_date FROM sde_collection.SDE.sez_channel_incision', conn)
     return df
 
-#Do I need this?
-# Initialize an empty list to store data
-#data = []
+def get_combined_survey_and_incision_data():
+    # Connect to SDE Collect to grab raw data
+    engine = get_conn('sde_collection')
 
- # Iterate over the rows in the feature class and extract data
-#with arcpy.da.SearchCursor(sezsurveytable, incisionfields) as cursor:
- #   for row in cursor:
-  #      data.append(row)
+    # Get the first dataset (sez_survey data)
+    with engine.begin() as conn:
+        dfsurvey = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, incision_ratio, survey_date FROM sde_collection.SDE.sez_survey_evw', conn)
 
-# Convert the data to a Pandas DataFrame
-#df = pd.DataFrame(data, columns=incisionfields)
+    # Get the second dataset (sez_stream_headcut data)
+    with engine.begin() as conn:
+        df = pd.read_sql('SELECT ParentGlobalID, bankfull_depth, depth_top_bank, bankfull_ratio, created_date FROM sde_collection.SDE.sez_channel_incision_evw', conn)
 
-def process_grade_incision(df, draft=True):
+    # Join the two DataFrames on GlobalID and ParentGlobalID
+    df = pd.merge(dfsurvey, df, how='inner', left_on='GlobalID', right_on='ParentGlobalID')
+
+    return df
+
+def process_grade_incision(df, year):
 #----------------------------------------------------------------#
 #Add correct info to dataframe
 #----------------------------------------------------------------#
@@ -40,6 +45,14 @@ def process_grade_incision(df, draft=True):
 
     #calculate year column 
     df['Year'] = df['survey_date'].dt.year
+    df['Year'] = year
+    #for QA purpses lets take the raw data and calculate the incision ratio
+    #I can also do this manually in Pro when doing the initial QA check
+    # Group by 'Assessment_Unit_Name' and calculate the sum and count
+    #grouped = df.groupby('Assessment_Unit_Name')['bankfull_depth','depth_top_bank']
+
+    
+    
     #----------------------------------------------------------------#
     #Grade, Score
     #----------------------------------------------------------------#
@@ -47,17 +60,6 @@ def process_grade_incision(df, draft=True):
     df['Incision_Score']= df['Incision_Rating'].apply(score_indicator)
 
     df['Incision_Data_Source'] = 'TRPA' 
-    
-    #----------------------------------------------------------------#
-    #post ending dataframe to incision staging table in sde
-    #----------------------------------------------------------------#
-def post_incision(df, draft=True):
-    # Define the name of the feature class
-    feature_class_name = 'incision'
-
-    # Define the full path to the feature class
-    feature_class_path = stage_incision 
-
     #Field Mapping
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
@@ -66,22 +68,42 @@ def post_incision(df, draft=True):
         'incision_ratio': 'Incision_Ratio',
         'Incision_Rating': 'Incision_Rating',
         'Incision_Score': 'Incision_Score',
-        'SEZ_ID': 'SEZ_ID'
-    }
+        'SEZ_ID': 'SEZ_ID',
+        }
 
     # Rename fields based on field mappings
     incisionfinaldf = df.rename(columns=field_mapping).drop(columns=[col for col in df.columns if col not in field_mapping])
 
     readydf = incisionfinaldf.groupby(['SEZ_ID', 'Year']).first().reset_index()
+    return readydf
+    #----------------------------------------------------------------#
+    #post ending dataframe to incision staging table in sde
+    #----------------------------------------------------------------#
+def post_incision(readydf, draft = False):
+    if draft == True:
+        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedincisiondata.csv", index=False)
+        # or post to SEZ.gdb?? staging table?
+        # Convert DataFrame to a list of dictionaries
+        #staging_table= stage_incisiongdb
+        #data = readydf.to_dict(orient='records')
 
-    # Convert DataFrame to a list of dictionaries
-    data = readydf.to_dict(orient='records')
+        # Append data to staging table directly
+        #field_names = list(readydf.columns)
+        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
+         #   for row in data:
+          #      cursor.insertRow([row[field] for field in field_names])
 
-    # Get the field names from the field mapping
-    field_names = list(readydf.columns)
+        #print(f"Draft data appended to {staging_table} successfully.")
 
-    # Append data to existing table
-    with arcpy.da.InsertCursor(stage_incision, field_names) as cursor:
-        for row in data:
-            cursor.insertRow([row[field] for field in field_names])
+    elif draft == False:
+        # Convert DataFrame to a list of dictionaries
+        data = readydf.to_dict(orient='records')
+
+        # Get the field names from the field mapping
+        field_names = list(readydf.columns)
+
+        # Append data to existing table
+        with arcpy.da.InsertCursor(stage_incision, field_names) as cursor:
+            for row in data:
+                cursor.insertRow([row[field] for field in field_names])
 
