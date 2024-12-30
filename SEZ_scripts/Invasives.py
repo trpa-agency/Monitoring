@@ -1,4 +1,6 @@
 from utils import *
+#Bring in data sent from USFS to get most recent invasives data from usfs layers
+
 def get_USFSinvasive_data():
     #External Data import and spatial join to our SEZ Units
     # Define the USFS REST endpoint
@@ -12,15 +14,13 @@ def get_USFSinvasive_data():
     # Create the spatially enabled DataFrame (sdf) for target feature SEZ assessment units
     #spatial reference stuff
     sdfUSFS.spatial.sr = dfSEZ.spatial.sr
-    # Align spatial references (project if necessary)
-    #if sdfUSFS.spatial.sr != dfSEZ.spatial.sr:
-     #   sdfUSFS = sdfUSFS.spatial.project(dfSEZ.spatial.sr)
     #perform spatial join
     usfsdata = dfSEZ.spatial.join(sdfUSFS, how="inner")
     usfsfields = ['Assessment_Unit_Name', 'COMMON_NAME', 'SCIENTIFIC_NAME', 'DATE_COLLECTED']
     usfsdf = usfsdata[usfsfields].copy()
     usfsdf.rename(columns={'Assessment_Unit_Name': 'Assessment_Unit_Name', 'COMMON_NAME': 'plant_type'}, inplace=True)
-    required_columns = ['Assessment_Unit_Name', 'plant_type', 'percent_cover', 'other', 'created_date', 'Source']
+    usfsdf['Year']=usfsdf['DATE_COLLECTED'].dt.year
+    required_columns = ['Assessment_Unit_Name', 'plant_type', 'percent_cover', 'other', 'Year', 'Source']
     usfsdf = add_and_keep_columns(usfsdf, required_columns)
     #Remove null plant types for usfs data
     usfsdf = usfsdf.loc[~usfsdf['plant_type'].isna()]
@@ -100,16 +100,18 @@ def get_combined_survey_and_invasive_data():
 
     # Get the second dataset (sez_invasive data)
     with engine.begin() as conn:
-        df = pd.read_sql('SELECT ParentGlobalID, invasives_percent_cover, invasives_plant_type, invasive_type_other created_date FROM sde_collection.SDE.sez_invasive_plant_evw', conn)
+        df = pd.read_sql('SELECT ParentGlobalID, invasives_percent_cover, invasives_plant_type, invasive_type_other, created_date FROM sde_collection.SDE.sez_invasive_plant_evw', conn)
     # Rename columns in the invasive data to align with survey data
     df.rename(columns={'invasives_plant_type': 'plant_type', 'invasive_type_other': 'other'}, inplace=True)
 
     # Join the two DataFrames on GlobalID and ParentGlobalID
     Idf = pd.merge(dfsurvey, df, how='inner', left_on='GlobalID', right_on='ParentGlobalID')
-    required_columns = ['Assessment_Unit_Name', 'plant_type', 'percent_cover', 'other', 'created_date', 'Source']
-    Idf= add_and_keep_columns(df, required_columns)
+    required_columns = ['Assessment_Unit_Name', 'plant_type', 'percent_cover', 'other', 'Year', 'Source']
+    Idf['Year']=Idf['created_date'].dt.year
+    Idf= add_and_keep_columns(Idf, required_columns)
     Idf['Source']= 'TRPA'
-    return Idf
+    
+    return Idf, df
 
 def process_grade_invasive(Idf, usfsdf, year):
     # Join USFS data and TRPA collected Invasive Data
@@ -122,7 +124,8 @@ def process_grade_invasive(Idf, usfsdf, year):
     file_path = "F:\\GIS\\PROJECTS\\ResearchAnalysis\\SEZ\\Invasives Priority lookup.csv"
 
     # Create the lookup dictionary and mapping function
-    lookup_dict, priority_mapper = create_invasive_dictionary(file_path)
+    #lookup_dict, priority_mapper = create_invasive_dictionary(file_path)
+    priority_mapper = create_invasive_dictionary(file_path)
 
     # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name
     df.loc[:, 'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
@@ -131,12 +134,11 @@ def process_grade_invasive(Idf, usfsdf, year):
     # Remove meadow from 2019 test period that are not actually meadows
     df = df[df['SEZ_ID'] != 0]
 
-    # Set 'Year' column based on data source
-    df['Year'] = df['created_date'].dt.year
+    # Set 'Year' column 
     df['Year']= year
 
-    df.loc[df['Source'] == 'USFS', 'Year'] = '2023'
-    df.loc[df['Source'] == 'TRPA', 'Year'] = df['created_date'].dt.year
+    df.loc[df['Source'] == 'USFS', 'Year'] = year
+    df.loc[df['Source'] == 'TRPA', 'Year'] = year
 
     # Reset index
     df.reset_index(drop=True, inplace=True)
@@ -244,20 +246,36 @@ def process_grade_invasive(Idf, usfsdf, year):
 
     return readydf
 
-def post_invasive(readydf):
+def post_invasive(readydf, draft= True):
     #----------------------------------------------------------------#
     #Prep and post ending dataframe to invasives table in SEZ_Data.GDB
     #----------------------------------------------------------------#
-    # Convert DataFrame to a list of dictionaries
-    data = readydf.to_dict(orient='records')
+    if draft == True:
+        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedinavsivedata.csv", index=False)
+        # or post to SEZ.gdb?? staging table?
+        # Convert DataFrame to a list of dictionaries
+        #staging_table= stage_invasivesgdb
+        #data = readydf.to_dict(orient='records')
 
-    # Get the field names from the field mapping
-    field_names = list(readydf.columns)
+        # Append data to staging table directly
+        #field_names = list(readydf.columns)
+        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
+         #   for row in data:
+          #      cursor.insertRow([row[field] for field in field_names])
 
-    # Append data to existing table uncomment when ready
-    with arcpy.da.InsertCursor(stage_invasives, field_names) as cursor:
-        for row in data:
-            cursor.insertRow([row[field] for field in field_names])
+        #print(f"Draft data appended to {staging_table} successfully.")
+
+    elif draft == False:
+        # Convert DataFrame to a list of dictionaries
+        data = readydf.to_dict(orient='records')
+
+        # Get the field names from the field mapping
+        field_names = list(readydf.columns)
+
+        # Append data to existing table uncomment when ready
+        with arcpy.da.InsertCursor(stage_invasives, field_names) as cursor:
+            for row in data:
+                cursor.insertRow([row[field] for field in field_names])
 
 
 
