@@ -65,6 +65,20 @@ stage_aquatic = os.path.join(sdeVector, "aquatic_organism_passage_table")
 stage_ditches = os.path.join(sdeVector, "ditches")
 stage_habitat = os.path.join(sdeVector, "habitat_fragmentation")
 
+#REST servive links to staging tables
+bank_stability_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/4"
+biotic_integrity_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/5"
+conifer_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/6"
+ditches_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/7"
+invasives_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/11"
+Hab_Frag_url = 'https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/8'
+vegetation_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/12"
+incision_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/10"
+headcuts_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/9"
+AOP_url= "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/3"
+SEZ_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/0"
+
+
 #Staging Tables in SEZ.gdb as a qa tool
 stage_bank_stabilitygdb = os.path.join(master_path, "bank_stability") 
 #stage_All_SEZ_Scores = os.path.join(sdeVector, "All_SEZ_Scores")
@@ -157,7 +171,7 @@ def get_conn(db):
  #   feature_layer = FeatureLayer(service_url)
   #  query_result = feature_layer.query(query_params).sdf
    # return query_result
-def get_fs_data_spatial_query(service_url, query_params):
+def get_fs_data_spatial_query(service_url, query_params=None):
         # Initialize the feature layer from the given URL
         feature_layer = FeatureLayer(service_url)
         # Perform the query and retrieve the results as a Spatially Enabled DataFrame (sdf)
@@ -175,6 +189,11 @@ def get_fs_data_query(service_url, query_params):
     # return data frame
     return all_data
 
+# Gets spatially enabled dataframe from TRPA server
+def get_fs_data_spatial(service_url):
+    feature_layer = FeatureLayer(service_url)
+    query_result = feature_layer.query().sdf
+    return query_result
 
 # Gets data from the TRPA server
 def get_fs_data(service_url):
@@ -192,11 +211,7 @@ def feature_class_to_dataframe(feature_class, fields):
     data = [row for row in arcpy.da.SearchCursor(feature_class, fields)]
     return pd.DataFrame(data, columns=fields)
 
-# Gets spatially enabled dataframe from TRPA server
-def get_fs_data_spatial(service_url):
-    feature_layer = FeatureLayer(service_url)
-    query_result = feature_layer.query().sdf
-    return query_result
+
 
 #SPECIAL Definition Functions#
 #Used in invasives? need to pinpoint

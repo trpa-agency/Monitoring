@@ -104,12 +104,12 @@ def post_erosion(readydf, draft= False):
         data = readydf.to_dict(orient='records')
 
     # Get the field names from the field mapping
-    field_names = list(readydf.columns)
+        field_names = list(readydf.columns)
     
     # Append data to existing table
-    with arcpy.da.InsertCursor(stage_bank_stability, field_names) as cursor:
-       for row in data:
-          cursor.insertRow([row[field] for field in field_names])
+        with arcpy.da.InsertCursor(stage_bank_stability, field_names) as cursor:
+            for row in data:
+                cursor.insertRow([row[field] for field in field_names])
  
 
    
