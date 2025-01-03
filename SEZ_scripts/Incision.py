@@ -64,7 +64,7 @@ def process_grade_incision(df, year):
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
         'Year': 'Year',
-        'Incision_Data_Source': 'Incision_Data_Source',
+        'Incision_Data_Sourc': 'Incision_Data_Source',
         'incision_ratio': 'Incision_Ratio',
         'Incision_Rating': 'Incision_Rating',
         'Incision_Score': 'Incision_Score',

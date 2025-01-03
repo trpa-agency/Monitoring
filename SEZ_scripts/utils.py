@@ -411,5 +411,4 @@ lookup_all = {}
 for index, row in excel_data.iterrows():
     lookup_all[row['SEZ_ID']] = {'SEZ_Type': row['SEZ_Type']}
 
-# See dictionary where keys are Assessment Unit Names and values are SEZ IDs
-print(lookup_all)
+#Used in Invasive

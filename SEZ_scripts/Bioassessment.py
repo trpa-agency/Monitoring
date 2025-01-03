@@ -10,8 +10,8 @@ def get_bioassessment_data():
     streamsdf.spatial.sr = dfSEZ.spatial.sr
 
     #perform spatial join of sde.stream and sez units
-    thesdf = dfSEZ.spatial.join(streamsdf, how='inner')
-
+    df = dfSEZ.spatial.join(streamsdf, how='inner')
+    return df
 def get_bioassessment_data_fc():
     arcpy.env.workspace = streamdata
     feature_class= "Stream"
@@ -33,37 +33,25 @@ def get_bioassessment_data_fc():
     #perform spatial join of sde.stream and sez units
     df = dfSEZ.spatial.join(streamsdf, how='inner')
     return df
-def process_grade_bioassessment(df):
+def process_grade_bioassessment(df, year):
     #----------------------#
     #DATA PREP
     #----------------------#
     # List of columns to keep
     columns_to_keep = ['Assessment_Unit_Name', 'SEZ_Type', 'Feature_Type', 'SEZ_ID','SITE_NAME', 'COUNT_VALUE', 'YEAR_OF_COUNT', 'STATION_TYPE', 'LONGITUDE', 'LATITUDE', ]
-    ##Try this instead
+
     # Select only the desired columns
     bioticdf = df.loc[:, columns_to_keep].copy()  
 
     #DATA PREP
     # Filter for years 2020 to 2023
-    filtered_df = bioticdf.loc[(bioticdf['YEAR_OF_COUNT'] >= 2020) & (bioticdf['YEAR_OF_COUNT'] <= 2023)].copy()
-
-    # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name THIS METHOD USES LARGER POLYGONES 
-    filtered_df.loc[:, 'SEZ_ID'] = filtered_df['Assessment_Unit_Name'].map(lookup_dict)
-
-    # Fill NaN values with a specific value, such as 0
-    filtered_df.loc[:, 'SEZ_ID'] = filtered_df['SEZ_ID'].fillna(0)
-
-    # Convert SEZ ID column to integer
-    filtered_df.loc[:, 'SEZ_ID'] = filtered_df['SEZ_ID'].astype(int)
-
-    # Replace values in the 'Assessment_Unit_Name' column
-    filtered_df.loc[:, 'Assessment_Unit_Name'] = filtered_df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh', 'Sky Meadows meadow - 1': 'Sky meadows'})
+    #filtered_df = bioticdf.loc[(bioticdf['YEAR_OF_COUNT'] >= 2020) & (bioticdf['YEAR_OF_COUNT'] <= 2023)].copy()
+    # Filter for the target year
+    filtered_df = bioticdf.loc[bioticdf['YEAR_OF_COUNT'] == year].copy()
 
     # Add data source information
     filtered_df['Source'] = 'TRPA, ' + filtered_df['SITE_NAME'].astype(str) + ', ' + filtered_df['YEAR_OF_COUNT'].astype(str)
-
-    #Group by Year and Assessment Unit and Site NAME and remove duplicates
-
+    #Formatting
     filtered_df['SITE_NAME'] = filtered_df['SITE_NAME'].str.strip()
     filtered_df['YEAR_OF_COUNT'] = filtered_df['YEAR_OF_COUNT'].astype(str).str.strip().astype(int)
     filtered_df['YEAR_OF_COUNT'] = pd.to_numeric(filtered_df['YEAR_OF_COUNT'], errors='coerce')

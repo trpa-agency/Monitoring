@@ -1,7 +1,7 @@
 from utils import *
-def get_sez_data_sql():
+def get_conifersez_data_sql():
     """
-    Connects to the SQL database, retrieves SEZ data, and returns it as a DataFrame.
+    Connects to the SQL database, retrieves SEZ dataused in last threshold, and returns it as a DataFrame.
     """
     # Connect to the database using the custom connection function
     engine = get_conn('sde')
@@ -103,7 +103,7 @@ def process_conifer(conifer_df):
     readydf = readydf[[field_mapping[key] for key in field_mapping if key in conifer_df.columns]]
     return readydf
 
-def post_conifer_data(readydf, draft= True):
+def post_conifer_data(readydf, draft= False):
     #----------------------------------------------------------------#
     #Prep and post ending dataframe to invasives table in SEZ_Data.GDB
     #----------------------------------------------------------------#

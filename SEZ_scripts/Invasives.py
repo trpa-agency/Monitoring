@@ -111,22 +111,15 @@ def get_combined_survey_and_invasive_data():
     Idf= add_and_keep_columns(Idf, required_columns)
     Idf['Source']= 'TRPA'
     
-    return Idf, df
-
-def process_grade_invasive(Idf, usfsdf, year):
+    return Idf
+#This combines external and internal data from USFS and reorganizes the data so we can process it
+def merge_format_invasive(Idf, usfsdf, year):
     # Join USFS data and TRPA collected Invasive Data
     df = pd.concat([Idf, usfsdf], ignore_index=True)
     
     #---------------------------#
-    # Prep Plant_type Data
+    # Format Data
     #---------------------------#
-    # Location of Invasives Priority Lookup
-    file_path = "F:\\GIS\\PROJECTS\\ResearchAnalysis\\SEZ\\Invasives Priority lookup.csv"
-
-    # Create the lookup dictionary and mapping function
-    #lookup_dict, priority_mapper = create_invasive_dictionary(file_path)
-    priority_mapper = create_invasive_dictionary(file_path)
-
     # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name
     df.loc[:, 'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
     df.loc[df['SEZ_ID'].isna(), 'SEZ_ID'] = 0  # Fill NaN values with 0
@@ -135,24 +128,33 @@ def process_grade_invasive(Idf, usfsdf, year):
     df = df[df['SEZ_ID'] != 0]
 
     # Set 'Year' column 
-    df['Year']= year
+    df = df.loc[df['Year'] == year].copy()
+    #df['Year']= year
 
-    df.loc[df['Source'] == 'USFS', 'Year'] = year
-    df.loc[df['Source'] == 'TRPA', 'Year'] = year
+    df.loc[df['Source'] == 'USFS', 'Year'] 
+    df.loc[df['Source'] == 'TRPA', 'Year'] 
 
     # Reset index
     df.reset_index(drop=True, inplace=True)
-
+    #---------------------------#
+    # Prep Plant_type Data
+    #---------------------------#
+    ###Other Plants##
     # Make a DataFrame to capture 'other' plants in TRPA data and then add it to invasive df
-    other_plants_df = df[['Source', 'Year', 'SEZ_ID', 'Assessment_Unit_Name', 'other']].copy()
+    #other_plants_df = df[['Source', 'Year', 'SEZ_ID', 'Assessment_Unit_Name', 'other']].copy()
 
     # Remove Null values
-    other_plants_df = other_plants_df[~other_plants_df['other'].isna()]
-    other_plants_df.reset_index(drop=True, inplace=True)
+    #other_plants_df = other_plants_df[~other_plants_df['other'].isna()]
+    #other_plants_df.reset_index(drop=True, inplace=True)
 
     # Rename 'other' to plant_type
-    other_plants_df.rename(columns={'other': 'plant_type'}, inplace=True)
+    #other_plants_df.rename(columns={'other': 'plant_type'}, inplace=True)
 
+    # Concatenate other_plants_df with df JUST DO THIS MANUALLY not working 
+    #invasivedf = pd.concat([invasivedf, other_plants_df], ignore_index=True)
+    
+    
+    ##### make it so plant type is split into individual rows instead of lumped##
     # Replace various representations of null values with 'none'
     null_representations = ['<null>', '<Null>', '', 'NA', 'N/A', 'nan', 'NaN', 'None', 'NULL', None]
     df['plant_type'] = df['plant_type'].replace(null_representations, 'none')
@@ -169,7 +171,7 @@ def process_grade_invasive(Idf, usfsdf, year):
     df['plant_type'] = df['plant_type'].str.strip()
 
     #----------------------#
-    # Plant Type Replacements
+    # Plant Type Replacements/ replace slang/misspellings in raw data
     #----------------------#
 
     # Lookup dictionary for plant type fixes
@@ -196,62 +198,59 @@ def process_grade_invasive(Idf, usfsdf, year):
     df = df.drop_duplicates(subset=['Assessment_Unit_Name', 'Year', 'plant_type'], keep='first')
 
     # Group by 'Assessment_Unit_Name' and 'Year' and combine plant types
+    #Columns formatting for final table so that all invasive plant types are in one block under a column called a_plant_types
+    # Group by 'Assessment_Unit_Name' and 'Year' and combine plant types
+    # Ensure 'grouped_df' is grouped by 'Assessment_Unit_Name' and 'Year'
     grouped_df = df.groupby(['Assessment_Unit_Name', 'Year'])['plant_type']
     combined_plant_types = grouped_df.apply(lambda x: ', '.join(x)).reset_index(name='all_plant_types')
+    # Merge combined plant types back to df
+    df = pd.merge(df, combined_plant_types, on=['Assessment_Unit_Name', 'Year'], how='left')
+    #Create Plant Priority look up dictionary 
+    
+    # Now df contains the 'all_plant_types' column with combined values
+    return df
+
+def process_grade_invasive(df):
+    #------------------------------------#
+    #Create Plant Priority look up dictionary 
+    #--------------------------------------#
+    
+    # Read the csv file into a DataFrame
+    csv_data = pd.read_csv(r"F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Invasives Priority lookup.csv") 
+
+    #Define Empty look up dataframe
+    Invasives_lookup = {}
+
+    key = 'Common'
+    values = ['Scientific', 'Priority'] 
+
+    Invasives_lookup= csv_data.set_index(key)[values].to_dict(orient='index')
+
+    # Define a custom function to map plant types to priorities
+    def map_priority(plant_type):
+        if pd.isnull(plant_type):
+            return 'None' # Return NaN for NaN values
+        else:
+            # Extract the priority from the dictionary, or return 'Unknown' if not found
+            plant_info = Invasives_lookup.get(plant_type)
+            if plant_info:
+                return plant_info['Priority']
+            else:
+                return 'Unknown'
+
 
     # Create a new column 'Priority' based on the mapping from the dictionary
-    df['Priority'] = df['plant_type'].map(priority_mapper)
+    df['Priority'] = df['plant_type'].map(map_priority)
+    
+    return df
 
-    # Group by assessment unit and year and summarize the priority level of plants in each unit
-    invasive_summary = df.groupby(['Assessment_Unit_Name', 'Year', 'Priority', 'Source'], dropna=False).size().reset_index(name='Count')
 
-    # Pivot to summarize by priority
-    invasive_summary_priority = invasive_summary.pivot_table(index=['Assessment_Unit_Name', 'Year', 'Source'], columns='Priority', values='Count', fill_value=0)
-
-    # Reset the index to flatten the DataFrame
-    invasive_summary_priority.reset_index(inplace=True)
-
-    # Apply the rating function to the summary DataFrame
-    invasive_summary_priority['Invasives_Rating'] = invasive_summary_priority[[1, 2, 3, 4]].apply(rate_invasive, axis=1)
-
-    # Calculate the score for the SEZ
-    invasive_summary_priority['Invasives_Score'] = invasive_summary_priority['Invasives_Rating'].apply(score_indicator)
-
-    # Calculate total number of invasives per SEZ per year
-    invasive_summary_priority['Number_of_Invasives'] = invasive_summary_priority[[1, 2, 3, 4]].sum(axis=1)
-
-    # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name
-    invasive_summary_priority['SEZ_ID'] = invasive_summary_priority['Assessment_Unit_Name'].map(lookup_dict)
-
-    invasive_summary_priority['all_plants'] = combined_plant_types['all_plant_types']
-
-    # Field Mapping
-    field_mapping = {
-        'Assessment_Unit_Name': 'Assessment_Unit_Name',
-        'Year': 'Year',
-        'Source': 'Invasives_Data_Source',
-        'Number_of_Invasives': 'Invasives_Number_of_Invasives',
-        'Invasives_Rating': 'Invasives_Rating',
-        'Invasives_Score': 'Invasives_Scores',
-        'SEZ_ID': 'SEZ_ID',
-        'percent_cover': 'Invasives_Percent_Cover',
-        'all_plants': 'Invasives_Plant_Types',
-    }
-
-    # Rename fields based on field mappings
-    readydf = invasive_summary_priority.rename(columns=field_mapping).drop(columns=[col for col in invasive_summary_priority.columns if col not in field_mapping])
-
-    # Final SEZ ID check
-    readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
-
-    return readydf
-
-def post_invasive(readydf, draft= True):
+def post_invasive(df, draft= True):
     #----------------------------------------------------------------#
     #Prep and post ending dataframe to invasives table in SEZ_Data.GDB
     #----------------------------------------------------------------#
     if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedinavsivedata.csv", index=False)
+        df.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedinavsivedata.csv", index=False)
         # or post to SEZ.gdb?? staging table?
         # Convert DataFrame to a list of dictionaries
         #staging_table= stage_invasivesgdb
