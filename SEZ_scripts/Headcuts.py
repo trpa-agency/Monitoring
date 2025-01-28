@@ -53,7 +53,10 @@ def get_combined_survey_and_headcut_data():
 
     # Join the two DataFrames on GlobalID and ParentGlobalID
     headcutdf = pd.merge(dfsurvey, dfheadcut, how='left', left_on='GlobalID', right_on='ParentGlobalID')
-
+    #calculate year column 
+    headcutdf['Year'] = headcutdf['survey_date'].dt.year
+    #format date as year only
+    headcutdf
     return headcutdf
 
 
@@ -61,10 +64,8 @@ def process_grade_headcut(headcutdf, year):
     #----------------------------------------------#
     # Process Data
     #----------------------------------------------#
-    #calculate year column 
-    headcutdf['Year'] = headcutdf['survey_date'].dt.year
-    #query for year here
-    headcutdf['Year'] = year
+    #filter for year
+    headcutdf = headcutdf[headcutdf['Year'] == year]
     # assign small, medium, large to headcut
     headcutdf['Headcut_Size']=headcutdf['headcut_depth'].apply(categorize_headcut)
 

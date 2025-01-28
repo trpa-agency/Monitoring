@@ -315,6 +315,9 @@ def categorize_csci(biotic_integrity):
 #Define Priority List Level of Invasive Plant Species lookup list will change
 # Process Data
 def rate_invasive(priority):
+    # priority[1] = count for Priority 1
+    # priority[2] = count for Priority 2
+    # priority[3] = count for Priority 3, etc.
     # Check if the SEZ has at least one large headcut
     if (priority[3] + priority[4] == 1):
         return 'B'  # Assign score D

@@ -7,64 +7,67 @@ from utils import *
 def get_erosion_data():
     # make sql database connection with pyodbc
     engine = get_conn('sde_collection')
-    # get BMP Status data as dataframe from BMP SQL Database
+    # get  data as dataframe from SQL Database
     with engine.begin() as conn:
-        # create dataframe from sql query
-        df  = pd.read_sql('SELECT Assessment_Unit_Name, Shape.STLength(), Bank_Type, Survey_Date FROM sde_collection.SDE.Stream_Erosion_evw', conn)
+        # Create dataframe from SQL query that includes STLength() to calculate shape length in the query itself
+        query = """
+        SELECT 
+            Assessment_Unit_Name, 
+            SHAPE.STLength() AS Shape_Length, 
+            Bank_Type, 
+            Survey_Date 
+        FROM sde_collection.SDE.Stream_Erosion_evw
+        """
+        df = pd.read_sql(query, conn)
+    
     return df
-#Clean Up Raw Erosion Data
+        
+#Clean Up Raw Erosion Data and process
 def process_grade_erosion(df, year):
-    
-    # Replace NaN values in 'Assessment_Unit_Name' column with 'Skylandia SEZ'
-    #erosiondf['Assessment_Unit_Name'] = erosiondf['Assessment_Unit_Name'].fillna('Skylandia SEZ')
-    # Replace specific values in 'Assessment_Unit_Name' column
-    df['Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
+    # Standardize Assessment_Unit_Name and fill missing SEZ_IDs
+    df['Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({
+        'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2',
+        'Taylor Creek marsh - 1': 'Taylor Creek marsh'
+    })
+    df['SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict).fillna(0).astype(int)
 
-    #This code is for the excel look up dictionary
-    df['SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
+    # Standardize Bank_Type
+    df['Bank_Type'] = df['Bank_Type'].replace({
+        'both_banks': 'Both Banks',
+        'Both banks': 'Both Banks',
+        'one_bank': 'One Bank',
+        'One bank': 'One Bank',
+        'no_bank': 'No Bank'
+    })
 
-    # Fill NaN values with a specific value, such as 0
-    df['SEZ_ID'] = df['SEZ_ID'].fillna(0)
-
-    # Convert SEZ ID column to integer
-    df['SEZ_ID'] = df['SEZ_ID'].astype(int)
-    
-    # Replace 'both_banks' with 'Both Banks' in Bank_Type column
-    df['Bank_Type'] = df['Bank_Type'].replace(['both_banks', 'Both banks'], 'Both Banks' )
-    df['Bank_Type'] = df['Bank_Type'].replace(['one_bank', 'One bank'], 'One Bank')
-    df['Bank_Type'] = df['Bank_Type'].replace(['no_bank', 'No bank'], 'No Bank')
-
-    #calculate year column 
+    # Extract year and filter data
     df['Year'] = df['Survey_Date'].dt.year
-    df['Year']=year
-    #----------------------------------------------------------------#
-    #Process Data
-    #----------------------------------------------------------------#
+    df = df[df['Year'] == year]
 
-    # Initialize variables
-    df['bank_multiplier'] = df['Bank_Type'].apply(lambda x: 2 if x == 'Both Banks' else (1 if x == 'One Bank' else 0))
+    # Add bank multiplier
+    df['bank_multiplier'] = df['Bank_Type'].map({'Both Banks': 2, 'One Bank': 1, 'No Bank': 0})
+    df['eroded_banks_per_row'] = df['Shape_Length'] * df['bank_multiplier']
 
-    # Calculate the product of 'Shape.STLength()' and 'bank_multiplier' to get the eroded banks per row
-    df['eroded_banks_per_row'] = df['Shape.STLength()'] * df['bank_multiplier']
+    # Perform explicit groupby aggregation
+    grouped = df.groupby(['Assessment_Unit_Name', 'Year']).agg(
+        banks_assessed_per_unit=('Shape_Length', lambda x: x.sum() * 2),  # Total banks assessed
+        SEZ_total_eroded=('eroded_banks_per_row', 'sum')  # Total eroded banks
+    ).reset_index()
 
-    # Group by Assessment_Unit_Name and year and sum the lengths of banks for each unit to get total banks assessed
-    df['banks_assessed_per_unit'] = df.groupby(['Assessment_Unit_Name', 'Year'])['Shape.STLength()'].transform('sum') * 2
+    # Calculate Bank Stability Percentage
+    grouped['Bank_Stability_Percent_Unstable'] = (
+        grouped['SEZ_total_eroded'] / grouped['banks_assessed_per_unit'] * 100
+    )
 
-    # Group by Assessment_Unit_Name and sum the eroded banks per row for each unit
-    df['SEZ_total_eroded'] = df.groupby(['Assessment_Unit_Name', 'Year'])['eroded_banks_per_row'].transform('sum')
+    # Apply grading and scoring
+    grouped['Bank_Stability_Rating'] = grouped['Bank_Stability_Percent_Unstable'].apply(categorize_erosion)
+    grouped['Bank_Stability_Score'] = grouped['Bank_Stability_Rating'].apply(score_indicator)
+    grouped['Bank_Stability_Data_Source'] = 'TRPA'
 
-    # Calculate percent unstable Bank Stability per Assessment Unit
-    df['Bank_Stability_Percent_Unstable'] = (df['SEZ_total_eroded'] / df['banks_assessed_per_unit']) * 100
+    # Map SEZ_ID back into the grouped DataFrame
+    grouped['SEZ_ID'] = grouped['Assessment_Unit_Name'].map(lookup_dict).fillna(0).astype(int)
 
-    #----------------------------------------------------------------#
-    #Grade, Score
-    #----------------------------------------------------------------#
-    df['Bank_Stability_Rating']= df['Bank_Stability_Percent_Unstable'].apply(categorize_erosion)
-    df['Bank_Stability_Score']= df['Bank_Stability_Rating'].apply(score_indicator)
-
-    df['Bank_Stability_Data_Source'] = 'TRPA' 
-    #print some kind of QA tool here?
-    #Field Mapping
+    # Final cleanup with field mapping
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
         'Year': 'Year',
@@ -75,11 +78,10 @@ def process_grade_erosion(df, year):
         'SEZ_ID': 'SEZ_ID'
     }
 
-    # Rename fields based on field mappings
-    readydf = df.rename(columns=field_mapping).drop(columns=[col for col in df.columns if col not in field_mapping])
-
-    #readydf = bank_stabilitydf.groupby(['SEZ_ID', 'Year']).first().reset_index()   
+    readydf = grouped.rename(columns=field_mapping)
     return readydf
+
+
 
 #DO QA Before you post data t0 table
 #draft=false if you want to do QA and draft
