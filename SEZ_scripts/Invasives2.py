@@ -151,13 +151,8 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     return df
 
 def process_grade_invasives(df):
-    # Convert 'Priority' column to categorical type for efficient memory usage and better performance
-    #df['Priority'] = df['Priority'].astype('category')
-   
    # Perform the groupby operation to include priority and reset the index to create a proper DataFrame
     invasive_summary = df.groupby(['Assessment_Unit_Name', 'Year', 'Priority'], dropna=False).size().reset_index(name='Count')
- 
-
     # Pivot the summary directly to create priority-level columns 1.2.3.4 with count values so all info is in one row
     invasive_priority_summary = (
         invasive_summary.pivot(
@@ -169,15 +164,9 @@ def process_grade_invasives(df):
         .reset_index()  # Flatten the DataFrame for simplicity
     )
     priority_list=['Level 1', 'Level 2', 'Level 3', 'Level 4']
-    #invasive_priority_summary[['1', '2', '3', '4']] = invasive_priority_summary[['1', '2', '3', '4']].astype(int)
     #Rate and Grade
     invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[priority_list].apply(rate_invasive, axis=1)
-    # #Calculate the total number of invasive plants per Assessment unit
-    # invasive_priority_summary['Number_of_Invasives'] = invasive_priority_summary[['1', '2', '3', '4']].sum(axis=1)
-    # # Calculate the score for the SEZ
-    # invasive_priority_summary['Invasives_Score'] = invasive_priority_summary['Invasives_Rating'].apply(score_indicator)
-    
-    return invasive_summary, invasive_priority_summary, 
+    return invasive_summary, invasive_priority_summary
 
 #----------------------#
     # #Joining plant types
