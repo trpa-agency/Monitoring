@@ -88,9 +88,8 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     df['plant_type'] = df['plant_type'].str.split(pat=',')
     df = df.explode('plant_type')
 
-    # Capitalize the first word and replace underscores with spaces
-    df['plant_type'] = df['plant_type'].str.split('_').str[0].str.capitalize() + ' ' + df['plant_type'].str.split('_').str[1:].str.join(' ').astype(str).str.strip()
-
+    # Capitalize the first word and make the second word lower case, replace underscores with spaces
+    df['plant_type'] = df['plant_type'].apply(lambda x: ' '.join([word.capitalize() if i == 0 else word.lower() for i, word in enumerate(x.split('_'))]))
 
     #----------------------#
     # Plant Type Replacements/ replace slang/misspellings in raw data
@@ -120,39 +119,75 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     df = df.drop_duplicates(subset=['Assessment_Unit_Name', 'Year', 'plant_type'], keep='first')
     
       #------------------------------------#
-    #Create Plant Priority look up dictionary 
+    #Assign Priorities to Plant Types
     #--------------------------------------#
+    # #Create Plant Priority look up dictionary
     
-    # Read the csv file into a DataFrame
-    csv_data = pd.read_csv(r"F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Invasives Priority lookup.csv") 
-    # Strip any leading/trailing spaces in column names
-    csv_data.columns = csv_data.columns.str.strip()
-    #Define Empty look up dataframe
+    #  Read and process the CSV into a lookup dictionary
+    csv_data = pd.read_csv(r"F:\\GIS\\PROJECTS\\ResearchAnalysis\\SEZ\\Invasives Priority lookup.csv", skipinitialspace=True)
+    csv_data.columns=csv_data.columns.str.strip()
     Invasives_lookup = {}
-    # Define the lookup dictionary using 'Common' as the key and 'Scientific' and 'Priority' as values
+    # Create the lookup dictionary directly
     Invasives_lookup = csv_data.set_index('Common')[['Scientific', 'Priority']].to_dict(orient='index')
-    #key = 'Common'
-    #values = ['Scientific', 'Priority'] 
-
-    #Invasives_lookup= csv_data.set_index(key)[values].to_dict(orient='index')
-
-    # Define a custom function to map plant types to priorities
-    def map_priority(plant_type):
-        if pd.isnull(plant_type) or plant_type.strip() == '':
-            return 'None'  # Handle empty or NaN values
-        plant_info = Invasives_lookup.get(plant_type)
-        return plant_info['Priority'] if plant_info else 'Unknown'
-
-    # Add a priority column using the mapping and handle missing values gracefully
-    df['Priority'] = df['plant_type'].map(map_priority).fillna('Unknown')
-
-    # Combine plant type with priority level into a new column
+    
+    #Assign Priorities to Cleaned Data
+    # Map priorities directly with a lambda function
+    df['Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
+    # Debug print to check the priorities
+    print("Priorities:", df['Priority'].unique())
+    
+    #Move to final FORMATTING??
+    # Create a new column with the plant type and priority
     df['Plant_Type_With_Priority'] = df['plant_type'] + ' (Level ' + df['Priority'].astype(str) + ')'
+    # If plant_type is none i want to assign Plant_Type_With_priority name as just None
+    df.loc[df['plant_type'] == 'None', 'Plant_Type_With_Priority'] = 'None'
+    # Reset Index?
+    df.reset_index(drop=True, inplace=True)
+    
     return df
 
 def process_grade_invasives(df):
+    # Convert 'Priority' column to categorical type for efficient memory usage and better performance
+    #df['Priority'] = df['Priority'].astype('category')
+   
+   # Perform the groupby operation to include priority and reset the index to create a proper DataFrame
+    invasive_summary = df.groupby(['Assessment_Unit_Name', 'Year', 'Priority'], dropna=False).size().reset_index(name='Count')
+ 
+
+    # Pivot the summary directly to create priority-level columns 1.2.3.4 with count values so all info is in one row
+    invasive_priority_summary = (
+        invasive_summary.pivot(
+            index=['Assessment_Unit_Name', 'Year'],
+            columns='Priority',
+            values='Count'
+        )
+        .fillna(0)
+        .reset_index()  # Flatten the DataFrame for simplicity
+    )
     
-    #----------------------#
+    # priority_columns= ['1','2','3','4']
+    #  # Ensure that the priority columns exist in the DataFrame
+    # for col in priority_columns:
+    #     if col not in invasive_priority_summary.columns:
+    #         invasive_priority_summary[col] = 0
+    # # Debug print to check the priority columns
+    # #print("Invasive Priority Summary (After Ensuring Priority Columns):")
+    # #print(invasive_priority_summary[priority_columns].head())
+    # # Drop the 'None' column if it exists
+    # if 'None' in invasive_priority_summary.columns:
+    #     invasive_priority_summary.drop(columns=['None'], inplace=True)
+    # #Rate and Grade'None')
+    # #invasive_priority_summary[['1', '2', '3', '4']] = invasive_priority_summary[['1', '2', '3', '4']].astype(int)
+    # #Rate and Grade
+    # invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[['1', '2', '3', '4']].apply(rate_invasive, axis=1)
+    # #Calculate the total number of invasive plants per Assessment unit
+    # invasive_priority_summary['Number_of_Invasives'] = invasive_priority_summary[['1', '2', '3', '4']].sum(axis=1)
+    # # Calculate the score for the SEZ
+    # invasive_priority_summary['Invasives_Score'] = invasive_priority_summary['Invasives_Rating'].apply(score_indicator)
+    
+    return invasive_priority_summary, invasive_summary
+
+#----------------------#
     # #Joining plant types
     # # Group by 'Assessment_Unit_Name' and 'Year' and combine plant types and data sources
     # grouped_df = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
@@ -175,51 +210,22 @@ def process_grade_invasives(df):
    # Summarize invasive plants by grouping and aggregating- creates a count column for each priority level per assessment unit per year
     #df['Count'] = df.groupby(['Assessment_Unit_Name', 'Year', 'Priority'], dropna=False).size()
         #.reset_index(name='Count')
-   # Perform the groupby operation and reset the index to create a proper DataFrame
-    invasive_summary = df.groupby(['Assessment_Unit_Name', 'Year', 'Priority'], dropna=False).size().reset_index(name='Count')
- 
+    # # Field Mapping
+    # field_mapping = {
+    #     'Assessment_Unit_Name': 'Assessment_Unit_Name',
+    #     'Year': 'Year',
+    #     'Data_Sources_y': 'Invasives_Data_Source',
+    #     'Number_of_Invasives': 'Invasives_Number_of_Invasives',
+    #     'Invasives_Rating': 'Invasives_Rating',
+    #     'Invasives_Score': 'Invasives_Scores',
+    #     'SEZ_ID': 'SEZ_ID',
+    #     'percent_cover': 'Invasives_Percent_Cover',
+    #     'all_plants': 'Invasives_Plant_Types',
+    # }
 
-    # Pivot the summary directly to create priority-level columns 1.2.3.4 with count values so all info is in one row
-    invasive_priority_summary = (
-        invasive_summary.pivot(
-            index=['Assessment_Unit_Name', 'Year'],
-            columns='Priority',
-            values='Count'
-        )
-        .fillna(0)
-        .reset_index()  # Flatten the DataFrame for simplicity
-    )
-    priority_columns= ['1','2','3','4']
-    #Rate and Grade
-    invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[priority_columns].apply(rate_invasive, axis=1)
-    invasive_priority_summary['Number_of_Invasives'] = invasive_priority_summary[priority_columns].sum(axis=1)
-    # Calculate the score for the SEZ
-    invasive_priority_summary['Invasives_Score'] = invasive_priority_summary['Invasives_Rating'].apply(score_indicator)
+    # # Rename fields based on field mappings
+    # readydf = invasive_priority_summary.rename(columns=field_mapping).drop(columns=[col for col in invasive_priority_summary.columns if col not in field_mapping])
 
-    # Calculate total number of invasives per SEZ per year
-    #invasive_summary_priority['Number_of_Invasives'] = invasive_summary_priority[[1, 2, 3, 4]].sum(axis=1)
-
-    # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name
-    invasive_priority_summary['SEZ_ID'] = invasive_priority_summary['Assessment_Unit_Name'].map(lookup_dict)
-
-    invasive_priority_summary['all_plants'] = df['all_plant_types']
-
-    # Field Mapping
-    field_mapping = {
-        'Assessment_Unit_Name': 'Assessment_Unit_Name',
-        'Year': 'Year',
-        'Data_Sources_y': 'Invasives_Data_Source',
-        'Number_of_Invasives': 'Invasives_Number_of_Invasives',
-        'Invasives_Rating': 'Invasives_Rating',
-        'Invasives_Score': 'Invasives_Scores',
-        'SEZ_ID': 'SEZ_ID',
-        'percent_cover': 'Invasives_Percent_Cover',
-        'all_plants': 'Invasives_Plant_Types',
-    }
-
-    # Rename fields based on field mappings
-    readydf = invasive_priority_summary.rename(columns=field_mapping).drop(columns=[col for col in invasive_priority_summary.columns if col not in field_mapping])
-
-    # Final SEZ ID check
-    readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
-    return invasive_priority_summary, invasive_summary, readydf 
+    # # Final SEZ ID check
+    # readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
+    #return invasive_priority_summary, invasive_summary#, readydf 

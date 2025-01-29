@@ -223,9 +223,9 @@ def add_and_keep_columns(df, required_columns):
     return df[required_columns]
 
 #location of Invasives Priority Lookup
-file_path = "F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Invasives Priority lookup.csv"
+#file_path = "F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Invasives Priority lookup.csv"
 
-def create_invasive_dictionary(file_path):
+#def create_invasive_dictionary(file_path):
     """
     Reads a CSV file and creates a lookup dictionary for invasive plant priorities.
 
@@ -236,27 +236,27 @@ def create_invasive_dictionary(file_path):
         dict: A lookup dictionary with plant types as keys and their scientific names and priorities as values.
         function: A custom function to map plant types to their priorities.
     """
-    # Read the CSV file into a DataFrame
-    csv_data = pd.read_csv(file_path)
+    # # Read the CSV file into a DataFrame
+    # csv_data = pd.read_csv(file_path)
 
-    # Define the lookup dictionary
-    key = 'Common'
-    values = ['Scientific', 'Priority']
-    invasives_lookup = csv_data.set_index(key)[values].to_dict(orient='index')
+    # # Define the lookup dictionary
+    # key = 'Common'
+    # values = ['Scientific', 'Priority']
+    # invasives_lookup = csv_data.set_index(key)[values].to_dict(orient='index')
 
-    # Define a custom function to map plant types to priorities
-    def map_priority(plant_type):
-        if pd.isnull(plant_type):
-            return 'None'  # Return 'None' for NaN values
-        else:
-            # Extract the priority from the dictionary, or return 'Unknown' if not found
-            plant_info = invasives_lookup.get(plant_type)
-            if plant_info:
-                return plant_info['Priority']
-            else:
-                return 'Unknown'
+    # # Define a custom function to map plant types to priorities
+    # def map_priority(plant_type):
+    #     if pd.isnull(plant_type):
+    #         return 'None'  # Return 'None' for NaN values
+    #     else:
+    #         # Extract the priority from the dictionary, or return 'Unknown' if not found
+    #         plant_info = invasives_lookup.get(plant_type)
+    #         if plant_info:
+    #             return plant_info['Priority']
+    #         else:
+    #             return 'Unknown'
 
-    return invasives_lookup, map_priority
+    # return invasives_lookup, map_priority
 
 # Grading for each parameter 
 #Defining Grade for Bank Stability based on Erosiondf[percent_unstable]
@@ -315,16 +315,21 @@ def categorize_csci(biotic_integrity):
 #Define Priority List Level of Invasive Plant Species lookup list will change
 # Process Data
 def rate_invasive(priority):
+    print("Priority array:", priority)
+     # Ensure the priority array has the correct length
+    #priority = [row.get(str(i), 0) for i in range(1, 5)]
+    # Debug print to check the adjusted priority array
+    print("Adjusted Priority array:", priority)
     # priority[1] = count for Priority 1
     # priority[2] = count for Priority 2
     # priority[3] = count for Priority 3, etc.
     # Check if the SEZ has at least one large headcut
     if (priority[3] + priority[4] == 1):
-        return 'B'  # Assign score D
+        return 'B'  # Assign score B
     elif (priority[3] + priority[4] == 2) or priority[1] == 1 or priority[2] == 1:
         return 'C'  # Assign score C
     elif (priority[3] + priority[4] >= 3)or priority[1] >= 2 or priority[2] >= 2 or (priority[1] + priority[2] >= 2):  
-       return 'D'  # Assign score B
+       return 'D'  # Assign score D
     else:
         return 'A'  # Assign score A (no invasives of any priority are present)
      
