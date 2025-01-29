@@ -38,28 +38,7 @@ def get_allheadcut_data():
     return headcutdf
 
 #Do QA in ArcGIS Pro in sde collectDo i make this return headcut df?
-def get_newheadcut_data_collect():
-    #Connect to SDE Collect to grab raw data, before bringing this data in go over in SDE and fix any data entry errors for example wrong units .. emasurement seems to be in cm rather than meters for example
-      # make sql database connection with pyodbc
-    engine = get_conn('sde_collection')
-    # get BMP Status data as dataframe from BMP SQL Database
-    with engine.begin() as conn:
-        # create dataframe from sql query is incision ratio the correct value to get (maybe use raw scores instead)
-        df  = pd.read_sql('SELECT ParentGlobalID, headcut_depth FROM sde_collection.SDE.sez_stream_headcut_evw', conn)
-    return df
-
-#Get general survey data from sde.collect
-def get_sezsurvey_data():
-    #Connect to SDE Collect to grab raw data, before bringing this data in go over in SDE and fix any data entry errors for example wrong units .. emasurement seems to be in cm rather than meters for example
-      # make sql database connection with pyodbc
-    engine = get_conn('sde_collection')
-    # get BMP Status data as dataframe from BMP SQL Database
-    with engine.begin() as conn:
-        # create dataframe from sql the correct value to get (maybe use raw scores instead)
-        dfsurvey  = pd.read_sql('SELECT GlobalID, Assessment_Unit_Name, headcuts_number_of_headcuts, survey_date FROM sde_collection.SDE.sez_survey_evw', conn)
-    return dfsurvey
-
-
+#Get general survey data and headcut specific survey from sde.collect
 def get_combined_survey_and_headcut_data():
     # Connect to SDE Collect to grab raw data
     engine = get_conn('sde_collection')
@@ -74,7 +53,10 @@ def get_combined_survey_and_headcut_data():
 
     # Join the two DataFrames on GlobalID and ParentGlobalID
     headcutdf = pd.merge(dfsurvey, dfheadcut, how='left', left_on='GlobalID', right_on='ParentGlobalID')
-
+    #calculate year column 
+    headcutdf['Year'] = headcutdf['survey_date'].dt.year
+    #format date as year only
+    headcutdf
     return headcutdf
 
 
@@ -82,10 +64,8 @@ def process_grade_headcut(headcutdf, year):
     #----------------------------------------------#
     # Process Data
     #----------------------------------------------#
-    #calculate year column 
-    headcutdf['Year'] = headcutdf['survey_date'].dt.year
-    #query for year here
-    headcutdf['Year'] = year
+    #filter for year
+    headcutdf = headcutdf[headcutdf['Year'] == year]
     # assign small, medium, large to headcut
     headcutdf['Headcut_Size']=headcutdf['headcut_depth'].apply(categorize_headcut)
 
