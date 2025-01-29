@@ -135,10 +135,14 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     df['Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
     # Debug print to check the priorities
     print("Priorities:", df['Priority'].unique())
-    
+    #Dictionary to rename priority levels
+    priority_dict = {1: 'Level 1', 2: 'Level 2', 3: 'Level 3', 4: 'Level 4', None: 'None'}
+
+    df['Priority'] = df['Priority'].replace(priority_dict)
+
     #Move to final FORMATTING??
     # Create a new column with the plant type and priority
-    df['Plant_Type_With_Priority'] = df['plant_type'] + ' (Level ' + df['Priority'].astype(str) + ')'
+    df['Plant_Type_With_Priority'] = df['plant_type'] + ' (' + df['Priority'].astype(str) + ')'
     # If plant_type is none i want to assign Plant_Type_With_priority name as just None
     df.loc[df['plant_type'] == 'None', 'Plant_Type_With_Priority'] = 'None'
     # Reset Index?
@@ -164,28 +168,16 @@ def process_grade_invasives(df):
         .fillna(0)
         .reset_index()  # Flatten the DataFrame for simplicity
     )
-    
-    # priority_columns= ['1','2','3','4']
-    #  # Ensure that the priority columns exist in the DataFrame
-    # for col in priority_columns:
-    #     if col not in invasive_priority_summary.columns:
-    #         invasive_priority_summary[col] = 0
-    # # Debug print to check the priority columns
-    # #print("Invasive Priority Summary (After Ensuring Priority Columns):")
-    # #print(invasive_priority_summary[priority_columns].head())
-    # # Drop the 'None' column if it exists
-    # if 'None' in invasive_priority_summary.columns:
-    #     invasive_priority_summary.drop(columns=['None'], inplace=True)
-    # #Rate and Grade'None')
-    # #invasive_priority_summary[['1', '2', '3', '4']] = invasive_priority_summary[['1', '2', '3', '4']].astype(int)
-    # #Rate and Grade
-    # invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[['1', '2', '3', '4']].apply(rate_invasive, axis=1)
+    priority_list=['Level 1', 'Level 2', 'Level 3', 'Level 4']
+    #invasive_priority_summary[['1', '2', '3', '4']] = invasive_priority_summary[['1', '2', '3', '4']].astype(int)
+    #Rate and Grade
+    invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[priority_list].apply(rate_invasive, axis=1)
     # #Calculate the total number of invasive plants per Assessment unit
     # invasive_priority_summary['Number_of_Invasives'] = invasive_priority_summary[['1', '2', '3', '4']].sum(axis=1)
     # # Calculate the score for the SEZ
     # invasive_priority_summary['Invasives_Score'] = invasive_priority_summary['Invasives_Rating'].apply(score_indicator)
     
-    return invasive_priority_summary, invasive_summary
+    return invasive_summary, invasive_priority_summary, 
 
 #----------------------#
     # #Joining plant types

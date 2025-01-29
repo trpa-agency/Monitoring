@@ -314,21 +314,17 @@ def categorize_csci(biotic_integrity):
 
 #Define Priority List Level of Invasive Plant Species lookup list will change
 # Process Data
-def rate_invasive(priority):
-    print("Priority array:", priority)
-     # Ensure the priority array has the correct length
-    #priority = [row.get(str(i), 0) for i in range(1, 5)]
-    # Debug print to check the adjusted priority array
-    print("Adjusted Priority array:", priority)
+def rate_invasive(row):
+   
     # priority[1] = count for Priority 1
     # priority[2] = count for Priority 2
     # priority[3] = count for Priority 3, etc.
     # Check if the SEZ has at least one large headcut
-    if (priority[3] + priority[4] == 1):
+    if (row['Level 3'] + row['Level 4'] == 1):
         return 'B'  # Assign score B
-    elif (priority[3] + priority[4] == 2) or priority[1] == 1 or priority[2] == 1:
+    elif (row['Level 3'] + row[4] == 2) or row['Level 1'] == 1 or row['Level 2'] == 1:
         return 'C'  # Assign score C
-    elif (priority[3] + priority[4] >= 3)or priority[1] >= 2 or priority[2] >= 2 or (priority[1] + priority[2] >= 2):  
+    elif (row['Level 3'] + row['Level 4'] >= 3)or row['Level 1'] >= 2 or row['Level 2'] >= 2 or (row['Level 1'] + row['Level 2'] >= 2):  
        return 'D'  # Assign score D
     else:
         return 'A'  # Assign score A (no invasives of any priority are present)
