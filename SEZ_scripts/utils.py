@@ -163,14 +163,8 @@ def get_conn(db):
     # connection file to use in pd.read_sql
     return engine
 
-#Connection to SDE Collect Staging Tables for Graded Data
-
 #Used for USFS rest service
-## Gets spatially enabled dataframe with query
-#def get_fs_data_spatial_query(service_url, query_params):
- #   feature_layer = FeatureLayer(service_url)
-  #  query_result = feature_layer.query(query_params).sdf
-   # return query_result
+# return query_result
 def get_fs_data_spatial_query(service_url, query_params=None):
         # Initialize the feature layer from the given URL
         feature_layer = FeatureLayer(service_url)
@@ -315,19 +309,19 @@ def categorize_csci(biotic_integrity):
 #Define Priority List Level of Invasive Plant Species lookup list will change
 # Process Data
 def rate_invasive(row):
-   
-    # priority[1] = count for Priority 1
-    # priority[2] = count for Priority 2
-    # priority[3] = count for Priority 3, etc.
-    # Check if the SEZ has at least one large headcut
-    if (row['Level 3'] + row['Level 4'] == 1):
-        return 'B'  # Assign score B
-    elif (row['Level 3'] + row[4] == 2) or row['Level 1'] == 1 or row['Level 2'] == 1:
-        return 'C'  # Assign score C
-    elif (row['Level 3'] + row['Level 4'] >= 3)or row['Level 1'] >= 2 or row['Level 2'] >= 2 or (row['Level 1'] + row['Level 2'] >= 2):  
-       return 'D'  # Assign score D
+    # Sum of Level 3 and Level 4
+    level_3_4_sum = row['Level 3'] + row['Level 4']
+    # Sum of Level 1 and Level 2
+    level_1_2_sum = row['Level 1'] + row['Level 2']
+    
+    if level_3_4_sum == 1:
+        return 'B'  # Assign score B if the sum of Level 3 and Level 4 is 1
+    elif level_3_4_sum == 2 or row['Level 1'] == 1 or row['Level 2'] == 1:
+        return 'C'  # Assign score C if the sum of Level 3 and Level 4 is 2, or any Level 1 or Level 2 is 1
+    elif level_3_4_sum >= 3 or row['Level 1'] >= 2 or row['Level 2'] >= 2 or level_1_2_sum >= 2:
+        return 'D'  # Assign score D if Level 3 or Level 4 is 3 or more, or Level 1 or 2 is 2 or more, or the sum of Level 1 and Level 2 is 2 or more
     else:
-        return 'A'  # Assign score A (no invasives of any priority are present)
+        return 'A'  # Assign score A if no significant invasives are present
      
 #Define Size for Headcut based off of headcut size
 ##A = 0 headcut, B 1+small headcut
