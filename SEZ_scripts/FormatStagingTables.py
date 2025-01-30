@@ -64,6 +64,30 @@ def process_data(data_dict, sezid_dict, columns_to_drop):
                 df[col] = df[col] + ', ' + df['Year'].astype(str)
     return df
 
+# # Function to merge all DataFrames on multiple keys(why on multiple keys? and not just SEZ ID)
+# def merge_dataframes(data_dict, keys):
+#     return reduce(lambda left, right: pd.merge(left, right, on=keys, how='outer'), data_dict.values())
+# Function to merge multiple DataFrames on SEZ_ID only
+def merge_dataframes(data_dict, key='SEZ_ID'):
+    """
+    Merge multiple DataFrames stored in a dictionary on a single key.
 
+    Parameters:
+        data_dict (dict): Dictionary of DataFrames to merge.
+        key (str): Column name to merge on.
+
+    Returns:
+        pd.DataFrame: Merged DataFrame with one row per unique SEZ_ID.
+    """
+    if not data_dict or key not in list(data_dict.values())[0].columns:
+        raise ValueError(f"Invalid input: Ensure data_dict contains DataFrames with '{key}'.")
+
+    # Convert dictionary values (DataFrames) to a list
+    dataframes = list(data_dict.values())
+
+    # Merge all DataFrames iteratively on SEZ_ID
+    merged_df = reduce(lambda left, right: pd.merge(left, right, on=key, how='outer'), dataframes)
+
+    return merged_df
 
 

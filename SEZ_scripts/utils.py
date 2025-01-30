@@ -20,6 +20,7 @@ from arcgis import GIS
 from arcgis.features import FeatureLayer
 #import requests
 from arcgis.geometry import SpatialReference
+from functools import reduce
 # external connection packages
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine
@@ -314,7 +315,7 @@ def rate_invasive(row):
     # Sum of Level 1 and Level 2
     level_1_2_sum = row['Level 1'] + row['Level 2']
     
-    if level_3_4_sum == 1:
+    if level_3_4_sum == 1 and row['Level 1'] == 0 and row['Level 2'] == 0:
         return 'B'  # Assign score B if the sum of Level 3 and Level 4 is 1
     elif level_3_4_sum == 2 or row['Level 1'] == 1 or row['Level 2'] == 1:
         return 'C'  # Assign score C if the sum of Level 3 and Level 4 is 2, or any Level 1 or Level 2 is 1
