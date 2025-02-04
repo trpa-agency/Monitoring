@@ -40,54 +40,79 @@ def average_biotic_scores(dfbiotic, unit_col='Assessment_Unit_Name', year_col='Y
 
     return averaged_df
     
-
-    # Process data for large and small polygons
 def process_data(data_dict, sezid_dict, columns_to_drop):
+    processed_data = {}  # Store processed DataFrames
+    
     for key, df in data_dict.items():
+        df = df.copy()  # Avoid modifying the original DataFrame
+        
         # Step 1: Get most recent scores
-        df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        df = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
         
         # Step 2: Drop unnecessary columns
-        df.drop(columns=[col for col in columns_to_drop if col in df.columns])
+        df.drop(columns=[col for col in columns_to_drop if col in df.columns], inplace=True)
+        
         # Step 3: Assign SEZ_ID
-        #df_with_sez_id = assign_sez_ids(df_cleaned, sezid_dict)
         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
         df = df.dropna(subset=['SEZ_ID'])
     
         # Use .loc to modify SEZ_ID safely
         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
-            # Iterate over columns in the DataFrame
+        
+        # Step 4: Modify columns containing 'Data_'
         for col in df.columns:
-            # Check if the column name contains 'Data'
             if 'Data_' in col:
-                # Add Year to the column if it contains 'Data'
                 df[col] = df[col] + ', ' + df['Year'].astype(str)
-    return df
+        
+        # Store the processed DataFrame in the dictionary
+        processed_data[key] = df
+
+    return processed_data  # Return dictionary of processed DataFrames
+
+#     # Process data for large and small polygons
+# def process_data(data_dict, sezid_dict, columns_to_drop):
+#     for key, df in data_dict.items():
+#         # Step 1: Get most recent scores
+#         df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        
+#         # Step 2: Drop unnecessary columns
+#         df.drop(columns=[col for col in columns_to_drop if col in df.columns])
+#         # Step 3: Assign SEZ_ID
+#         #df_with_sez_id = assign_sez_ids(df_cleaned, sezid_dict)
+#         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
+#         df = df.dropna(subset=['SEZ_ID'])
+    
+#         # Use .loc to modify SEZ_ID safely
+#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
+#             # Iterate over columns in the DataFrame
+#         for col in df.columns:
+#             # Check if the column name contains 'Data'
+#             if 'Data_' in col:
+#                 # Add Year to the column if it contains 'Data'
+#                 df[col] = df[col] + ', ' + df['Year'].astype(str)
+#     return df
 
 # # Function to merge all DataFrames on multiple keys(why on multiple keys? and not just SEZ ID)
 # def merge_dataframes(data_dict, keys):
 #     return reduce(lambda left, right: pd.merge(left, right, on=keys, how='outer'), data_dict.values())
 # Function to merge multiple DataFrames on SEZ_ID only
-def merge_dataframes(data_dict, key='SEZ_ID'):
-    """
-    Merge multiple DataFrames stored in a dictionary on a single key.
+# def merge_dataframes(data_dict, key='SEZ_ID'):
+#     """
+#     Merge multiple DataFrames stored in a dictionary on a single key.
 
-    Parameters:
-        data_dict (dict): Dictionary of DataFrames to merge.
-        key (str): Column name to merge on.
+#     Parameters:
+#         data_dict (dict): Dictionary of DataFrames to merge.
+#         key (str): Column name to merge on.
 
-    Returns:
-        pd.DataFrame: Merged DataFrame with one row per unique SEZ_ID.
-    """
-    if not data_dict or key not in list(data_dict.values())[0].columns:
-        raise ValueError(f"Invalid input: Ensure data_dict contains DataFrames with '{key}'.")
+#     Returns:
+#         pd.DataFrame: Merged DataFrame with one row per unique SEZ_ID.
+#     """
+#     # Convert dictionary values (DataFrames) to a list
+#     dataframes = list(data_dict.values())
 
-    # Convert dictionary values (DataFrames) to a list
-    dataframes = list(data_dict.values())
+#     # Merge all DataFrames iteratively on SEZ_ID
+#     merged_df = reduce(lambda left, right: pd.merge(left, right, on=key, how='outer'), dataframes)
 
-    # Merge all DataFrames iteratively on SEZ_ID
-    merged_df = reduce(lambda left, right: pd.merge(left, right, on=key, how='outer'), dataframes)
-
-    return merged_df
+#     return merged_df
 
 
