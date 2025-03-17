@@ -45,12 +45,18 @@ def process_data(data_dict, sezid_dict, columns_to_drop):
     
     for key, df in data_dict.items():
         df = df.copy()  # Avoid modifying the original DataFrame
+        # Debug print to check the columns of the DataFrame
+        print(f"Processing DataFrame: {key}")
+        print("Columns:", df.columns)
         
         # Step 1: Get most recent scores
-        df = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        if 'Year' not in df.columns:
+            raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+        df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+        df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
         
         # Step 2: Drop unnecessary columns
-        df.drop(columns=[col for col in columns_to_drop if col in df.columns], inplace=True)
+        df = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df_most_recent.columns])
         
         # Step 3: Assign SEZ_ID
         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
@@ -59,15 +65,87 @@ def process_data(data_dict, sezid_dict, columns_to_drop):
         # Use .loc to modify SEZ_ID safely
         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
         
-        # Step 4: Modify columns containing 'Data_'
-        for col in df.columns:
-            if 'Data_' in col:
-                df[col] = df[col] + ', ' + df['Year'].astype(str)
-        
+
         # Store the processed DataFrame in the dictionary
         processed_data[key] = df
 
     return processed_data  # Return dictionary of processed DataFrames
+# def process_data(data_dict, sezid_dict, columns_to_drop):
+#     processed_data = {}  # Store processed DataFrames
+    
+#     for key, df in data_dict.items():
+#         df = df.copy()  # Avoid modifying the original DataFrame
+#         # Debug print to check the columns of the DataFrame
+#         print(f"Processing DataFrame: {key}")
+#         print("Columns:", df.columns)
+        
+#         # Step 1: Get most recent scores
+#         if 'Year' not in df.columns:
+#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        
+#         # Step 2: Drop unnecessary columns
+#         cols_to_drop = [col for col in columns_to_drop if col in df.columns]
+#         if cols_to_drop:
+#             df = df_most_recent.drop(columns=cols_to_drop)  # Avoid using inplace=True
+        
+#         # Step 3: Assign SEZ_ID
+#         if 'Assessment_Unit_Name' in df.columns:  # Check if column exists before using map
+#             df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
+#             df = df.dropna(subset=['SEZ_ID'])
+#         else:
+#             print(f"Warning: 'Assessment_Unit_Name' column missing in DataFrame: {key}")
+#             continue  # Skip this DataFrame if the column doesn't exist
+    
+#         # Use .loc to modify SEZ_ID safely
+#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
+        
+#         # Step 4: Modify columns containing 'Data_'
+#         for col in df.columns:
+#             if 'Data_' in col:
+#                 df[col] = df[col].astype(str) + ', ' + df['Year'].astype(str)
+        
+#         # Store the processed DataFrame in the dictionary
+#         processed_data[key] = df
+
+#     return processed_data  # Return dictionary of processed DataFrames
+# def process_data(data_dict, sezid_dict, columns_to_drop):
+#     processed_data = {}  # Store processed DataFrames
+    
+#     for key, df in data_dict.items():
+#         df = df.copy()  # Avoid modifying the original DataFrame
+#         # Debug print to check the columns of the DataFrame
+#         print(f"Processing DataFrame: {key}")
+#         print("Columns:", df.columns)
+        
+#         # Step 1: Get most recent scores
+#         if 'Year' not in df.columns:
+#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        
+#         # Step 2: Drop unnecessary columns
+#         dfcleaned = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df.columns])
+
+#         # Debug check: Ensure dfcleaned is not empty or None
+#         if dfcleaned is None or dfcleaned.empty:
+#             print(f"Warning: DataFrame {key} is empty or None after dropping columns!")
+#             continue  # Skip processing for this DataFrame if it's empty
+
+#         # Step 3: Assign SEZ_ID
+#         dfcleaned['SEZ_ID'] = dfcleaned['Assessment_Unit_Name'].map(sezid_dict)
+#         dfcleaned = dfcleaned.dropna(subset=['SEZ_ID'])
+    
+#         # Ensure SEZ_ID is safely converted to int
+#         if 'SEZ_ID' in dfcleaned.columns:
+#             dfcleaned.loc[:, 'SEZ_ID'] = dfcleaned['SEZ_ID'].astype(int)
+        
+       
+#         # Store the processed DataFrame in the dictionary
+#         processed_data[key] = dfcleaned
+
+#     return processed_data  # Return dictionary of processed DataFrames
 
 #     # Process data for large and small polygons
 # def process_data(data_dict, sezid_dict, columns_to_drop):
