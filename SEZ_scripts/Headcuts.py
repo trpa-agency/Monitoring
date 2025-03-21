@@ -37,8 +37,9 @@ def get_allheadcut_data():
     
     return headcutdf
 
-#Do QA in ArcGIS Pro in sde collectDo i make this return headcut df?
-#Get general survey data and headcut specific survey from sde.collect
+#Do QA in ArcGIS Pro in sde collect
+
+#Get general survey data and headcut specific survey from sde.collect and combine
 def get_combined_survey_and_headcut_data():
     # Connect to SDE Collect to grab raw data
     engine = get_conn('sde_collection')
@@ -55,8 +56,7 @@ def get_combined_survey_and_headcut_data():
     headcutdf = pd.merge(dfsurvey, dfheadcut, how='left', left_on='GlobalID', right_on='ParentGlobalID')
     #calculate year column 
     headcutdf['Year'] = headcutdf['survey_date'].dt.year
-    #format date as year only
-    headcutdf
+
     return headcutdf
 
 
@@ -74,7 +74,10 @@ def process_grade_headcut(headcutdf, year):
     headcut_summary = headcutdf.groupby(['Assessment_Unit_Name', 'Year', 'Headcut_Size']).size().reset_index(name='Count')
 
     headcut_summary_sml = headcut_summary.pivot_table(index=['Assessment_Unit_Name', 'Year'], columns='Headcut_Size', values='Count', fill_value=0)
-
+    # Ensure 'large', 'medium', and 'small' exist even if they have no data
+    for col in ['large', 'medium', 'small']:
+        if col not in headcut_summary_sml.columns:
+            headcut_summary_sml[col] = 0  # Default value
     # Reset the index to flatten the DataFrame
     headcut_summary_sml.reset_index(inplace=True)
 

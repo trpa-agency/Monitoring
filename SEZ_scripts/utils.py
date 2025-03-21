@@ -284,7 +284,7 @@ def score_indicator(Rating):
 
 def categorize_incision(bankfull_ratio):
     if pd.isna(bankfull_ratio):
-        return np.nan
+        return 'A'
     elif 0 <= bankfull_ratio < 1.2:
         return 'A'
     elif 1.2 <= bankfull_ratio < 1.6:

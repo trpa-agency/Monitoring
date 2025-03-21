@@ -7,7 +7,7 @@ def get_incision_data():
     # get BMP Status data as dataframe from BMP SQL Database
     with engine.begin() as conn:
         # create dataframe from sql query is incision ratio the correct value to get (maybe use raw scores instead)
-        df  = pd.read_sql('SELECT Assessment_Unit_Name, incision_ratio, survey_date FROM sde_collection.SDE.sez_channel_incision', conn)
+        df  = pd.read_sql('SELECT Assessment_Unit_Name, incision_ratio, survey_date FROM sde_collection.SDE.sez_channel_incision_evw', conn)
     return df
 
 def get_combined_survey_and_incision_data():
@@ -23,49 +23,70 @@ def get_combined_survey_and_incision_data():
         df = pd.read_sql('SELECT ParentGlobalID, bankfull_depth, depth_top_bank, bankfull_ratio, created_date FROM sde_collection.SDE.sez_channel_incision_evw', conn)
 
     # Join the two DataFrames on GlobalID and ParentGlobalID
-    df = pd.merge(dfsurvey, df, how='inner', left_on='GlobalID', right_on='ParentGlobalID')
-
+    df = pd.merge(dfsurvey, df, how='left', left_on='GlobalID', right_on='ParentGlobalID')
+    #calculate year column 
+    df['Year'] = df['survey_date'].dt.year
     return df
 
 def process_grade_incision(df, year):
 #----------------------------------------------------------------#
 #Add correct info to dataframe
 #----------------------------------------------------------------#
+     #filter for year
+    df = df[df['Year'] == year].copy()
     #use this until we fix the domain- did we fix it? 12/9/24
-    df['Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
+    df.loc[:,'Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
     # Create a new column 'SEZ ID'
     #This code is for the excel look up dictionary
-    df['SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
+    df.loc[:,'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
 
     # Fill NaN values with a specific value, such as 0
-    df['SEZ_ID'] = df['SEZ_ID'].fillna(0)
+    df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].fillna(0).astype(int)
 
-    # Convert SEZ ID column to integer
-    df['SEZ_ID'] = df['SEZ_ID'].astype(int)
+    # Step 1: Calculate the incision ratio for each measurement
+    df['calculated_incision_ratio'] = df['depth_top_bank'] / df['bankfull_depth']
 
-    #calculate year column 
-    df['Year'] = df['survey_date'].dt.year
-    df['Year'] = year
+    # Step 2: Group by Assessment Unit and Year, and calculate the mean incision ratio
+    grouped = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
+        'calculated_incision_ratio': 'mean'  # Calculate the mean of the incision ratios
+    }).reset_index()
+
+    # Step 3: Merge the mean incision ratio back into the original DataFrame
+    df = df.merge(grouped, on=['Assessment_Unit_Name', 'Year'], how='left', suffixes=('', '_mean'))
+
+    # Calculate incision ratio per Assessment Unit and Year
+    #grouped = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
+    #    'depth_top_bank': 'sum',  # Sum of depth_top_bank
+    #    'bankfull_depth': 'sum'  # Sum of bankfull_depth
+    #}).reset_index()
+
+    # Calculate the incision ratio for each group
+    #grouped['Calculated_ratio'] =  grouped['depth_top_bank']/grouped['bankfull_depth']
+    #merge calculated ratio into df
+    #df = df.merge(grouped[['Assessment_Unit_Name', 'Year', 'Calculated_ratio']], on=['Assessment_Unit_Name', 'Year'], how='left')
+   
     #for QA purpses lets take the raw data and calculate the incision ratio
     #I can also do this manually in Pro when doing the initial QA check
     # Group by 'Assessment_Unit_Name' and calculate the sum and count
-    #grouped = df.groupby('Assessment_Unit_Name')['bankfull_depth','depth_top_bank']
+    
 
     
     
     #----------------------------------------------------------------#
     #Grade, Score
     #----------------------------------------------------------------#
-    df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
+    df['Incision_Rating'] = df['calculated_incision_ratio'].apply(categorize_incision)
+    #df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
     df['Incision_Score']= df['Incision_Rating'].apply(score_indicator)
 
-    df['Incision_Data_Source'] = 'TRPA' 
+    #df['Incision_Data_Source'] = 'TRPA' 
     #Field Mapping
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
         'Year': 'Year',
         'Incision_Data_Sourc': 'Incision_Data_Source',
         'incision_ratio': 'Incision_Ratio',
+        'calculated_incision_ratio': 'Calculated_Ratio',
         'Incision_Rating': 'Incision_Rating',
         'Incision_Score': 'Incision_Score',
         'SEZ_ID': 'SEZ_ID',
