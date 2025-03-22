@@ -164,6 +164,10 @@ def process_grade_invasives(df):
         .reset_index()  # Flatten the DataFrame for simplicity
     )
     priority_list=['Level 1', 'Level 2', 'Level 3', 'Level 4']
+    # Ensure all levels exist in the DataFrame
+    for level in priority_list:
+        if level not in invasive_priority_summary.columns:
+            invasive_priority_summary[level] = 0  # or np.nan if missing values should be NaN
     #Rate and Grade
     invasive_priority_summary['Invasives_Rating'] =  invasive_priority_summary[priority_list].apply(rate_invasive, axis=1)
     # Calculate the score for the SEZ
@@ -194,7 +198,7 @@ def final_format_invasive (df, invasive_priority_summary):
     grouped_df['Invasives_Rating'] = invasive_priority_summary['Invasives_Rating']
     grouped_df['Invasives_Score'] = invasive_priority_summary['Invasives_Score']
 
-    #Assign SEZ ID for large polygons only
+    #Assign SEZ ID for large polygons only??
     grouped_df['SEZ_ID'] = grouped_df['Assessment_Unit_Name'].map(lookup_dict)
     grouped_df['SEZ_ID'] = grouped_df['SEZ_ID'].fillna(0)
   
@@ -227,6 +231,7 @@ def post_invasive(readydf, draft=True):
     #----------------------------------------------------------------#
     if draft == True:
         readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedinvasivedata.csv", index=False)
+        print(f"Draft data appended to csv successfully.")
         # or post to SEZ.gdb?? staging table?
         # Convert DataFrame to a list of dictionaries
         #staging_table= stage_invasivesgdb
