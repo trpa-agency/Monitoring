@@ -43,6 +43,7 @@ def process_grade_incision(df, year):
     # Fill NaN values with a specific value, such as 0
     df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].fillna(0).astype(int)
 
+#Calcluate the Incision Ratio 
     # Step 1: Calculate the incision ratio for each measurement
     df['calculated_incision_ratio'] = df['depth_top_bank'] / df['bankfull_depth']
 
@@ -54,6 +55,7 @@ def process_grade_incision(df, year):
     # Step 3: Merge the mean incision ratio back into the original DataFrame
     df = df.merge(grouped, on=['Assessment_Unit_Name', 'Year'], how='left', suffixes=('', '_mean'))
 
+    
     # Calculate incision ratio per Assessment Unit and Year
     #grouped = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
     #    'depth_top_bank': 'sum',  # Sum of depth_top_bank
@@ -75,7 +77,7 @@ def process_grade_incision(df, year):
     #----------------------------------------------------------------#
     #Grade, Score
     #----------------------------------------------------------------#
-    df['Incision_Rating'] = df['calculated_incision_ratio'].apply(categorize_incision)
+    df['Incision_Rating'] = df['calculated_incision_ratio_mean'].apply(categorize_incision)
     #df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
     df['Incision_Score']= df['Incision_Rating'].apply(score_indicator)
 
@@ -86,7 +88,7 @@ def process_grade_incision(df, year):
         'Year': 'Year',
         'Incision_Data_Sourc': 'Incision_Data_Source',
         'incision_ratio': 'Incision_Ratio',
-        'calculated_incision_ratio': 'Calculated_Ratio',
+        'calculated_incision_ratio_mean': 'Calculated_Ratio',
         'Incision_Rating': 'Incision_Rating',
         'Incision_Score': 'Incision_Score',
         'SEZ_ID': 'SEZ_ID',
