@@ -39,37 +39,91 @@ def average_biotic_scores(dfbiotic, unit_col='Assessment_Unit_Name', year_col='Y
     averaged_df['Biotic_Integrity_Score']=averaged_df['Biotic_Integrity_Score'].astype(int)
 
     return averaged_df
-    
+
 def process_data(data_dict, sezid_dict, columns_to_drop):
     processed_data = {}  # Store processed DataFrames
     
     for key, df in data_dict.items():
         df = df.copy()  # Avoid modifying the original DataFrame
-        # Debug print to check the columns of the DataFrame
         print(f"Processing DataFrame: {key}")
         print("Columns:", df.columns)
         
         # Step 1: Get most recent scores
         if 'Year' not in df.columns:
             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+
         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+        df = df.dropna(subset=['Year'])  # Drop NaN years before using idxmax()
+
+        if df.empty:
+            print(f"Warning: DataFrame {key} is empty after dropping NaN 'Year' values.")
+            continue
+
+        if 'Assessment_Unit_Name' not in df.columns:
+            raise KeyError(f"'Assessment_Unit_Name' column is missing in DataFrame: {key}")
+
         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
-        
+
         # Step 2: Drop unnecessary columns
         df = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df_most_recent.columns])
-        
+
         # Step 3: Assign SEZ_ID
         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
-        df = df.dropna(subset=['SEZ_ID'])
-    
-        # Use .loc to modify SEZ_ID safely
-        df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
-        
+
+        if df['SEZ_ID'].isna().any():
+            print(f"Warning: {df['SEZ_ID'].isna().sum()} rows in {key} have missing SEZ_IDs and will be dropped.")
+
+        df = df.dropna(subset=['SEZ_ID']).copy()  # Ensure no chained assignment issues
+
+        if df.empty:
+            print(f"Warning: DataFrame {key} is empty after dropping NaN SEZ_ID values.")
+            continue
+
+        df['SEZ_ID'] = df['SEZ_ID'].astype(int)  # Convert safely
 
         # Store the processed DataFrame in the dictionary
         processed_data[key] = df
 
-    return processed_data  # Return dictionary of processed DataFrames
+    return processed_data  # Return the processed dictionary
+    
+# def process_data(data_dict, sezid_dict, columns_to_drop):
+#     processed_data = {}  # Store processed DataFrames
+    
+#     for key, df in data_dict.items():
+#         df = df.copy()  # Avoid modifying the original DataFrame
+#         # Debug print to check the columns of the DataFrame
+#         print(f"Processing DataFrame: {key}")
+#         print("Columns:", df.columns)
+        
+#         # Step 1: Get most recent scores
+#         # Step 1: Get most recent scores
+#         if 'Year' not in df.columns:
+#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+
+#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+#         df = df.dropna(subset=['Year'])  # Drop NaN years before using idxmax()
+
+#         if df.empty:
+#             print(f"Warning: DataFrame {key} is empty after dropping NaN 'Year' values.")
+#             continue
+       
+#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
+        
+#         # Step 2: Drop unnecessary columns
+#         df = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df_most_recent.columns])
+        
+#         # Step 3: Assign SEZ_ID
+#         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
+#         df = df.dropna(subset=['SEZ_ID'])
+    
+#         # Use .loc to modify SEZ_ID safely
+#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
+        
+
+#         # Store the processed DataFrame in the dictionary
+#         processed_data[key] = df
+
+#     return processed_data  # Return dictionary of processed DataFrames
 # def process_data(data_dict, sezid_dict, columns_to_drop):
 #     processed_data = {}  # Store processed DataFrames
     

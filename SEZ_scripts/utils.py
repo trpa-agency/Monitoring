@@ -54,17 +54,17 @@ streamdata = os.path.join(sdemonitoring, "sde.SDE.Stream")
 
 #Staging Tables in sde.Vector
 # to post to staging tables in SEZ_Data.GDB replace master_path with sdeBase
-stage_bank_stability = os.path.join(sdeVector, "bank_stability") 
+stage_bank_stability = os.path.join(sdeVector, "sez_scores_bank_stability") 
 #stage_All_SEZ_Scores = os.path.join(sdeVector, "All_SEZ_Scores")
-stage_biotic_integrity = os.path.join(sdeVector, "biotic_integrity")
-stage_headcuts = os.path.join(sdeVector, "headcuts_table")
-stage_incision = os.path.join(sdeVector, "incision")
-stage_invasives = os.path.join(sdeVector, "invasives")
-stage_vegetation = os.path.join(sdeVector, "vegetation_vigor")
-stage_conifer = os.path.join(sdeVector, "conifer_encroachment")
-stage_aquatic = os.path.join(sdeVector, "aquatic_organism_passage_table")
-stage_ditches = os.path.join(sdeVector, "ditches")
-stage_habitat = os.path.join(sdeVector, "habitat_fragmentation")
+stage_biotic_integrity = os.path.join(sdeVector, "sez_scores_biotic")
+stage_headcuts = os.path.join(sdeVector, "sez_scores_headcut")
+stage_incision = os.path.join(sdeVector, "sez_scores_incision")
+stage_invasives = os.path.join(sdeVector, "sez_scores_invasive")
+stage_vegetation = os.path.join(sdeVector, "sez_scores_vegetation_vigor")
+stage_conifer = os.path.join(sdeVector, "sez_scoresconifer_encroachment")
+stage_aquatic = os.path.join(sdeVector, "sez_scores_aquatic_organism")
+stage_ditches = os.path.join(sdeVector, "sez_scores_ditch")
+stage_habitat = os.path.join(sdeVector, "sez_scores_habitat_fragmentation")
 
 #REST servive links to staging tables
 bank_stability_url = "https://maps.trpa.org/server/rest/services/SEZ_Assessment_Unit/FeatureServer/4"
@@ -410,4 +410,4 @@ lookup_all = {}
 for index, row in excel_data.iterrows():
     lookup_all[row['SEZ_ID']] = {'SEZ_Type': row['SEZ_Type']}
 
-#Used in Invasive
+
