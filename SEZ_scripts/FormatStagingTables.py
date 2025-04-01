@@ -86,165 +86,81 @@ def process_data(data_dict, sezid_dict, columns_to_drop):
 
     return processed_data  # Return the processed dictionary
     
-# def process_data(data_dict, sezid_dict, columns_to_drop):
-#     processed_data = {}  # Store processed DataFrames
-    
-#     for key, df in data_dict.items():
-#         df = df.copy()  # Avoid modifying the original DataFrame
-#         # Debug print to check the columns of the DataFrame
-#         print(f"Processing DataFrame: {key}")
-#         print("Columns:", df.columns)
-        
-#         # Step 1: Get most recent scores
-#         # Step 1: Get most recent scores
-#         if 'Year' not in df.columns:
-#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
+# Field Mapping so 2019 threshol data renamed so it can be joined to new data
+field_mapping = {
+    'Assessment_Unit_Name': 'Assessment_Unit_Name',
+    'Threshold_Year': 'Threshold Year',
+    'Comments': 'Comments',
+    'SEZ_Type': 'SEZ_Type',
+    'SEZ_ID': 'SEZ_ID',
+    'Acres': 'Acres',
+    'AquaticOrganismPassage_Barriers': 'AOP_BarriersPerMile',
+    'AquaticOrganismPassage_NumberOf': 'AOP_NumberofBarriers',
+    'AquaticOrganismPassage_Score': 'AOP_Score',
+    'AquaticOrganismPassage_Rating': 'AOP_Rating',
+    'AquaticOrganismPassage_StreamMi': 'AOP_StreamMiles',
+    'AquaticOrganismPassage_DataSour': 'AOP_DataSource',
+    'Bank_Stability_Data_Source': 'Bank_Stability_Data_Source',
+    'Bank_Stability_Percent_Unstable': 'Bank_Stability_Percent_Unstable',
+    'Bank_Stability_Rating': 'Bank_Stability_Rating',
+    'Bank_Stability_Score': 'Bank_Stability_Score',
+    'Biotic_Integrity_Rating': 'Biotic_Integrity_Rating',
+    'Biotic_Integrity_CSCI': 'Biotic_Integrity_CSCI',
+    'Biotic_Integrity_Data_Source': 'Biotic_Integrity_Data_Source',
+    'Biotic_Integrity_Score': 'Biotic_Integrity_Score',
+    'Conifer_Encroachment_Percent_En': 'Conifer_Percent_Encroached',
+    'Conifer_Encroachment_Data_Sourc': 'Conifer_Encroachment_Data_Sourc',
+    'Conifer_Encroachment_Rating': 'Conifer_Encroachment_Rating',
+    'Conifer_Encroachment_Score': 'Conifer_Encroachment_Score',
+    'ConiferEncroachment_Comments': 'ConiferEncroachment_Comments',
+    'Ditches_Data_Source': 'Ditches_Data_Source',
+    'Ditches_Length': 'Ditches_Length',
+    'Ditches_Meadow_Length': 'Ditches_Meadow_Length',
+    'Ditches_Percent': 'Ditches_Percent',
+    'Ditches_Rating': 'Ditches_Rating',
+    'Ditches_Score': 'Ditches_Score',
+    'Feature_Type': 'Feature_Type',
+    'Habitat_Fragmentation_Data_Sour': 'Habitat_Frag_Data_Source',
+    'Habitat_Fragmentation_Imperviou': 'Habitat_Frag_Impervious_Acres',
+    'Habitat_Fragmentation_Percent_I': 'Habitat_Frag_Percent_Impervious',
+    'Habitat_Fragmentation_Rating': 'Habitat_Frag_Rating',
+    'Habitat_Fragmentation_Score': 'Habitat_Frag_Score',
+    'Headcuts_Data_Source': 'Headcuts_Data_Source',
+    'Headcuts_Number_of_Headcuts':'Number_of_Headcuts',
+    'Headcuts_Rating': 'Headcuts_Rating',
+    'Headcuts_Score': 'Headcuts_Score',
+    'Incision_Data_Source': 'Incision_Data_Source',
+    'Incision_Rating': 'Incision_Rating',
+    'Incision_Score': 'Incision_Score',
+    'Incision_Ratio': 'Incision_Ratio',
+    'Invasive_Percent_Cover': 'Invasive_Percent_Cover',
+    'Invasive_Rating': 'Invasives_Rating',
+    'Invasives_Data_Source': 'Invasives_Data_Source',
+    'Invasives_Number_of_Invasives': 'Invasives_Number_of_Invasives',
+    'Invasives_Plant_Types': 'Invasives_Plant_Types',
+    'Invasives_Scores': 'Invasives_Scores',
+    'NDVI_ID': 'NDVI_ID',
+    'Ownership_Primary': 'Ownership_Primary',
+    'Ownership_Secondary': 'Ownership_Secondary',
+    'Ownership_Secondary_2': 'Ownership_Secondary_2',
+    'Ownership_Secondary_3': 'Ownership_Secondary_3',
+    'VegetationVigor_DataSource': 'VegetationVigor_DataSource',
+    'VegetationVigor_Rating': 'VegetationVigor_Rating',
+    'VegetationVigor_Raw': 'VegetationVigor_Raw',
+    'VegetationVigor_Score': 'VegetationVigor_Score'
+}
 
-#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-#         df = df.dropna(subset=['Year'])  # Drop NaN years before using idxmax()
+#create final table by bringing in most recent year of dta from our database and overwriting with new data
+# Function to create the final table
+def create_final_table(df, field_mapping, columns_to_drop):
+    # Rename columns according to the field mapping
+    df.rename(columns=field_mapping, inplace=True)
 
-#         if df.empty:
-#             print(f"Warning: DataFrame {key} is empty after dropping NaN 'Year' values.")
-#             continue
-       
-#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
-        
-#         # Step 2: Drop unnecessary columns
-#         df = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df_most_recent.columns])
-        
-#         # Step 3: Assign SEZ_ID
-#         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
-#         df = df.dropna(subset=['SEZ_ID'])
-    
-#         # Use .loc to modify SEZ_ID safely
-#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
-        
+    # Drop unnecessary columns
+    df.drop(columns=columns_to_drop, inplace=True, errors='ignore')
 
-#         # Store the processed DataFrame in the dictionary
-#         processed_data[key] = df
+    # Reorder columns to match the desired output
+    ordered_columns = list(field_mapping.values())
+    df = df[ordered_columns]
 
-#     return processed_data  # Return dictionary of processed DataFrames
-# def process_data(data_dict, sezid_dict, columns_to_drop):
-#     processed_data = {}  # Store processed DataFrames
-    
-#     for key, df in data_dict.items():
-#         df = df.copy()  # Avoid modifying the original DataFrame
-#         # Debug print to check the columns of the DataFrame
-#         print(f"Processing DataFrame: {key}")
-#         print("Columns:", df.columns)
-        
-#         # Step 1: Get most recent scores
-#         if 'Year' not in df.columns:
-#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
-#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
-        
-#         # Step 2: Drop unnecessary columns
-#         cols_to_drop = [col for col in columns_to_drop if col in df.columns]
-#         if cols_to_drop:
-#             df = df_most_recent.drop(columns=cols_to_drop)  # Avoid using inplace=True
-        
-#         # Step 3: Assign SEZ_ID
-#         if 'Assessment_Unit_Name' in df.columns:  # Check if column exists before using map
-#             df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
-#             df = df.dropna(subset=['SEZ_ID'])
-#         else:
-#             print(f"Warning: 'Assessment_Unit_Name' column missing in DataFrame: {key}")
-#             continue  # Skip this DataFrame if the column doesn't exist
-    
-#         # Use .loc to modify SEZ_ID safely
-#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
-        
-#         # Step 4: Modify columns containing 'Data_'
-#         for col in df.columns:
-#             if 'Data_' in col:
-#                 df[col] = df[col].astype(str) + ', ' + df['Year'].astype(str)
-        
-#         # Store the processed DataFrame in the dictionary
-#         processed_data[key] = df
-
-#     return processed_data  # Return dictionary of processed DataFrames
-# def process_data(data_dict, sezid_dict, columns_to_drop):
-#     processed_data = {}  # Store processed DataFrames
-    
-#     for key, df in data_dict.items():
-#         df = df.copy()  # Avoid modifying the original DataFrame
-#         # Debug print to check the columns of the DataFrame
-#         print(f"Processing DataFrame: {key}")
-#         print("Columns:", df.columns)
-        
-#         # Step 1: Get most recent scores
-#         if 'Year' not in df.columns:
-#             raise KeyError(f"'Year' column is missing in DataFrame: {key}")
-#         df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-#         df_most_recent = df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
-        
-#         # Step 2: Drop unnecessary columns
-#         dfcleaned = df_most_recent.drop(columns=[col for col in columns_to_drop if col in df.columns])
-
-#         # Debug check: Ensure dfcleaned is not empty or None
-#         if dfcleaned is None or dfcleaned.empty:
-#             print(f"Warning: DataFrame {key} is empty or None after dropping columns!")
-#             continue  # Skip processing for this DataFrame if it's empty
-
-#         # Step 3: Assign SEZ_ID
-#         dfcleaned['SEZ_ID'] = dfcleaned['Assessment_Unit_Name'].map(sezid_dict)
-#         dfcleaned = dfcleaned.dropna(subset=['SEZ_ID'])
-    
-#         # Ensure SEZ_ID is safely converted to int
-#         if 'SEZ_ID' in dfcleaned.columns:
-#             dfcleaned.loc[:, 'SEZ_ID'] = dfcleaned['SEZ_ID'].astype(int)
-        
-       
-#         # Store the processed DataFrame in the dictionary
-#         processed_data[key] = dfcleaned
-
-#     return processed_data  # Return dictionary of processed DataFrames
-
-#     # Process data for large and small polygons
-# def process_data(data_dict, sezid_dict, columns_to_drop):
-#     for key, df in data_dict.items():
-#         # Step 1: Get most recent scores
-#         df.loc[df.groupby('Assessment_Unit_Name')['Year'].idxmax()]
-        
-#         # Step 2: Drop unnecessary columns
-#         df.drop(columns=[col for col in columns_to_drop if col in df.columns])
-#         # Step 3: Assign SEZ_ID
-#         #df_with_sez_id = assign_sez_ids(df_cleaned, sezid_dict)
-#         df['SEZ_ID'] = df['Assessment_Unit_Name'].map(sezid_dict)
-#         df = df.dropna(subset=['SEZ_ID'])
-    
-#         # Use .loc to modify SEZ_ID safely
-#         df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].astype(int)
-#             # Iterate over columns in the DataFrame
-#         for col in df.columns:
-#             # Check if the column name contains 'Data'
-#             if 'Data_' in col:
-#                 # Add Year to the column if it contains 'Data'
-#                 df[col] = df[col] + ', ' + df['Year'].astype(str)
-#     return df
-
-# # Function to merge all DataFrames on multiple keys(why on multiple keys? and not just SEZ ID)
-# def merge_dataframes(data_dict, keys):
-#     return reduce(lambda left, right: pd.merge(left, right, on=keys, how='outer'), data_dict.values())
-# Function to merge multiple DataFrames on SEZ_ID only
-# def merge_dataframes(data_dict, key='SEZ_ID'):
-#     """
-#     Merge multiple DataFrames stored in a dictionary on a single key.
-
-#     Parameters:
-#         data_dict (dict): Dictionary of DataFrames to merge.
-#         key (str): Column name to merge on.
-
-#     Returns:
-#         pd.DataFrame: Merged DataFrame with one row per unique SEZ_ID.
-#     """
-#     # Convert dictionary values (DataFrames) to a list
-#     dataframes = list(data_dict.values())
-
-#     # Merge all DataFrames iteratively on SEZ_ID
-#     merged_df = reduce(lambda left, right: pd.merge(left, right, on=key, how='outer'), dataframes)
-
-#     return merged_df
-
-
+    return df 
