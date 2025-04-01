@@ -130,7 +130,7 @@ def post_headcut(readydf, draft=False):
 
     if draft == True:
         readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedheadcutdata.csv", index=False)
-        # or post to SEZ.gdb?? staging table?
+        # or post to SEZ.gdb?? staging table? This would make it more user friendly so you don't have to change the csv folder.. 
         # Convert DataFrame to a list of dictionaries
         #staging_table= stage_headcutsgdb
         #data = readydf.to_dict(orient='records')
@@ -144,14 +144,24 @@ def post_headcut(readydf, draft=False):
         #print(f"Draft data appended to {staging_table} successfully.")
 
     elif draft == False:
-
+        #drop Headcut Size column so it can be put into the database
+        readydf = readydf.drop(columns=['small', 'medium', 'large'])
         # Convert DataFrame to a list of dictionaries
         data = readydf.to_dict(orient='records')
 
         # Get the field names from the field mapping
         field_names = list(readydf.columns)
 
+        # Start an edit session
+    edit = arcpy.da.Editor(sdeVector)
+    edit.startEditing(False, True)  # Start edit session with versioned editing
+    try:
         # Append data to existing table
         with arcpy.da.InsertCursor(stage_headcuts, field_names) as cursor:
           for row in data:
             cursor.insertRow([row[field] for field in field_names])
+
+        edit.stopEditing(True)  # Save changes
+    except Exception as e:
+        edit.stopEditing(False)  # Rollback if an error occurs
+        print(f"Error: {e}")

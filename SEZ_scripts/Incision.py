@@ -55,22 +55,10 @@ def process_grade_incision(df, year):
     # Step 3: Merge the mean incision ratio back into the original DataFrame
     df = df.merge(grouped, on=['Assessment_Unit_Name', 'Year'], how='left', suffixes=('', '_mean'))
 
-    
-    # Calculate incision ratio per Assessment Unit and Year
-    #grouped = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
-    #    'depth_top_bank': 'sum',  # Sum of depth_top_bank
-    #    'bankfull_depth': 'sum'  # Sum of bankfull_depth
-    #}).reset_index()
-
-    # Calculate the incision ratio for each group
-    #grouped['Calculated_ratio'] =  grouped['depth_top_bank']/grouped['bankfull_depth']
-    #merge calculated ratio into df
-    #df = df.merge(grouped[['Assessment_Unit_Name', 'Year', 'Calculated_ratio']], on=['Assessment_Unit_Name', 'Year'], how='left')
-   
     #for QA purpses lets take the raw data and calculate the incision ratio
     #I can also do this manually in Pro when doing the initial QA check
     # Group by 'Assessment_Unit_Name' and calculate the sum and count
-    
+    #If you are processing data from 2023 or earlier change the scoring to point to incision_ratio rather than calculated_incision_ratio_mean
 
     
     
@@ -119,6 +107,12 @@ def post_incision(readydf, draft = False):
         #print(f"Draft data appended to {staging_table} successfully.")
 
     elif draft == False:
+        #uncomment this if you are trying to get data pre 2023
+        #drop calcluated incision Ratio
+        #readydf = readydf.drop(columns=['Calculated_Ratio'])
+        #readydf['Incision_Rating'] = readydf['Incision_Ratio'].apply(categorize_incision)
+        #df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
+        #readydf['Incision_Score']= readydf['Incision_Rating'].apply(score_indicator)
         # Convert DataFrame to a list of dictionaries
         data = readydf.to_dict(orient='records')
 
