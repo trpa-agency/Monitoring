@@ -79,7 +79,7 @@ def process_grade_incision(df, year):
         'calculated_incision_ratio_mean': 'Calculated_Ratio',
         'Incision_Rating': 'Incision_Rating',
         'Incision_Score': 'Incision_Score',
-        'SEZ_ID': 'SEZ_ID',
+        #'SEZ_ID': 'SEZ_ID',
         }
 
     # Rename fields based on field mappings

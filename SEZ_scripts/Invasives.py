@@ -124,15 +124,18 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     # #Create Plant Priority look up dictionary
     
     #  Read and process the CSV into a lookup dictionary
-    csv_data = pd.read_csv(r"F:\\GIS\\PROJECTS\\ResearchAnalysis\\SEZ\\Invasives Priority lookup.csv", skipinitialspace=True)
+    csv_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\Invasives Priority Lookup.csv", skipinitialspace=True)
     csv_data.columns=csv_data.columns.str.strip()
     Invasives_lookup = {}
     # Create the lookup dictionary directly
     Invasives_lookup = csv_data.set_index('Common')[['Scientific', 'Priority']].to_dict(orient='index')
     
     #Assign Priorities to Cleaned Data
-    # Map priorities directly with a lambda function
-    df['Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
+    # Only map priority for rows where plant_type is NOT 'None'
+    df.loc[df['plant_type'] != 'None', 'Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
+
+    # # Map priorities directly with a lambda function
+    # df['Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
     # Debug print to check the priorities
     print("Priorities:", df['Priority'].unique())
     #Dictionary to rename priority levels
@@ -140,12 +143,7 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
 
     df['Priority'] = df['Priority'].replace(priority_dict)
 
-    #Move to final FORMATTING??
-    # # Create a new column with the plant type and priority
-    # df['Plant_Type_With_Priority'] = df['plant_type'] + ' (' + df['Priority'].astype(str) + ')'
-    # # If plant_type is none i want to assign Plant_Type_With_priority name as just None
-    # df.loc[df['plant_type'] == 'None', 'Plant_Type_With_Priority'] = 'None'
-    # Reset Index?
+   
     df.reset_index(drop=True, inplace=True)
     
     return df
@@ -174,33 +172,37 @@ def process_grade_invasives(df):
     invasive_priority_summary['Invasives_Score'] = invasive_priority_summary['Invasives_Rating'].apply(score_indicator)
     invasive_priority_summary['Number_of_Invasives'] = invasive_priority_summary[priority_list].sum(axis=1)
     return invasive_summary, invasive_priority_summary
+
 def final_format_invasive (df, invasive_priority_summary):
     ##FORMAT FOR FINAL TABLE
     # Create a new column with the plant type and priority combined name
     df['Plant_Type_With_Priority'] = df['plant_type'] + ' (' + df['Priority'].astype(str) + ')'
-    # If plant_type is none i want to assign Plant_Type_With_priority name as just None
-    df.loc[df['plant_type'] == 'None', 'Plant_Type_With_Priority'] = 'None'
+    # If plant_type is none or blank, assign Plant_Type_With_Priority name as just None
+    df.loc[df['plant_type'].isin(['None', '', None, np.nan]), 'Plant_Type_With_Priority'] = 'None'
     
+    #df_filtered = df[df['Priority'] != 'None']
+
     #Joining plant types
     # Group by 'Assessment_Unit_Name' and 'Year' and combine plant types and data sources
     grouped_df = df.groupby(['Assessment_Unit_Name', 'Year']).agg({
         'Plant_Type_With_Priority': lambda x: ', '.join(x),         # Combine plant types
         'Source': lambda x: ', '.join(sorted(set(x)))       # Combine data sources
     }).reset_index()
-
+    
     # Rename columns for clarity
     grouped_df.rename(columns={
         'Plant_Type_With_Priority': 'all_plant_types',
         'Source': 'Data_Sources'
     }, inplace=True)
+   
     
     grouped_df['Number_of_Invasives'] = invasive_priority_summary['Number_of_Invasives']
     grouped_df['Invasives_Rating'] = invasive_priority_summary['Invasives_Rating']
     grouped_df['Invasives_Score'] = invasive_priority_summary['Invasives_Score']
 
-    #Assign SEZ ID for large polygons only??
-    grouped_df['SEZ_ID'] = grouped_df['Assessment_Unit_Name'].map(lookup_dict)
-    grouped_df['SEZ_ID'] = grouped_df['SEZ_ID'].fillna(0)
+    #Assign SEZ ID for large polygons only QA for SEZ Names
+    #grouped_df['SEZ_ID'] = grouped_df['Assessment_Unit_Name'].map(lookup_dict)
+    #grouped_df['SEZ_ID'] = grouped_df['SEZ_ID'].fillna(0)
   
     #Percent cover add to final 
     grouped_df['percent_cover'] = np.nan
@@ -212,7 +214,7 @@ def final_format_invasive (df, invasive_priority_summary):
         'Number_of_Invasives': 'Invasives_Number_of_Invasives',
         'Invasives_Rating': 'Invasives_Rating',
         'Invasives_Score': 'Invasives_Scores',
-        'SEZ_ID': 'SEZ_ID',
+        #'SEZ_ID': 'SEZ_ID',
         'percent_cover': 'Invasives_Percent_Cover',
         'all_plant_types': 'Invasives_Plant_Types',
     }
@@ -220,44 +222,44 @@ def final_format_invasive (df, invasive_priority_summary):
     # Rename fields based on field mappings
     readydf = grouped_df.rename(columns=field_mapping).drop(columns=[col for col in grouped_df.columns if col not in field_mapping])
 
-    # Final SEZ ID check
-    readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
+
+    #Create a CSV file for final QA and
+    # then append this into the database. Vector-->sde.sez_scores_invasives
+    year = df['Year'].iloc[0]  # Assuming all rows in the DataFrame have the same year
+    file_name = f"processedinvasivedata_{year}.csv"
+    file_path = r"C:\Users\snewsome\Documents\SEZ\2024 Data Processing"
+    #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
+    full_path = os.path.join(file_path, file_name)
+    readydf.to_csv(full_path, index=False)
+    print(f"Draft data written to {full_path} successfully.")
     return readydf
 
    
-def post_invasive(readydf, draft=True):
-      #----------------------------------------------------------------#
-    #Post ending dataframe to invasives table in SEZ_Data.GDB or CSV for QA/ manual edits to 'other' designations
-    #----------------------------------------------------------------#
-    if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedinvasivedata.csv", index=False)
-        print(f"Draft data appended to csv successfully.")
-        # or post to SEZ.gdb?? staging table?
-        # Convert DataFrame to a list of dictionaries
-        #staging_table= stage_invasivesgdb
-        #data = readydf.to_dict(orient='records')
+# def post_invasive(readydf, draft=True):
+#       #----------------------------------------------------------------#
+#     #Post ending dataframe to invasives table in SEZ_Data.GDB or CSV for QA/ manual edits to 'other' designations
+#     #----------------------------------------------------------------#
+#     if draft == True:
+        
+#         # or post to SEZ.gdb?? staging table?
+#         # Convert DataFrame to a list of dictionaries
+#         #staging_table= stage_invasivesgdb
+#         #data = readydf.to_dict(orient='records')
 
-        # Append data to staging table directly
-        #field_names = list(readydf.columns)
-        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
-         #   for row in data:
-          #      cursor.insertRow([row[field] for field in field_names])
+#         # Append data to staging table directly
+#         #field_names = list(readydf.columns)
+#         #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
+#          #   for row in data:
+#           #      cursor.insertRow([row[field] for field in field_names])
 
-        #print(f"Draft data appended to {staging_table} successfully.")
+#         #print(f"Draft data appended to {staging_table} successfully.")
 
-    elif draft == False:
-        # Convert DataFrame to a list of dictionaries
-        data = readydf.to_dict(orient='records')
-
-        # Get the field names from the field mapping
-        field_names = list(readydf.columns)
-
-        # Append data to existing table uncomment when ready
-        with arcpy.da.InsertCursor(stage_invasives, field_names) as cursor:
-            for row in data:
-                cursor.insertRow([row[field] for field in field_names])
-        print(f"Data appended to {stage_invasives} successfully.")
-
+#     elif draft == False:
+#         #field_names = list(readydf.columns)
+#         # call the CSV you just QA'd function:
+#         csv_file_path = r"C:\Users\snewsome\Documents\SEZ\processedinvasivedata.csv"  # Update with your actual CSV file path
+#         process_and_insert_csv(csv_file_path, stage_invasives)
+       
 #--------------------------------------------#
 #This is invasive data from the F drive. Need to use if getting data between 2019 and 2022
 def get_invasive_data_gdb():

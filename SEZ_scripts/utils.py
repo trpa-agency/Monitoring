@@ -132,7 +132,7 @@ arcpy.env.overwriteOutput = True
 sr = arcpy.SpatialReference(26910)
 
 # function to get sql connection for tabular TRPA data Collection.sde?
-# db options are 'tabular' or 'tahoebmpsde'??
+# db options are 'tabular' or 'collect'??
 def get_conn(db):
     # Get database user and password from environment variables on machine running script
     db_user             = os.environ.get('DB_USER')
@@ -146,11 +146,11 @@ def get_conn(db):
     # make it case insensitive
     db = db.lower()
     # make sql database connection with pyodbc
-    if db   == 'sde_tabular':
-        connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
-        connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
-        engine = create_engine(connection_url)
-    elif db == 'sde_collection':
+    # if db   == 'sde_tabular':
+    #     connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
+    #     connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
+    #     engine = create_engine(connection_url)
+    if db == 'sde_collection':
         connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
         connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
         engine = create_engine(connection_url)
@@ -163,6 +163,93 @@ def get_conn(db):
         engine = None
     # connection file to use in pd.read_sql
     return engine
+
+#Used for setting up database connection to write scores to staging tables in vector sde.
+#--------------------------------------------------------------------------------------------------------#
+# # Function to create database connection
+# def create_db_connection(version_name_full):
+#     """
+#     Creates a database connection to the specified version in the SQL Server.
+#     """
+#     arcpy.CreateDatabaseConnection_management(
+#         out_folder_path='db_connections/',
+#         out_name="ConnectionFile.sde",
+#         database_platform="SQL_SERVER",  # Replace with your DBMS type (e.g., ORACLE, SQL_SERVER, POSTGRESQL)
+#         instance="sql12",
+#         database="sde",
+#         account_authentication="DATABASE_AUTH",  # Use "OPERATING_SYSTEM" for OS authentication
+#         username="DB_USER",
+#         password="DB_PASSWORD", # use environment variable
+#         version_type='TRANSACTIONAL',
+#         version=version_name_full
+#     )
+#     #--------------------------------------------------------------------------------------------------------#
+# # Function to insert data into a feature class using arcpy.da.InsertCursor
+# def insert_data_to_cursor(data, field_names, target_fc):
+#     """
+#     Inserts data into a feature class using an InsertCursor.
+    
+#     Parameters:
+#     - data: List of dictionaries containing the data to insert.
+#     - field_names: List of field names in the target feature class.
+#     - target_fc: The feature class where the data will be inserted.
+#     """
+#     with arcpy.da.InsertCursor(target_fc, field_names) as cursor:
+#         for row in data:
+#             cursor.insertRow([row[field] for field in field_names])
+
+#--------------------------------------------------------------------------------------------------------#
+# # Function to load CSV, prepare data, and insert into the feature class within an edit session
+# def process_and_insert_csv(csv_file_path, version_name_full, target_fc):
+#     """
+#     Loads a CSV file into a pandas DataFrame, converts it to a list of dictionaries,
+#     and inserts it into a feature class using arcpy.da.InsertCursor inside an edit session.
+    
+#     Parameters:
+#     - csv_file_path: Path to the CSV file to load.
+#     - version_name_full: The version name used to create the DB connection.
+#     - target_fc: The feature class where the data will be inserted.
+#     """
+#     # Load CSV into pandas DataFrame
+#     df = pd.read_csv(csv_file_path)
+
+#     # Create a database connection
+#     create_db_connection(version_name_full)
+
+#     # Get field names from the DataFrame columns
+#     field_names = list(df.columns)
+
+#     # Convert the DataFrame to a list of dictionaries
+#     data = df.to_dict(orient='records')
+
+#     # Start editing session
+#     db_connection = 'db_connections/ConnectionFile.sde'
+#     edit = arcpy.da.Editor(db_connection)
+#     edit.startEditing(False, True)  # Start the edit session (False = don't use undo/redo, True = allow editing)
+
+#     try:
+#         # Start an edit operation
+#         edit.startOperation()
+
+#         # Insert the data into the feature class
+#         insert_data_to_cursor(data, field_names, target_fc)
+#         print(f"Data successfully inserted into {target_fc}.")
+
+#         # Stop the edit operation
+#         edit.stopOperation()
+
+#         # Stop the editing session and save the changes
+#         edit.stopEditing(True)  # True = save edits
+
+#     except Exception as e:
+#         print(f"Error during editing session: {e}")
+#         edit.stopOperation()  # If error occurs, discard the operation
+#         edit.stopEditing(False)  # False = discard changes
+
+# # Example of how to call the function:
+# #csv_file_path = r"C:/path/to/your/file.csv"  # Update with your actual CSV file path
+# #version_name_full = "SDE.YourVersionName"   # Replace with the correct version name
+# #process_and_insert_csv(csv_file_path, version_name_full, TARGET_FC)
 
 #Used for USFS rest service
 # return query_result
@@ -376,7 +463,7 @@ def categorize_phab(IPI):
 #Large Polygons or only polygon shapes lookup dictionary for Assessment Units with lerger values of acreage
 
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv("F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Large_Polygon_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\Large_Polygon_Lookup.csv")  
 
 #Define Empty look up dataframe
 lookup_dict = {}
@@ -389,7 +476,7 @@ print(lookup_dict)
 
 #Small Polygon if there are two acres for an SEZ
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv("F:\GIS\PROJECTS\ResearchAnalysis\SEZ\Small_Polygon_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\Small_Polygon_Lookup.csv")  
 
 #Define Empty look up dataframe
 lookup_riverine = {}
@@ -402,7 +489,7 @@ print(lookup_riverine)
 
 #All Polygons
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv("F:\GIS\PROJECTS\ResearchAnalysis\SEZ\All_SEZID_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\All_SEZID_Lookup.csv")  
 
 #Define Empty look up dataframe
 lookup_all = {}

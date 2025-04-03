@@ -150,17 +150,3 @@ field_mapping = {
     'VegetationVigor_Score': 'VegetationVigor_Score'
 }
 
-#create final table by bringing in most recent year of dta from our database and overwriting with new data
-# Function to create the final table
-def create_final_table(df, field_mapping, columns_to_drop):
-    # Rename columns according to the field mapping
-    df.rename(columns=field_mapping, inplace=True)
-
-    # Drop unnecessary columns
-    df.drop(columns=columns_to_drop, inplace=True, errors='ignore')
-
-    # Reorder columns to match the desired output
-    ordered_columns = list(field_mapping.values())
-    df = df[ordered_columns]
-
-    return df 

@@ -105,7 +105,6 @@ def process_grade_headcut(headcutdf, year):
         'Number_of_Headcuts': 'Number_of_Headcuts',
         'Headcuts_Rating': 'Headcuts_Rating',
         'Headcuts_Score': 'Headcuts_Score',
-        'SEZ_ID': 'SEZ_ID',
         'small': 'small',
         'medium': 'medium',
         'large': 'large'
@@ -114,7 +113,7 @@ def process_grade_headcut(headcutdf, year):
     # Rename fields based on field mappings
     readydf = headcut_summary_sml.rename(columns=field_mapping).drop(columns=[col for col in headcut_summary_sml.columns if col not in field_mapping])
 
-    readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
+    
 
     # Convert "Year" column to datetime format with year frequency
     readydf['Year'] = pd.to_datetime(readydf['Year'], format='%Y')
