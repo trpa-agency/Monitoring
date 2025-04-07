@@ -105,7 +105,6 @@ def process_grade_headcut(headcutdf, year):
         'Number_of_Headcuts': 'Number_of_Headcuts',
         'Headcuts_Rating': 'Headcuts_Rating',
         'Headcuts_Score': 'Headcuts_Score',
-        'SEZ_ID': 'SEZ_ID',
         'small': 'small',
         'medium': 'medium',
         'large': 'large'
@@ -113,55 +112,13 @@ def process_grade_headcut(headcutdf, year):
 
     # Rename fields based on field mappings
     readydf = headcut_summary_sml.rename(columns=field_mapping).drop(columns=[col for col in headcut_summary_sml.columns if col not in field_mapping])
-
-    readydf['SEZ_ID'] = readydf['Assessment_Unit_Name'].map(lookup_dict)
-
-    # Convert "Year" column to datetime format with year frequency
-    readydf['Year'] = pd.to_datetime(readydf['Year'], format='%Y')
-    
+    #post data to CSV to be appended to sez_score_headcut table in sde.Vector
+    file_name = f"processedheadcutdata_{year}.csv"
+    file_path = r"F:\GIS\GIS_DATA\Monitoring\Stream_Headcut\Processed_Headcut_Data"  
+    #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
+    full_path = os.path.join(file_path, file_name)
+    readydf.to_csv(full_path, index=False)
+    print(f"Draft data written to {full_path} successfully.")
     return readydf
 
-#post the data to a CSV or gdb for QA if draft=True, 
-#if draft=False post to sde vector staging table
-def post_headcut(readydf, draft=False):
-    #----------------------------------------------------------------#
-    #post ending dataframe to headcut called stage_headcut GDB location
-    #----------------------------------------------------------------#
-
-    if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedheadcutdata.csv", index=False)
-        # or post to SEZ.gdb?? staging table? This would make it more user friendly so you don't have to change the csv folder.. 
-        # Convert DataFrame to a list of dictionaries
-        #staging_table= stage_headcutsgdb
-        #data = readydf.to_dict(orient='records')
-
-        # Append data to staging table directly
-        #field_names = list(readydf.columns)
-        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
-         #   for row in data:
-          #      cursor.insertRow([row[field] for field in field_names])
-
-        #print(f"Draft data appended to {staging_table} successfully.")
-
-    elif draft == False:
-        #drop Headcut Size column so it can be put into the database
-        readydf = readydf.drop(columns=['small', 'medium', 'large'])
-        # Convert DataFrame to a list of dictionaries
-        data = readydf.to_dict(orient='records')
-
-        # Get the field names from the field mapping
-        field_names = list(readydf.columns)
-
-        # Start an edit session
-    edit = arcpy.da.Editor(sdeVector)
-    edit.startEditing(False, True)  # Start edit session with versioned editing
-    try:
-        # Append data to existing table
-        with arcpy.da.InsertCursor(stage_headcuts, field_names) as cursor:
-          for row in data:
-            cursor.insertRow([row[field] for field in field_names])
-
-        edit.stopEditing(True)  # Save changes
-    except Exception as e:
-        edit.stopEditing(False)  # Rollback if an error occurs
-        print(f"Error: {e}")
+#post the data to a CSV or gdb for QA and manually append in ARCGIS Pro
