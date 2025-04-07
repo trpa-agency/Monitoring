@@ -75,43 +75,22 @@ def process_grade_erosion(df, year):
         'Bank_Stability_Percent_Unstable': 'Bank_Stability_Percent_Unstable',
         'Bank_Stability_Rating': 'Bank_Stability_Rating',
         'Bank_Stability_Score': 'Bank_Stability_Score',
-        'SEZ_ID': 'SEZ_ID'
+        #'SEZ_ID': 'SEZ_ID'
     }
-
+    
     readydf = grouped.rename(columns=field_mapping)
+    
+    #post data to CSV to be appended to sez_score_headcut table in sde.Vector
+    file_name = f"processederosiondata_{year}.csv"
+    file_path = r"F:\GIS\GIS_DATA\Monitoring\Stream_Erosion\Processed_Erosion_Data"
+    #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
+    full_path = os.path.join(file_path, file_name)
+    readydf.to_csv(full_path, index=False)
+    print(f"Data written to {full_path} successfully.")
+ 
+    
     return readydf
 
-
-
-#DO QA Before you post data t0 table
-#draft=false if you want to do QA and draft
-def post_erosion(readydf, draft= False):
-    if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processederosiondata.csv", index=False)
-        # or post to SEZ.gdb?? staging table?
-        # Convert DataFrame to a list of dictionaries
-        #staging_table= stage_bank_stabilitygdb
-        #data = readydf.to_dict(orient='records')
-
-        # Append data to staging table directly
-        #field_names = list(readydf.columns)
-        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
-         #   for row in data:
-          #      cursor.insertRow([row[field] for field in field_names])
-
-        #print(f"Draft data appended to {staging_table} successfully.")
-
-    elif draft == False:
-    # Convert DataFrame to a list of dictionaries
-        data = readydf.to_dict(orient='records')
-
-    # Get the field names from the field mapping
-        field_names = list(readydf.columns)
-    
-    # Append data to existing table
-        with arcpy.da.InsertCursor(stage_bank_stability, field_names) as cursor:
-            for row in data:
-                cursor.insertRow([row[field] for field in field_names])
  
 
    

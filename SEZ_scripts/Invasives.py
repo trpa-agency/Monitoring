@@ -63,18 +63,18 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     #---------------------------#
     #Do I need to to assign SEZ ID if we aren't going to grab 2019 data
     # Define SEZ ID based on Assessment_Unit_Name for QA on SEZ Name
-    df.loc[:, 'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
-    df.loc[df['SEZ_ID'].isna(), 'SEZ_ID'] = 0  # Fill NaN values with 0
-    
-    # Remove meadow from 2019 test period that are not actually meadows
-    df = df[df['SEZ_ID'] != 0]
+    #Uncommenbt if you want to use SEZ ID for QA
+    # df.loc[:, 'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
+    # df.loc[df['SEZ_ID'].isna(), 'SEZ_ID'] = 0  # Fill NaN values with 0
+    # # Remove meadow from 2019 test period that are not actually meadows
+    # df = df[df['SEZ_ID'] != 0]
 
     # Set 'Year' column 
     df = df.loc[df['Year'] == year].copy()
     #df['Year']= year
 
-    df.loc[df['Source'] == 'USFS', 'Year'] 
-    df.loc[df['Source'] == 'TRPA', 'Year'] 
+    # df.loc[df['Source'] == 'USFS', 'Year'] 
+    # df.loc[df['Source'] == 'TRPA', 'Year'] 
 
     # Reset index
     #df.reset_index(drop=True, inplace=True)
@@ -132,6 +132,7 @@ def merge_format_prioritize_invasive(Idf, usfsdf, year):
     
     #Assign Priorities to Cleaned Data
     # Only map priority for rows where plant_type is NOT 'None'
+    df = df.reset_index(drop=True)
     df.loc[df['plant_type'] != 'None', 'Priority'] = df['plant_type'].map(lambda x: Invasives_lookup.get(x, {}).get('Priority', 'None'))
 
     # # Map priorities directly with a lambda function
@@ -224,6 +225,7 @@ def final_format_invasive (df, invasive_priority_summary):
     #Create a CSV file for final QA and
     # then append this into the database. Vector-->sde.sez_scores_invasives
     year = df['Year'].iloc[0]  # Assuming all rows in the DataFrame have the same year
+
     file_name = f"processedinvasivedata_{year}.csv"
     file_path = r"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing"
     #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
@@ -235,92 +237,13 @@ def final_format_invasive (df, invasive_priority_summary):
     return readydf
 
    
-def post_invasive():
-    #type_mapping = {
-     #   'LONG': 'SHORT',
-        #'float64': 'DOUBLE',
-        #'object': 'TEXT',
-        #'string': 'TEXT',
-        #'datetime64[ns]': 'DATE'
-    #}
-    # Define the CSV path- should be the document you QA'd
-    QAd_path = r"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing\processedinvasivedata_2024.csv"
 
-    # Load the CSV into a pandas DataFrame
-    df = pd.read_csv(QAd_path)
-
-    # Ensure 'Year' column exists and extract the first value
-    if 'Year' not in df.columns:
-        raise ValueError("The 'Year' column is missing from the CSV.")
-    
-    year = df['Year'].iloc[0]  # Extract year from the first row
-#     QAcsv = f"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing\processedinvasivedata_{year}.csv"
-#    # Load the CSV into a pandas DataFrame
-#     df = pd.read_csv(QAcsv) 
-
-#     # Extract year from the first row (assuming 'Year' column exists in the CSV)
-#     year = df['Year'].iloc[0]
-    # Set up geodatabase and output table name
-    gdb_path = r"F:\Research and Analysis\Workspace\Sarah\Scratch.gdb"
-    output_table = f"invasive_temp_{year}"
-    output_path = f"{gdb_path}\\{output_table}"
-
-    #Delete existing table if it exists
-    if arcpy.Exists(output_path):
-        arcpy.management.Delete(output_path)
-        print(f"Deleted existing table: {output_table}")
-
-    # Create the table in the geodatabase
-    arcpy.management.CreateTable(gdb_path, output_table)
-
-    # # Identify date columns (assume they are 'object' type but contain dates)
-    # date_columns = [col for col in df_long.columns if pd.api.types.is_datetime64_any_dtype(df_long[col])]
-
-
-    # # Add fields based on DataFrame dtypes
-    # for col_name, dtype in df.dtypes.items():
-    #     arcgis_type = type_mapping.get(str(dtype), 'TEXT')  # Default to TEXT if dtype is unknown
-    #     if arcgis_type == 'TEXT':
-    #         arcpy.management.AddField(output_path, col_name, arcgis_type, field_length=255)
-    #     else:
-    #         arcpy.management.AddField(output_path, col_name, arcgis_type)
-    
-    # Insert data into the table
-    with arcpy.da.InsertCursor(output_path, df.columns.tolist()) as cursor:
-        for _, row in df.iterrows():
-            cursor.insertRow(row.tolist())
-    
-    print(f"Table '{output_table}' created and populated in {gdb_path}")      
-    return df
-# #----------------------------------------------------------------#
-#     #Post ending dataframe to invasives table in SEZ_Data.GDB or CSV for QA/ manual edits to 'other' designations
-#     #----------------------------------------------------------------#
-#     if draft == True:
-        
-#         # or post to SEZ.gdb?? staging table?
-#         # Convert DataFrame to a list of dictionaries
-#         #staging_table= stage_invasivesgdb
-#         #data = readydf.to_dict(orient='records')
-
-#         # Append data to staging table directly
-#         #field_names = list(readydf.columns)
-#         #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
-#          #   for row in data:
-#           #      cursor.insertRow([row[field] for field in field_names])
-
-#         #print(f"Draft data appended to {staging_table} successfully.")
-
-#     elif draft == False:
-#         #field_names = list(readydf.columns)
-#         # call the CSV you just QA'd function:
-#         csv_file_path = r"C:\Users\snewsome\Documents\SEZ\processedinvasivedata.csv"  # Update with your actual CSV file path
-#         process_and_insert_csv(csv_file_path, stage_invasives)
-       
 #--------------------------------------------#
 #This is invasive data from the F drive. Need to use if getting data between 2019 and 2022
 def get_invasive_data_gdb():
     # Paths to the feature classes 2019-2023 threshold, 
     # Future US: just pull new invasive info from SDE Collect
+    #2019 had different priority list and manual fixes so this won't be accurate to what is in the 2019 data table exactly
     invasive19fc = os.path.join(invasiveplant19gdb, "Invasive_Species_2019")
     invasive20fc = os.path.join(invasiveplant20gdb, "Invasive_Species_2020")
     invasive22fc = os.path.join(invasiveplant22gdb, "Invasive_Species_2022")
@@ -376,6 +299,7 @@ def get_invasive_data_gdb():
 
     # Concatenate DataFrames
     Idf = pd.concat([invasive19df, invasive20df, invasive22df, invasive23df], ignore_index=True)
+    Idf['Year']=Idf['created_date'].dt.year
     Idf['Source']= 'TRPA'
     return Idf
     

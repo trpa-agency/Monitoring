@@ -34,14 +34,14 @@ def process_grade_incision(df, year):
 #----------------------------------------------------------------#
      #filter for year
     df = df[df['Year'] == year].copy()
-    #use this until we fix the domain- did we fix it? 12/9/24
-    df.loc[:,'Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
-    # Create a new column 'SEZ ID'
-    #This code is for the excel look up dictionary
-    df.loc[:,'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
+    # #use this until we fix the domain- did we fix it? 12/9/24
+    # df.loc[:,'Assessment_Unit_Name'] = df['Assessment_Unit_Name'].replace({'Blackwood Creek - upper 2': 'Blackwood Creek - Upper 2', 'Taylor Creek marsh - 1': 'Taylor Creek marsh'})
+    # # Create a new column 'SEZ ID'
+    # #This code is for the excel look up dictionary
+    # df.loc[:,'SEZ_ID'] = df['Assessment_Unit_Name'].map(lookup_dict)
 
-    # Fill NaN values with a specific value, such as 0
-    df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].fillna(0).astype(int)
+    # # Fill NaN values with a specific value, such as 0
+    # df.loc[:, 'SEZ_ID'] = df['SEZ_ID'].fillna(0).astype(int)
 
 #Calcluate the Incision Ratio 
     # Step 1: Calculate the incision ratio for each measurement
@@ -69,12 +69,12 @@ def process_grade_incision(df, year):
     #df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
     df['Incision_Score']= df['Incision_Rating'].apply(score_indicator)
 
-    #df['Incision_Data_Source'] = 'TRPA' 
+    df['Incision_Data_Source'] = 'TRPA' 
     #Field Mapping
     field_mapping = {
         'Assessment_Unit_Name': 'Assessment_Unit_Name',
         'Year': 'Year',
-        'Incision_Data_Sourc': 'Incision_Data_Source',
+        'Incision_Data_Source': 'Incision_Data_Source',
         'incision_ratio': 'Incision_Ratio',
         'calculated_incision_ratio_mean': 'Calculated_Ratio',
         'Incision_Rating': 'Incision_Rating',
@@ -85,42 +85,14 @@ def process_grade_incision(df, year):
     # Rename fields based on field mappings
     incisionfinaldf = df.rename(columns=field_mapping).drop(columns=[col for col in df.columns if col not in field_mapping])
 
-    readydf = incisionfinaldf.groupby(['SEZ_ID', 'Year']).first().reset_index()
+    readydf = incisionfinaldf.groupby(['Assessment_Unit_Name', 'Year']).first().reset_index()
+    
+    #post data to CSV to be appended to sez_score_headcut table in sde.Vector
+    file_name = f"processedincisiondata_{year}.csv"
+    file_path = r"F:\GIS\GIS_DATA\Monitoring\Channel_Incision\Processed_Incision_Data"
+    #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
+    full_path = os.path.join(file_path, file_name)
+    readydf.to_csv(full_path, index=False)
+    print(f"Data written to {full_path} successfully.")
     return readydf
-    #----------------------------------------------------------------#
-    #post ending dataframe to incision staging table in sde
-    #----------------------------------------------------------------#
-def post_incision(readydf, draft = False):
-    if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedincisiondata.csv", index=False)
-        # or post to SEZ.gdb?? staging table?
-        # Convert DataFrame to a list of dictionaries
-        #staging_table= stage_incisiongdb
-        #data = readydf.to_dict(orient='records')
-
-        # Append data to staging table directly
-        #field_names = list(readydf.columns)
-        #with arcpy.da.InsertCursor(staging_table, field_names) as cursor:
-         #   for row in data:
-          #      cursor.insertRow([row[field] for field in field_names])
-
-        #print(f"Draft data appended to {staging_table} successfully.")
-
-    elif draft == False:
-        #uncomment this if you are trying to get data pre 2023
-        #drop calcluated incision Ratio
-        #readydf = readydf.drop(columns=['Calculated_Ratio'])
-        #readydf['Incision_Rating'] = readydf['Incision_Ratio'].apply(categorize_incision)
-        #df['Incision_Rating']=df['incision_ratio'].apply(categorize_incision)
-        #readydf['Incision_Score']= readydf['Incision_Rating'].apply(score_indicator)
-        # Convert DataFrame to a list of dictionaries
-        data = readydf.to_dict(orient='records')
-
-        # Get the field names from the field mapping
-        field_names = list(readydf.columns)
-
-        # Append data to existing table
-        with arcpy.da.InsertCursor(stage_incision, field_names) as cursor:
-            for row in data:
-                cursor.insertRow([row[field] for field in field_names])
-
+    
