@@ -179,8 +179,6 @@ def final_format_invasive (df, invasive_priority_summary):
     df['Plant_Type_With_Priority'] = df['plant_type'] + ' (' + df['Priority'].astype(str) + ')'
     # If plant_type is none or blank, assign Plant_Type_With_Priority name as just None
     df.loc[df['plant_type'].isin(['None', '', None, np.nan]), 'Plant_Type_With_Priority'] = 'None'
-    
-    #df_filtered = df[df['Priority'] != 'None']
 
     #Joining plant types
     # Group by 'Assessment_Unit_Name' and 'Year' and combine plant types and data sources
@@ -227,16 +225,74 @@ def final_format_invasive (df, invasive_priority_summary):
     # then append this into the database. Vector-->sde.sez_scores_invasives
     year = df['Year'].iloc[0]  # Assuming all rows in the DataFrame have the same year
     file_name = f"processedinvasivedata_{year}.csv"
-    file_path = r"C:\Users\snewsome\Documents\SEZ\2024 Data Processing"
+    file_path = r"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing"
     #file_path = r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts"  # Update with your GitHub repo path
     full_path = os.path.join(file_path, file_name)
     readydf.to_csv(full_path, index=False)
     print(f"Draft data written to {full_path} successfully.")
+    
+    
     return readydf
 
    
-# def post_invasive(readydf, draft=True):
-#       #----------------------------------------------------------------#
+def post_invasive():
+    #type_mapping = {
+     #   'LONG': 'SHORT',
+        #'float64': 'DOUBLE',
+        #'object': 'TEXT',
+        #'string': 'TEXT',
+        #'datetime64[ns]': 'DATE'
+    #}
+    # Define the CSV path- should be the document you QA'd
+    QAd_path = r"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing\processedinvasivedata_2024.csv"
+
+    # Load the CSV into a pandas DataFrame
+    df = pd.read_csv(QAd_path)
+
+    # Ensure 'Year' column exists and extract the first value
+    if 'Year' not in df.columns:
+        raise ValueError("The 'Year' column is missing from the CSV.")
+    
+    year = df['Year'].iloc[0]  # Extract year from the first row
+#     QAcsv = f"F:\GIS\GIS_DATA\Monitoring\Invasive_Species\2024 Data Processing\processedinvasivedata_{year}.csv"
+#    # Load the CSV into a pandas DataFrame
+#     df = pd.read_csv(QAcsv) 
+
+#     # Extract year from the first row (assuming 'Year' column exists in the CSV)
+#     year = df['Year'].iloc[0]
+    # Set up geodatabase and output table name
+    gdb_path = r"F:\Research and Analysis\Workspace\Sarah\Scratch.gdb"
+    output_table = f"invasive_temp_{year}"
+    output_path = f"{gdb_path}\\{output_table}"
+
+    #Delete existing table if it exists
+    if arcpy.Exists(output_path):
+        arcpy.management.Delete(output_path)
+        print(f"Deleted existing table: {output_table}")
+
+    # Create the table in the geodatabase
+    arcpy.management.CreateTable(gdb_path, output_table)
+
+    # # Identify date columns (assume they are 'object' type but contain dates)
+    # date_columns = [col for col in df_long.columns if pd.api.types.is_datetime64_any_dtype(df_long[col])]
+
+
+    # # Add fields based on DataFrame dtypes
+    # for col_name, dtype in df.dtypes.items():
+    #     arcgis_type = type_mapping.get(str(dtype), 'TEXT')  # Default to TEXT if dtype is unknown
+    #     if arcgis_type == 'TEXT':
+    #         arcpy.management.AddField(output_path, col_name, arcgis_type, field_length=255)
+    #     else:
+    #         arcpy.management.AddField(output_path, col_name, arcgis_type)
+    
+    # Insert data into the table
+    with arcpy.da.InsertCursor(output_path, df.columns.tolist()) as cursor:
+        for _, row in df.iterrows():
+            cursor.insertRow(row.tolist())
+    
+    print(f"Table '{output_table}' created and populated in {gdb_path}")      
+    return df
+# #----------------------------------------------------------------#
 #     #Post ending dataframe to invasives table in SEZ_Data.GDB or CSV for QA/ manual edits to 'other' designations
 #     #----------------------------------------------------------------#
 #     if draft == True:

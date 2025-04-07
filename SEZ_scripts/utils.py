@@ -114,7 +114,7 @@ invasiveplant20gdb= os.path.join(invasivegdbfolder,"Invasive_Species_Survey_2020
 invasiveplant19gdb= os.path.join(invasivegdbfolder,"Invasive_Species_Survey_2019.gdb")
 #current working directory
 local_path = pathlib.Path().absolute()
-# set data path as a subfolder of the current working directory TravelDemandModel\2022\
+# set data path as a subfolder of the current working directory 
 data_dir = local_path.parents[0] / 'data/raw_data'
 # folder to save processed data
 out_dir  = local_path.parents[0] / 'data/processed_data'
