@@ -1,5 +1,5 @@
 from utils import *
-
+#THIS JUST TAKES DATA FROM SEZ_DATA.gdb and creats a dataframe for the staging table.
 #def get_vegvig_data_staged():
 #def get_vegvig_data_sql():
 
