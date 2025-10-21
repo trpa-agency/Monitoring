@@ -1,0 +1,161 @@
+---
+title: "CSCI Calculations"
+output: html_notebook
+---
+
+Source: Instructions for Calculating Bioassessment Indices
+
+Initial Installations and Libraries
+```{r}
+#Only need to install once
+#install.packages("devtools")
+#install_github("SCCWRP/BMIMetrics")
+#install_github("SCCWRP/CSCI")
+
+library(dplyr)
+library(tidyverse)
+library(devtools)
+library(CSCI)
+```
+
+!!USER INPUTS!!
+Paths for bug data, station data, and output folders
+```{r}
+bug_path <- "C:/Users/emalamut/BMI_24_Processing/bug_metrics.csv" #"Record file" tab from "2024 TRPA BMI ABA version analysis"
+
+station_path <- "C:/Users/emalamut/BMI_24_Processing/Indices_Metrics_Consolidated.csv"
+
+#Location to save CSCI outputs
+output_path_base <- "C:/Users/emalamut/BMI_24_Processing/"
+
+collection_year <- "2024" #year that you are processing the data for
+```
+
+Load, format, and clean bug data
+```{r}
+#Load and format bug data
+bug_metrics <- read_csv(bug_path) %>%
+  mutate(
+    SampleID = paste(Sample.I.D., collection_year, sep = "_"),
+    Distinct = NA
+  ) %>%
+  select(
+    StationCode = Sample.I.D.,
+    SampleID,
+    FinalID = Taxon,
+    LifeStageCode = Stage,
+    BAResult = Abundance,
+    Distinct
+  )
+
+#Load and format station data
+stations_CSCI <- read.csv(station_path, stringsAsFactors = F) %>%
+  select(
+    StationCode, 
+    New_Lat, 
+    New_Long, 
+    SITE_ELEV, 
+    ELEV_RANGE, 
+    AREA_SQKM, 
+    TEMP_00_09, 
+    PPT_00_09, 
+    SumAve_P, 
+    KFCT_AVE, 
+    BDH_AVE, 
+    P_MEAN
+  )
+
+#Clean bug data
+bug_clean <- cleanData(bug_metrics)
+
+#List the unique FinalIDs that were flagged as unacceptable values
+bug_ID_problems <- bug_clean %>% 
+  filter(problemFinalID == TRUE) %>% 
+  distinct(FinalID)
+
+bug_ID_problems
+```
+
+!!USER INPUT!!
+Create list of replacement values for the FinalIDs flagged as unacceptable in the list above (bug_ID_problems). Each unnacceptable value should correspond to an acceptable one. Use the Long output tab in 2024 TRPA BMI ABA version analysis and the SWAMP lookup table for reference. You will need to create your own replacements list. The one below can be used as a reference.
+```{r}
+replacements <- c(
+  "Drunella", 
+  "Paraleptophlebia bicornuta", 
+  "Lepidostoma", 
+  "Physa", 
+  "Ephemerella excrucians", 
+  "Rhyacophila vemna group", 
+  "Perlodidae", 
+  "Empididae", 
+  "Epeorus longimanus", 
+  "Chloroperlidae", 
+  "Epeorus grandis", 
+  "Tanytarsini", 
+  "Turbellaria", 
+  "Cricotopus", 
+  "Phaenopsectra obediens", 
+  "Potthastia longimana group",
+  "Lepidostoma",
+  "Cricotopus",
+  "Leptophlebiidae"
+)
+
+#Add a column to the bug_ID_problems dataframe with names of the replacements
+bug_ID_problems <- bug_ID_problems %>% 
+  mutate(Replacements = replacements)
+
+bug_ID_problems
+```
+
+
+Update bug dataframe with replacements values and check that there are no more unaccepted IDs ( bug_final_Insect_problems should be an empty list)
+```{r}
+#Replace values in dataframe with replacement values
+for (i in 1:length(bug_ID_problems$FinalID)) {
+  bug_clean$FinalID <- replace(bug_clean$FinalID, 
+                              bug_clean$FinalID == bug_ID_problems[i,1, drop=TRUE], 
+                              bug_ID_problems[i,2, drop=TRUE]
+                              )
+}
+
+#Clean data
+bug_final <- cleanData(bug_clean)
+
+#Check if there are still insect ID problems
+bug_final_ID_problems <- bug_final %>% 
+  filter(problemFinalID == TRUE) %>% 
+  distinct(FinalID)
+
+bug_final_ID_problems
+```
+!!USER CHECK!!
+Review list of FinalIDs (bug_insect_problems) flagged as non-insects. If they are all non-insects, then continue.
+```{r}
+#Select the unique FinalIDs that were flagged as Non-insects
+bug_insect_problems <- bug_final %>% 
+  filter(LifeStageCode == "X") %>% 
+  distinct(FinalID)
+
+bug_insect_problems
+```
+
+Generate CSCI report and associated csv files
+```{r}
+#Calculate CSCI
+report <- CSCI(bugs=bug_final, stations=stations_CSCI)
+
+# Save the lists in report as separate CSVs
+write.csv(report[["core"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_core.csv"))
+
+write.csv(report[["Suppl1_mmi"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_Suppl1_mmi.csv"))
+
+write.csv(report[["Suppl2_mmi"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_Suppl2_mmi.csv"))
+
+write.csv(report[["Suppl1_grps"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_Suppl1_grps.csv"))
+
+write.csv(report[["Suppl1_OE"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_Suppl1_OE.csv"))
+
+write.csv(report[["Suppl2_OE"]], file = paste0(output_path_base, "CSCI_Report_", collection_year,"_Suppl2_OE.csv"))
+```
+
