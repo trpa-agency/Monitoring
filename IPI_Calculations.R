@@ -1,5 +1,10 @@
 ## Calculate IPI ##
-# Source: Instructions for Calculating Bioassessment Indices
+#Source: Instructions for Calculating Bioassessment Indices
+#Created: October 21st, 2025
+#Last Updated: December 11th, 2025
+#Evelyn Malamut, Tahoe Regional Planning Agency
+#This R Markdown was developed to calculate CSCI scores with yearly bioassessment data
+#This R script uses R version 4.5.1
 
 ## Initial Installation ##
 
