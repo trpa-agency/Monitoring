@@ -5,7 +5,7 @@ output: html_notebook
 
 Source: Instructions for Calculating Bioassessment Indices
 Created: October 21st, 2025
-Last Updated: December 11th, 2025
+Last Updated: January 26th, 2026
 Evelyn Malamut, Tahoe Regional Planning Agency
 This R Markdown was developed to calculate CSCI scores with yearly bioassessment data
 This R script uses R version 4.5.1
@@ -16,6 +16,7 @@ Initial Installations and Libraries
 #install.packages("devtools")
 #install.packages("dplyr)
 #install.packages("tidyverse")
+#install.packages("readxl")
 #install_github("SCCWRP/BMIMetrics")
 #install_github("SCCWRP/CSCI")
 
@@ -23,6 +24,7 @@ library(dplyr)
 library(tidyverse)
 library(devtools)
 library(CSCI)
+library(readxl)
 ```
 
 !!USER INPUTS!!

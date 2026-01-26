@@ -1,7 +1,7 @@
 ## Calculate IPI ##
 #Source: Instructions for Calculating Bioassessment Indices
 #Created: October 21st, 2025
-#Last Updated: December 11th, 2025
+#Last Updated: January 26th, 2026
 #Evelyn Malamut, Tahoe Regional Planning Agency
 #This R Markdown was developed to calculate CSCI scores with yearly bioassessment data
 #This R script uses R version 4.5.1
@@ -11,6 +11,7 @@
 #install.packages("devtools")
 #install.packages("dplyr)
 #install.packages("tidyverse")
+#install.packages("readxl")
 #install_github("SCCWRP/PHAB")
 
 ## Load libraries ##
@@ -19,6 +20,7 @@ library(dplyr)
 library(tidyverse)
 library(devtools)
 library(PHAB)
+library(readxl)
 
 ## USER INPUT: File paths ##
 phab_path <- "C:/Users/emalamut/BMI_24_Processing/TRPA_2024_PHAB_metrics_20250428.csv"
