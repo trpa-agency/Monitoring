@@ -14,6 +14,8 @@ Initial Installations and Libraries
 ```{r}
 #Only need to install once
 #install.packages("devtools")
+#install.packages("dplyr)
+#install.packages("tidyverse")
 #install_github("SCCWRP/BMIMetrics")
 #install_github("SCCWRP/CSCI")
 
