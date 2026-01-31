@@ -50,6 +50,7 @@ selected_rows_CSCI <- semi_join(
 matching_stations <- intersect(diff_df$STATION_CODE, SDE_Updated$STATION_CODE)
 matching_df <- data.frame(matching_stations = matching_stations)
 
+#After writing, I deleted the SAX ones with the zero vs o situation and re-formatted to match SDE format
 write.csv(selected_rows_CSCI, "C:/Users/emalamut/Desktop/SelectedRowsCSCI.csv")
 
 # Updating re-calculated CSCI scores
