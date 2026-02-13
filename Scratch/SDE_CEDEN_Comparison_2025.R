@@ -1,8 +1,8 @@
 ## Bioassessment_SDE_MissingSurveys.R ##
 #Created: January 26th, 2026
-#Last Updated: January 26th, 2026
+#Last Updated: January 30th, 2026
 #Evelyn Malamut, Tahoe Regional Planning Agency
-#This script was developed to add data from Bioassessment Surveys not already in SDE and update re-calculated CSCI scores
+#This script was developed to add Bioassessment surveys collected by other agencies in CEDEN to our SDE
 #This R script uses R version 4.5.1
 
 ##Notes: January 26th, 2026
@@ -19,13 +19,15 @@ library(writexl)
 library(lubridate)
 
 ## File paths ##
+
+##Got CEDEN output from CEDEN Query with IPI and CSCI
 CEDEN_CSCI_IPI_path <- "C:/Users/emalamut/Tahoe Regional Planning Agency/Science & Data Team - Documents/Monitoring/Programs/Bioassessment/Workspace/CEDEN_CSCI_IPI_2025_Export.xlsx"
 SDE_Updated_path <- "C:/Users/emalamut/Tahoe Regional Planning Agency/Science & Data Team - Documents/Monitoring/Programs/Bioassessment/Workspace/StreamSDE_Updated.xlsx"
 
 CEDEN_CSCI_IPI_ALL <- read_excel(CEDEN_CSCI_IPI_path)
 SDE_Updated <- read_excel(SDE_Updated_path)
 
-# Seelect 634 sites
+# Select 634 sites
 CEDEN_CSCI_IPI <- CEDEN_CSCI_IPI_ALL[startsWith(CEDEN_CSCI_IPI_ALL$StationCode, "634"), ] %>%
   select(
     Project,
@@ -121,6 +123,17 @@ SDE_w_CEDEN <- test_df %>%
     YEAR_OF_SURVEY,
     CSCI_SCORE,
     IPI_SCORE,
+    STATION_TYPE,
     AGENCY = AGENCY.y,
     LTINFO
   )
+
+write_xlsx(SDE_w_CEDEN, "C:/Users/emalamut/Desktop/SDE_Sample_test.xlsx")
+
+Missing_SDE <- joined_df[is.na(joined_df$STATION_NAME), ] %>%
+  select(
+    STATION_CODE,
+    YEAR_OF_SURVEY
+  )
+
+write_xlsx(Missing_SDE, "C:/Users/emalamut/Desktop/Missing_CEDEN_Sites.xlsx")

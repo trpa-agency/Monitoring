@@ -3,15 +3,16 @@
 #Created: October 21st, 2025
 #Last Updated: January 26th, 2026
 #Evelyn Malamut, Tahoe Regional Planning Agency
-#This R Markdown was developed to calculate CSCI scores with yearly bioassessment data
+#This R Markdown was developed to calculate IPI scores with yearly bioassessment data
 #This R script uses R version 4.5.1
 
 ## Initial Installation ##
 
 #install.packages("devtools")
-#install.packages("dplyr)
+#install.packages("dplyr")
 #install.packages("tidyverse")
 #install.packages("readxl")
+#library(devtools) #Have to load the library before using install_github function
 #install_github("SCCWRP/PHAB")
 
 ## Load libraries ##
@@ -23,14 +24,14 @@ library(PHAB)
 library(readxl)
 
 ## USER INPUT: File paths ##
-phab_path <- "C:/Users/emalamut/BMI_24_Processing/TRPA_2024_PHAB_metrics_20250428.csv"
-station_path <- "C:/Users/emalamut/BMI_24_Processing/Indices_Metrics_Consolidated.csv"
-output_path <- "C:/Users/emalamut/BMI_24_Processing/IPI_report_2024.csv"
+phab_path <- "F:/Research and Analysis/Fisheries/Streams/Bioassessment/2020/TRPA_PHAB_Metrics_2020.xlsx"
+station_path <- "F:/Research and Analysis/Fisheries/Streams/Bioassessment/California Stream Condition Index/Physical Habitat Condition Index/2020 PHAB/Stations_20.csv"
+output_path <- "F:/Research and Analysis/Fisheries/Streams/Bioassessment/California Stream Condition Index/Physical Habitat Condition Index/2020 IPI/2020_IPI_report.csv"
 
 #Load and format phab data
 #Create SampleID column
 
-phab_metrics <- read.csv(phab_path, stringsAsFactors = F) %>%
+phab_metrics <- read_excel(phab_path) %>%
   select(
     StationCode, 
     SampleDate, 
@@ -61,6 +62,8 @@ phab_stations <- read.csv(station_path, stringsAsFactors = F) %>%
     MINP_WS
     ) %>%
   filter(StationCode %in% unique(phab_metrics$StationCode))
+
+phab_metrics <- phab_metrics %>% filter(StationCode %in% unique(phab_stations$StationCode))
 
 #Create Report
 

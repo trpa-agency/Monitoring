@@ -17,6 +17,7 @@ Initial Installations and Libraries
 #install.packages("dplyr)
 #install.packages("tidyverse")
 #install.packages("readxl")
+#library(devtools) #Have to load the library before using install_github function
 #install_github("SCCWRP/BMIMetrics")
 #install_github("SCCWRP/CSCI")
 
