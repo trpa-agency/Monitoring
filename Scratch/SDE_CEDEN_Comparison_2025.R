@@ -15,16 +15,17 @@ library(dplyr)
 library(tidyverse)
 library(devtools)
 library(readxl)
+library(readr)
 library(writexl)
 library(lubridate)
 
 ## File paths ##
 
 ##Got CEDEN output from CEDEN Query with IPI and CSCI
-CEDEN_CSCI_IPI_path <- "C:/Users/emalamut/Tahoe Regional Planning Agency/Science & Data Team - Documents/Monitoring/Programs/Bioassessment/Workspace/CEDEN_CSCI_IPI_2025_Export.xlsx"
+CEDEN_CSCI_IPI_path <- "C:/Users/emalamut/Tahoe Regional Planning Agency/Science & Data Team - Documents/Monitoring/Programs/Bioassessment/Workspace/CEDEN_CSCI_IPI_Export.tsv"
 SDE_Updated_path <- "C:/Users/emalamut/Tahoe Regional Planning Agency/Science & Data Team - Documents/Monitoring/Programs/Bioassessment/Workspace/StreamSDE_Updated.xlsx"
 
-CEDEN_CSCI_IPI_ALL <- read_excel(CEDEN_CSCI_IPI_path)
+CEDEN_CSCI_IPI_ALL <- read_tsv(CEDEN_CSCI_IPI_path)
 SDE_Updated <- read_excel(SDE_Updated_path)
 
 # Select 634 sites
@@ -43,25 +44,25 @@ CEDEN_CSCI_IPI <- CEDEN_CSCI_IPI_ALL[startsWith(CEDEN_CSCI_IPI_ALL$StationCode, 
 
 write_xlsx(CEDEN_CSCI_IPI, "C:/Users/emalamut/Desktop/CEDEN_CSCI_IPI_634.xlsx")
 
-#Create df with stations that exist in CEDEN but not in SDE
-CEDEN_diff_list <- list(
-  StationCode = setdiff(unique(CEDEN_CSCI_IPI$StationCode), unique(SDE_Updated$STATION_CODE))
-)
-
-CEDEN_diff <- as.data.frame(CEDEN_diff_list)
-
-#Create df with stations that exist in SDE but not in CEDEN
-SDE_diff_list <- list(
-  StationCode = setdiff(unique(SDE_Updated$STATION_CODE), unique(CEDEN_CSCI_IPI$StationCode))
-)
-
-SDE_diff <- as.data.frame(SDE_diff_list)
+# #Create df with stations that exist in CEDEN but not in SDE
+# CEDEN_diff_list <- list(
+#   StationCode = setdiff(unique(CEDEN_CSCI_IPI$StationCode), unique(SDE_Updated$STATION_CODE))
+# )
+# 
+# CEDEN_diff <- as.data.frame(CEDEN_diff_list)
+# 
+# #Create df with stations that exist in SDE but not in CEDEN
+# SDE_diff_list <- list(
+#   StationCode = setdiff(unique(SDE_Updated$STATION_CODE), unique(CEDEN_CSCI_IPI$StationCode))
+# )
+# 
+# SDE_diff <- as.data.frame(SDE_diff_list)
 
 
 # Formatting CEDEN output to append non-TRPA sampled sites
 CEDEN_CSCI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "CSCI", ] %>%
   mutate(
-    YEAR_OF_SURVEY = year(SampleDate)
+    YEAR_OF_SURVEY = year(as.POSIXct(SampleDate, format = "%m/%d/%Y %I:%M:%S %p"))
   ) %>%
   select(
     STATION_CODE = StationCode,
@@ -76,7 +77,7 @@ CEDEN_CSCI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "CSCI", ] %>%
   
 CEDEN_IPI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "IPI", ] %>%
   mutate(
-    YEAR_OF_SURVEY = year(SampleDate)
+    YEAR_OF_SURVEY = year(as.POSIXct(SampleDate, format = "%m/%d/%Y %I:%M:%S %p"))
   ) %>%
   select(
     STATION_CODE = StationCode,
@@ -89,18 +90,21 @@ CEDEN_IPI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "IPI", ] %>%
     IPI = Result
   ) 
 
+#Join IPI and CSCI dataframes together
 formatted_CEDEN_CSCI_IPI <- full_join(
   x = CEDEN_CSCI, 
   y = CEDEN_IPI, 
   by = c("STATION_CODE", "STATION_NAME", "SAMPLE_DATE", "YEAR_OF_SURVEY", "AGENCY", "LONGITUDE", "LATITUDE")
 )
 
+#Join CEDEN sites with SDE
 joined_df <- full_join(
   x = formatted_CEDEN_CSCI_IPI, 
   y = SDE_Updated, 
   by = c("STATION_CODE", "YEAR_OF_SURVEY")
 )
 
+#Pull information from CEDEN that is not in SDE already
 test_df <- joined_df %>%
   mutate(
     AGENCY.y = coalesce(AGENCY.y, AGENCY.x),
@@ -110,9 +114,11 @@ test_df <- joined_df %>%
     STREAM_NAME = if_else(AGENCY.y != "TRPA", STATION_NAME, STREAM_NAME),
     STATION_TYPE = if_else(AGENCY.y != "TRPA", "NA", STATION_TYPE),
     LTINFO = if_else(AGENCY.y != "TRPA", "NA", LTINFO),
+    SAMPLE_DATE = as.Date(SAMPLE_DATE, format = "%m/%d/%Y"),
     IPI_SCORE = IPI
   )
 
+#Select fields that we want in SDE
 SDE_w_CEDEN <- test_df %>%
   select(
     STATION_CODE = STATION_CODE,
@@ -130,10 +136,10 @@ SDE_w_CEDEN <- test_df %>%
 
 write_xlsx(SDE_w_CEDEN, "C:/Users/emalamut/Desktop/SDE_Sample_test.xlsx")
 
-Missing_SDE <- joined_df[is.na(joined_df$STATION_NAME), ] %>%
-  select(
-    STATION_CODE,
-    YEAR_OF_SURVEY
-  )
-
-write_xlsx(Missing_SDE, "C:/Users/emalamut/Desktop/Missing_CEDEN_Sites.xlsx")
+# Missing_SDE <- joined_df[is.na(joined_df$STATION_NAME), ] %>%
+#   select(
+#     STATION_CODE,
+#     YEAR_OF_SURVEY
+#   )
+# 
+# write_xlsx(Missing_SDE, "C:/Users/emalamut/Desktop/Missing_CEDEN_Sites.xlsx")
