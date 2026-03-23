@@ -1,6 +1,6 @@
 ## Bioassessment_SDE_MissingSurveys.R ##
 #Created: January 26th, 2026
-#Last Updated: January 30th, 2026
+#Last Updated: March 23rd, 2026
 #Evelyn Malamut, Tahoe Regional Planning Agency
 #This script was developed to add Bioassessment surveys collected by other agencies in CEDEN to our SDE
 #This R script uses R version 4.5.1
@@ -35,6 +35,7 @@ CEDEN_CSCI_IPI <- CEDEN_CSCI_IPI_ALL[startsWith(CEDEN_CSCI_IPI_ALL$StationCode, 
     SampleAgency,
     StationCode,
     StationName,
+    waterbody_type,
     TargetLatitude,
     TargetLongitude,
     SampleDate,
@@ -67,6 +68,7 @@ CEDEN_CSCI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "CSCI", ] %>%
   select(
     STATION_CODE = StationCode,
     STATION_NAME = StationName,
+    STREAM_NAME = waterbody_type,
     SAMPLE_DATE = SampleDate,
     YEAR_OF_SURVEY,
     LONGITUDE = TargetLongitude,
@@ -82,6 +84,7 @@ CEDEN_IPI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "IPI", ] %>%
   select(
     STATION_CODE = StationCode,
     STATION_NAME = StationName,
+    STREAM_NAME = waterbody_type,
     SAMPLE_DATE = SampleDate,
     YEAR_OF_SURVEY,
     LONGITUDE = TargetLongitude,
@@ -94,7 +97,7 @@ CEDEN_IPI <- CEDEN_CSCI_IPI[CEDEN_CSCI_IPI$Analyte == "IPI", ] %>%
 formatted_CEDEN_CSCI_IPI <- full_join(
   x = CEDEN_CSCI, 
   y = CEDEN_IPI, 
-  by = c("STATION_CODE", "STATION_NAME", "SAMPLE_DATE", "YEAR_OF_SURVEY", "AGENCY", "LONGITUDE", "LATITUDE")
+  by = c("STATION_CODE", "STREAM_NAME", "STATION_NAME", "SAMPLE_DATE", "YEAR_OF_SURVEY", "AGENCY", "LONGITUDE", "LATITUDE")
 )
 
 #Join CEDEN sites with SDE
@@ -111,7 +114,7 @@ test_df <- joined_df %>%
     LONGITUDE.y = ifelse(AGENCY.y != "TRPA", LONGITUDE.x, LONGITUDE.y),
     LATITUDE.y = ifelse(AGENCY.y != "TRPA", LATITUDE.x, LATITUDE.y),
     CSCI_SCORE = if_else(AGENCY.y != "TRPA", CSCI, CSCI_SCORE),
-    STREAM_NAME = if_else(AGENCY.y != "TRPA", STATION_NAME, STREAM_NAME),
+    STREAM_NAME = if_else(AGENCY.y != "TRPA", STREAM_NAME.x, STREAM_NAME.y),
     STATION_TYPE = if_else(AGENCY.y != "TRPA", "NA", STATION_TYPE),
     LTINFO = if_else(AGENCY.y != "TRPA", "NA", LTINFO),
     SAMPLE_DATE = as.Date(SAMPLE_DATE, format = "%m/%d/%Y"),
@@ -122,7 +125,8 @@ test_df <- joined_df %>%
 SDE_w_CEDEN <- test_df %>%
   select(
     STATION_CODE = STATION_CODE,
-    STREAM_NAME,
+    STREAM_NAME = STREAM_NAME,
+    STATION_NAME = STATION_NAME,
     LONGITUDE = LONGITUDE.y,
     LATITUDE = LATITUDE.y,
     SAMPLE_DATE,
