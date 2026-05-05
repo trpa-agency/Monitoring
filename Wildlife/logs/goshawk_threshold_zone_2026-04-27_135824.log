@@ -1,0 +1,13 @@
+2026-04-27 13:58:24 | INFO | goshawk_threshold_zone | Log file: C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\logs\goshawk_threshold_zone_2026-04-27_135824.log
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | TRPA Goshawk Threshold Zone
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | Workspace:    C:\GIS\Scratch.gdb
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | Nests FC:     nogo_nest_usfs
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | HIGH habitat: amgo_ecobject_cwhr_habmodel_high
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | MOD habitat:  amgo_ecobject_cwhr_habmodel_moderate
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | Output FC:    C:\GIS\Scratch.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | Target ac:    500.0 | Buffer: 0.25 Miles | min_acres: 0.5
+2026-04-27 13:58:26 | INFO | goshawk_threshold_zone | Replacing existing C:\GIS\Scratch.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-27 13:58:35 | INFO | goshawk_threshold_zone | Nests found: 136
+2026-04-27 13:58:35 | INFO | goshawk_threshold_zone | [1/136] Nest OID 1

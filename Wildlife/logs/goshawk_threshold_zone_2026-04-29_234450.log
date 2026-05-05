@@ -1,0 +1,157 @@
+2026-04-29 23:44:50 | INFO | goshawk_threshold_zone | Log file: C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\logs\goshawk_threshold_zone_2026-04-29_234450.log
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | TRPA Goshawk Threshold Zone (v1)
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Source GDB:   C:\GIS\Scratch.gdb
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Output GDB:   C:\GIS\Goshawk_Threshold_Zone.gdb
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Nests FC:     C:\GIS\Scratch.gdb\nogo_nest_usfs
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | HIGH habitat: C:\GIS\Scratch.gdb\amgo_ecobject_cwhr_habmodel_high
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | MOD habitat:  C:\GIS\Scratch.gdb\amgo_ecobject_cwhr_habmodel_moderate
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Output FC:    C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Target ac: 500.0 | Buffer: 0.25 Miles | search: 5 Miles | min_acres: 0.5 | close: 200 Feet
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Probe: every 5 picks, homestretch within 100.0 ac
+2026-04-29 23:44:53 | INFO | goshawk_threshold_zone | Replacing existing C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-29 23:45:00 | INFO | goshawk_threshold_zone | Nests to process: 138
+2026-04-29 23:53:27 | INFO | goshawk_threshold_zone | [  1/138]  2011A Sierra Creek                   Total= 502.8  picks=100  507.3s
+2026-04-30 00:01:05 | INFO | goshawk_threshold_zone | [  2/138]  2004J Watson Creek                   Total= 500.2  picks= 85  457.6s
+2026-04-30 00:10:09 | INFO | goshawk_threshold_zone | [  3/138]  2011B McKinney Creek                 Total= 505.5  picks=110  544.0s
+2026-04-30 00:13:38 | INFO | goshawk_threshold_zone | [  4/138]  1978A Bliss Creek                    Total= 504.9  picks=110  207.9s
+2026-04-30 00:18:06 | INFO | goshawk_threshold_zone | [  5/138]  1979B Marlette Creek                 Total= 515.7  picks=155  268.6s
+2026-04-30 00:22:24 | INFO | goshawk_threshold_zone | [  6/138]  1987C Burke Creek Upper              Total= 184.8  picks= 23  257.9s  WARNING short
+2026-04-30 00:36:41 | INFO | goshawk_threshold_zone | [  7/138]  1981B Angora Creek                   Total= 511.0  picks= 75  856.3s
+2026-04-30 00:44:40 | INFO | goshawk_threshold_zone | [  8/138]  1993D Griff Creek                    Total= 505.0  picks= 80  478.7s
+2026-04-30 01:03:41 | INFO | goshawk_threshold_zone | [  9/138]  1991B Saxon Creek                    Total= 500.1  picks= 94  1140.5s
+2026-04-30 01:21:07 | INFO | goshawk_threshold_zone | [ 10/138]  1981G Trout Creek                    Total= 526.3  picks= 99  1045.4s
+2026-04-30 01:36:30 | INFO | goshawk_threshold_zone | [ 11/138]  1989A Cold Creek Upper               Total= 514.6  picks=115  922.2s
+2026-04-30 01:48:30 | INFO | goshawk_threshold_zone | [ 12/138]  1992K Sugar Pine Point SP            Total= 511.7  picks=105  718.3s
+2026-04-30 01:58:00 | INFO | goshawk_threshold_zone | [ 13/138]  1992I Painted Rock                   Total= 518.9  picks= 40  570.1s
+2026-04-30 02:15:09 | INFO | goshawk_threshold_zone | [ 14/138]  1992L Saxon Creek                    Total= 573.0  picks= 81  1028.4s
+2026-04-30 02:34:16 | INFO | goshawk_threshold_zone | [ 15/138]  1998F Trout Creek                    Total= 502.4  picks= 92  1145.5s
+2026-04-30 02:48:18 | INFO | goshawk_threshold_zone | [ 16/138]  1991A Tahoe Mountain                 Total= 549.2  picks= 89  841.8s
+2026-04-30 02:57:48 | INFO | goshawk_threshold_zone | [ 17/138]  1999B Painted Rock                   Total= 500.2  picks= 60  568.8s
+2026-04-30 03:09:23 | INFO | goshawk_threshold_zone | [ 18/138]  1995A Blackwood Canyon               Total= 500.2  picks=105  695.0s
+2026-04-30 03:22:42 | INFO | goshawk_threshold_zone | [ 19/138]  1981H Blackwood Canyon               Total= 527.4  picks=141  797.7s
+2026-04-30 03:32:55 | INFO | goshawk_threshold_zone | [ 20/138]  1993F Watson Creek                   Total= 511.2  picks= 95  612.7s
+2026-04-30 03:42:56 | INFO | goshawk_threshold_zone | [ 21/138]  2005D Watson Creek                   Total= 516.9  picks= 90  599.9s
+2026-04-30 03:52:38 | INFO | goshawk_threshold_zone | [ 22/138]  2000A Burton Creek                   Total= 536.6  picks= 53  582.3s
+2026-04-30 04:02:22 | INFO | goshawk_threshold_zone | [ 23/138]  2001B Burton Creek                   Total= 538.8  picks= 52  582.7s
+2026-04-30 04:12:37 | INFO | goshawk_threshold_zone | [ 24/138]  2002A Burton Creek                   Total= 571.6  picks= 74  615.0s
+2026-04-30 04:22:02 | INFO | goshawk_threshold_zone | [ 25/138]  2003I Burton Creek                   Total= 537.9  picks= 50  564.2s
+2026-04-30 04:31:43 | INFO | goshawk_threshold_zone | [ 26/138]  2004D Burton Creek                   Total= 548.9  picks= 47  580.3s
+2026-04-30 04:41:07 | INFO | goshawk_threshold_zone | [ 27/138]  2005C Burton Creek                   Total= 513.7  picks= 45  563.0s
+2026-04-30 04:48:41 | INFO | goshawk_threshold_zone | [ 28/138]  1984A Griff Creek                    Total= 505.9  picks= 45  453.0s
+2026-04-30 04:56:13 | INFO | goshawk_threshold_zone | [ 29/138]  1992E Griff Creek                    Total= 507.0  picks= 35  452.1s
+2026-04-30 05:04:05 | INFO | goshawk_threshold_zone | [ 30/138]  1997A Griff Creek                    Total= 524.6  picks= 45  470.9s
+2026-04-30 05:11:13 | INFO | goshawk_threshold_zone | [ 31/138]  2005E Griff Creek                    Total= 527.8  picks= 25  427.1s
+2026-04-30 05:22:09 | INFO | goshawk_threshold_zone | [ 32/138]  2000B Alpine Ridge                   Total= 500.2  picks= 85  655.7s
+2026-04-30 05:33:13 | INFO | goshawk_threshold_zone | [ 33/138]  2001D Alpine Ridge                   Total= 529.5  picks= 90  664.0s
+2026-04-30 05:45:04 | INFO | goshawk_threshold_zone | [ 34/138]  1998E Sugar Pine Point SP            Total= 510.6  picks=120  710.7s
+2026-04-30 05:57:03 | INFO | goshawk_threshold_zone | [ 35/138]  2000C Sugar Pine Point SP            Total= 514.0  picks=130  717.4s
+2026-04-30 06:09:17 | INFO | goshawk_threshold_zone | [ 36/138]  2001E Sugar Pine Point SP            Total= 501.8  picks= 96  733.7s
+2026-04-30 06:21:12 | INFO | goshawk_threshold_zone | [ 37/138]  2003K Sugar Pine Point SP            Total= 516.6  picks=120  714.1s
+2026-04-30 06:33:48 | INFO | goshawk_threshold_zone | [ 38/138]  2005H Sugar Pine Point SP            Total= 507.9  picks=110  755.4s
+2026-04-30 06:46:32 | INFO | goshawk_threshold_zone | [ 39/138]  1996A Sugar Pine Point SP            Total= 518.9  picks=115  763.5s
+2026-04-30 06:59:00 | INFO | goshawk_threshold_zone | [ 40/138]  1995D Sugar Pine Point SP            Total= 511.7  picks=105  747.0s
+2026-04-30 07:11:53 | INFO | goshawk_threshold_zone | [ 41/138]  2006A Sugar Pine Point SP            Total= 510.0  picks=120  772.2s
+2026-04-30 07:23:52 | INFO | goshawk_threshold_zone | [ 42/138]  2002H Sierra Creek                   Total= 503.2  picks=100  717.9s
+2026-04-30 07:35:54 | INFO | goshawk_threshold_zone | [ 43/138]  2002G Sierra Creek                   Total= 500.6  picks=104  721.3s
+2026-04-30 07:47:51 | INFO | goshawk_threshold_zone | [ 44/138]  1984B Cascade Lake                   Total= 520.1  picks= 97  716.4s
+2026-04-30 08:01:06 | INFO | goshawk_threshold_zone | [ 45/138]  1997C Floating Island Lake           Total= 502.4  picks= 95  794.3s
+2026-04-30 08:14:31 | INFO | goshawk_threshold_zone | [ 46/138]  1999A Floating Island Lake           Total= 516.5  picks= 85  804.2s
+2026-04-30 08:26:44 | INFO | goshawk_threshold_zone | [ 47/138]  2003D Spring Creek                   Total= 504.5  picks= 90  732.1s
+2026-04-30 08:38:06 | INFO | goshawk_threshold_zone | [ 48/138]  2004G Spring Creek                   Total= 500.0  picks= 97  682.4s
+2026-04-30 08:53:46 | INFO | goshawk_threshold_zone | [ 49/138]  2003E Tahoe Mountain                 Total= 522.9  picks=105  939.1s
+2026-04-30 09:09:51 | INFO | goshawk_threshold_zone | [ 50/138]  1981D Angora Creek                   Total= 545.9  picks= 79  963.5s
+2026-04-30 09:23:15 | INFO | goshawk_threshold_zone | [ 51/138]  1991C Angora Creek                   Total= 234.0  picks= 35  803.0s  WARNING short
+2026-04-30 09:35:35 | INFO | goshawk_threshold_zone | [ 52/138]  1992A Angora Creek                   Total= 511.0  picks= 75  739.3s
+2026-04-30 09:48:10 | INFO | goshawk_threshold_zone | [ 53/138]  2003A Angora Creek                   Total= 200.4  picks= 27  753.8s  WARNING short
+2026-04-30 09:55:02 | INFO | goshawk_threshold_zone | [ 54/138]  2001A Angora Creek                   Total= 503.1  picks= 75  412.2s
+2026-04-30 10:06:04 | INFO | goshawk_threshold_zone | [ 55/138]  2004I Angora Creek                   Total= 507.6  picks= 80  660.9s
+2026-04-30 10:22:49 | INFO | goshawk_threshold_zone | [ 56/138]  1993C Angora Creek                   Total= 545.6  picks= 78  1004.4s
+2026-04-30 10:38:34 | INFO | goshawk_threshold_zone | [ 57/138]  2003G Round Lake                     Total= 505.9  picks=130  944.8s
+2026-04-30 10:53:50 | INFO | goshawk_threshold_zone | [ 58/138]  1981E Tahoe Valley                   Total= 153.7  picks=  8  914.8s  WARNING short
+2026-04-30 11:13:14 | INFO | goshawk_threshold_zone | [ 59/138]  1991D Saxon Creek                    Total= 508.5  picks= 85  1163.5s
+2026-04-30 11:24:41 | INFO | goshawk_threshold_zone | [ 60/138]  1995B Saxon Creek                    Total= 515.9  picks=105  685.2s
+2026-04-30 11:33:59 | INFO | goshawk_threshold_zone | [ 61/138]  1998D Saxon Creek                    Total= 528.5  picks= 95  557.7s
+2026-04-30 11:43:01 | INFO | goshawk_threshold_zone | [ 62/138]  2001C Saxon Creek                    Total= 520.0  picks= 85  540.8s
+2026-04-30 11:52:10 | INFO | goshawk_threshold_zone | [ 63/138]  2005B Saxon Creek Middle             Total= 504.9  picks= 90  549.0s
+2026-04-30 12:05:30 | INFO | goshawk_threshold_zone | [ 64/138]  1992H Trout Creek                    Total= 530.8  picks= 85  799.5s
+2026-04-30 12:41:55 | INFO | goshawk_threshold_zone | [ 65/138]  1993B Trout Creek                    Total= 530.8  picks= 85  2183.4s
+2026-04-30 13:01:00 | INFO | goshawk_threshold_zone | [ 66/138]  1998B Hell Hole                      Total= 560.5  picks= 85  1143.7s
+2026-04-30 13:20:23 | INFO | goshawk_threshold_zone | [ 67/138]  2003C Hell Hole                      Total= 525.1  picks= 90  1161.9s
+2026-04-30 13:39:15 | INFO | goshawk_threshold_zone | [ 68/138]  1992B Hell Hole                      Total= 502.4  picks= 98  1131.0s
+2026-04-30 13:59:00 | INFO | goshawk_threshold_zone | [ 69/138]  1999C Hell Hole                      Total= 503.5  picks= 80  1183.6s
+2026-04-30 14:17:24 | INFO | goshawk_threshold_zone | [ 70/138]  2002E Cold Creek                     Total= 500.1  picks= 81  1102.1s
+2026-04-30 14:37:01 | INFO | goshawk_threshold_zone | [ 71/138]  1992C Cold Creek                     Total= 500.3  picks= 96  1175.8s
+2026-04-30 15:17:55 | INFO | goshawk_threshold_zone | [ 72/138]  2002B Cold Creek Upper               Total= 513.7  picks= 85  2453.1s
+2026-04-30 15:48:00 | INFO | goshawk_threshold_zone | [ 73/138]  2004C High Meadows                   Total= 512.9  picks=100  1801.5s
+2026-04-30 16:02:17 | INFO | goshawk_threshold_zone | [ 74/138]  1987A Burke Creek Upper              Total= 190.7  picks= 21  856.5s  WARNING short
+2026-04-30 17:44:32 | INFO | goshawk_threshold_zone | [ 75/138]  1988A Burke Creek Upper              Total= 176.9  picks=  9  6134.4s  WARNING short
+2026-04-30 17:54:22 | INFO | goshawk_threshold_zone | [ 76/138]  1992G Burke Creek Upper              Total= 178.7  picks= 13  589.1s  WARNING short
+2026-04-30 19:45:28 | INFO | goshawk_threshold_zone | [ 77/138]  1987B Heavenly Valley Creek          Total= 501.4  picks=110  6665.1s
+2026-04-30 19:54:30 | INFO | goshawk_threshold_zone | [ 78/138]  1988C North Canyon                   Total= 500.1  picks= 85  541.5s
+2026-04-30 20:08:46 | INFO | goshawk_threshold_zone | [ 79/138]  1977A Bliss Creek                    Total= 518.5  picks= 80  854.5s
+2026-04-30 20:49:05 | INFO | goshawk_threshold_zone | [ 80/138]  2004K Bliss Creek                    Total= 517.0  picks= 90  2418.6s
+2026-04-30 20:54:51 | INFO | goshawk_threshold_zone | [ 81/138]  1999D Genoa Peak                     Total= 505.9  picks= 85  344.8s
+2026-04-30 21:00:19 | INFO | goshawk_threshold_zone | [ 82/138]  2003L Genoa Peak                     Total= 509.7  picks= 76  327.9s
+2026-04-30 21:04:37 | INFO | goshawk_threshold_zone | [ 83/138]  2004L Genoa Peak                     Total= 506.6  picks= 65  258.2s
+2026-04-30 21:14:16 | INFO | goshawk_threshold_zone | [ 84/138]  1979A Marlette Creek                 Total= 500.4  picks=140  578.1s
+2026-04-30 21:24:00 | INFO | goshawk_threshold_zone | [ 85/138]  1983A Marlette Creek                 Total= 503.5  picks=145  583.6s
+2026-04-30 21:28:07 | INFO | goshawk_threshold_zone | [ 86/138]  1995C Incline Creek                  Total= 297.1  picks= 48  246.0s  WARNING short
+2026-04-30 21:33:42 | INFO | goshawk_threshold_zone | [ 87/138]  1998A First Creek                    Total= 505.2  picks=125  335.0s
+2026-04-30 21:38:00 | INFO | goshawk_threshold_zone | [ 88/138]  1992D Martis Peak                    Total= 501.7  picks=105  257.8s
+2026-04-30 21:44:18 | INFO | goshawk_threshold_zone | [ 89/138]  2007A Big Meadow                     Total= 500.5  picks=130  377.5s
+2026-04-30 21:48:42 | INFO | goshawk_threshold_zone | [ 90/138]  2007B Burton SP                      Total= 533.1  picks= 42  263.2s
+2026-04-30 21:54:23 | INFO | goshawk_threshold_zone | [ 91/138]  2008A Burton SP                      Total= 554.7  picks= 49  341.1s
+2026-04-30 22:04:29 | INFO | goshawk_threshold_zone | [ 92/138]  2008B Watson Creek                   Total= 506.0  picks= 90  605.8s
+2026-04-30 22:18:40 | INFO | goshawk_threshold_zone | [ 93/138]  2009A Big Meadow                     Total= 542.3  picks=145  849.6s
+2026-04-30 22:37:17 | INFO | goshawk_threshold_zone | [ 94/138]  2009B Hell Hole                      Total= 501.7  picks= 96  1116.6s
+2026-04-30 22:51:05 | INFO | goshawk_threshold_zone | [ 95/138]  2009D Sugar Pine Point SP            Total= 519.1  picks=120  826.5s
+2026-04-30 23:05:17 | INFO | goshawk_threshold_zone | [ 96/138]  2009E High Meadows                   Total= 544.3  picks= 93  851.1s
+2026-04-30 23:14:35 | INFO | goshawk_threshold_zone | [ 97/138]  2009F Martis Peak                    Total= 524.0  picks= 80  557.4s
+2026-04-30 23:33:13 | INFO | goshawk_threshold_zone | [ 98/138]  2010A Saxon Creek                    Total= 500.5  picks= 99  1117.9s
+2026-04-30 23:46:52 | INFO | goshawk_threshold_zone | [ 99/138]  2010C Sawmill Pond                   Total= 213.7  picks= 34  817.4s  WARNING short
+2026-04-30 23:59:54 | INFO | goshawk_threshold_zone | [100/138]  2010D Spring Creek                   Total= 512.7  picks= 99  780.4s
+2026-05-01 00:07:48 | INFO | goshawk_threshold_zone | [101/138]  2010E Martis Peak                    Total= 541.5  picks= 73  473.2s
+2026-05-01 00:20:18 | INFO | goshawk_threshold_zone | [102/138]  2010F High Meadows                   Total= 524.3  picks= 90  750.1s
+2026-05-01 00:37:44 | INFO | goshawk_threshold_zone | [103/138]  2010B Hell Hole                      Total= 525.5  picks= 75  1044.4s
+2026-05-01 00:49:05 | INFO | goshawk_threshold_zone | [104/138]  2012A Page Meadows                   Total= 508.4  picks= 70  680.1s
+2026-05-01 01:02:01 | INFO | goshawk_threshold_zone | [105/138]  2012C High Meadows                   Total= 537.8  picks= 90  775.3s
+2026-05-01 01:12:06 | INFO | goshawk_threshold_zone | [106/138]  2012D Watson Creek                   Total= 515.3  picks= 95  604.0s
+2026-05-01 01:20:57 | INFO | goshawk_threshold_zone | [107/138]  2012F Martis Peak                    Total= 547.3  picks= 91  530.1s
+2026-05-01 01:32:48 | INFO | goshawk_threshold_zone | [108/138]  2012G Twin Crags                     Total= 502.8  picks=100  710.6s
+2026-05-01 01:50:41 | INFO | goshawk_threshold_zone | [109/138]  2012H Hell Hole                      Total= 552.2  picks= 82  1072.2s
+2026-05-01 02:02:35 | INFO | goshawk_threshold_zone | [110/138]  2012I Blackwood Canyon               Total= 502.6  picks= 80  712.7s
+2026-05-01 02:15:18 | INFO | goshawk_threshold_zone | [111/138]  2012B Sierra Creek                   Total= 515.5  picks=112  762.0s
+2026-05-01 02:25:43 | INFO | goshawk_threshold_zone | [112/138]  2014A Watson Creek                   Total= 517.5  picks= 90  624.7s
+2026-05-01 02:36:58 | INFO | goshawk_threshold_zone | [113/138]  2015A Page Meadows                   Total= 508.0  picks= 65  674.3s
+2026-05-01 02:46:32 | INFO | goshawk_threshold_zone | [114/138]  2016A Burton Creek                   Total= 522.4  picks= 50  572.5s
+2026-05-01 03:00:37 | INFO | goshawk_threshold_zone | [115/138]  2017A Spring Creek                   Total= 562.4  picks=120  844.9s
+2026-05-01 03:12:34 | INFO | goshawk_threshold_zone | [116/138]  2017B Sierra Creek                   Total= 505.8  picks=100  715.7s
+2026-05-01 03:24:22 | INFO | goshawk_threshold_zone | [117/138]  2017C Page Meadows                   Total= 539.0  picks= 67  706.9s
+2026-05-01 03:34:42 | INFO | goshawk_threshold_zone | [118/138]  2018A Ward Creek                     Total= 527.7  picks= 55  619.7s
+2026-05-01 03:47:56 | INFO | goshawk_threshold_zone | [119/138]  2019A Spring Creek                   Total= 500.0  picks= 97  793.0s
+2026-05-01 04:04:44 | INFO | goshawk_threshold_zone | [120/138]  2019B Lower Trout Creek B            Total= 504.8  picks=105  1006.8s
+2026-05-01 04:19:54 | INFO | goshawk_threshold_zone | [121/138]  2019C Seneca Pond                    Total= 379.0  picks= 87  908.8s  WARNING short
+2026-05-01 04:31:56 | INFO | goshawk_threshold_zone | [122/138]  2013A Blackwood Canyon               Total= 530.4  picks= 80  720.9s
+2026-05-01 04:42:29 | INFO | goshawk_threshold_zone | [123/138]  2019D Ward Creek                     Total= 514.8  picks= 55  632.5s
+2026-05-01 04:55:44 | INFO | goshawk_threshold_zone | [124/138]  2012E McKinney Creek                 Total= 555.2  picks=100  794.2s
+2026-05-01 05:08:15 | INFO | goshawk_threshold_zone | [125/138]  2019E Sierra Creek                   Total= 519.3  picks= 93  750.3s
+2026-05-01 05:19:30 | INFO | goshawk_threshold_zone | [126/138]  2019F Sawmill Flat                   Total= 510.5  picks=115  673.7s
+2026-05-01 05:31:18 | INFO | goshawk_threshold_zone | [127/138]  2019G Page Meadows                   Total= 527.3  picks= 66  708.1s
+2026-05-01 05:43:44 | INFO | goshawk_threshold_zone | [128/138]  2020A Sawmill Flat                   Total= 503.1  picks=140  744.4s
+2026-05-01 05:54:38 | INFO | goshawk_threshold_zone | [129/138]  2022A Sawmill Flat                   Total= 500.7  picks=115  654.0s
+2026-05-01 06:06:12 | INFO | goshawk_threshold_zone | [130/138]  2022B Blackwood Canyon Middle        Total= 503.1  picks= 75  692.6s
+2026-05-01 06:23:24 | INFO | goshawk_threshold_zone | [131/138]  2022C Hellhole Upper                 Total= 554.4  picks=109  1031.8s
+2026-05-01 06:36:27 | INFO | goshawk_threshold_zone | [132/138]  2022D Sugar Pine State Park          Total= 516.7  picks=115  782.3s
+2026-05-01 06:48:56 | INFO | goshawk_threshold_zone | [133/138]  2022E Stanford Rock                  Total= 530.0  picks=100  747.7s
+2026-05-01 07:01:33 | INFO | goshawk_threshold_zone | [134/138]  2023A Stanford Rock                  Total= 520.0  picks=100  756.9s
+2026-05-01 07:10:54 | INFO | goshawk_threshold_zone | [135/138]  2025B Ward Timber                    Total= 516.9  picks=110  559.4s
+2026-05-01 07:16:37 | INFO | goshawk_threshold_zone | [136/138]  2025A Sawmill Flat                   Total= 504.0  picks=120  343.1s
+2026-05-01 07:21:45 | INFO | goshawk_threshold_zone | [137/138]  2025Z Burton Creek                   Total= 515.8  picks= 55  308.1s
+2026-05-01 07:31:40 | INFO | goshawk_threshold_zone | [138/138]  2026A Tahoma                         Total= 515.8  picks=125  593.7s
+2026-05-01 07:31:40 | INFO | goshawk_threshold_zone | ============================================================
+2026-05-01 07:31:40 | INFO | goshawk_threshold_zone | Done. Output: C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone
+2026-05-01 07:31:40 | INFO | goshawk_threshold_zone | Processed: 138 | failures: 0 | shorts: 10 | elapsed: 1906.7 min
+2026-05-01 07:31:40 | INFO | goshawk_threshold_zone | Short NEST_IDs: ['1987C', '1991C', '2003A', '1981E', '1987A', '1988A', '1992G', '1995C', '2010C', '2019C']
+2026-05-01 07:31:41 | INFO | goshawk_threshold_zone | in_memory cleared

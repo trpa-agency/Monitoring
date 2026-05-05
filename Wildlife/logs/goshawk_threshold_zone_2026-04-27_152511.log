@@ -1,0 +1,48 @@
+2026-04-27 15:25:11 | INFO | goshawk_threshold_zone | Log file: C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\logs\goshawk_threshold_zone_2026-04-27_152511.log
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | TRPA Goshawk Threshold Zone
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | Workspace:    C:\GIS\Scratch.gdb
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | Nests FC:     nogo_nest_usfs
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | HIGH habitat: amgo_ecobject_cwhr_habmodel_high
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | MOD habitat:  amgo_ecobject_cwhr_habmodel_moderate
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | Output FC:    C:\GIS\Scratch.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | Target ac:    500.0 | Buffer: 0.25 Miles | min_acres: 0.5 | search: 5 Miles
+2026-04-27 15:25:12 | INFO | goshawk_threshold_zone | Replacing existing C:\GIS\Scratch.gdb\TRPA_Goshawk_Threshold_Zone
+2026-04-27 15:25:15 | INFO | goshawk_threshold_zone | Nests found: 136
+2026-04-27 15:25:15 | INFO | goshawk_threshold_zone | [1/136] Nest OID 1
+2026-04-27 15:25:16 | INFO | goshawk_threshold_zone |   [  0.5s] buffer ok (125.6 ac, need 374.4 more)
+2026-04-27 15:25:17 | INFO | goshawk_threshold_zone |   [  2.1s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-27 15:25:20 | INFO | goshawk_threshold_zone |   [  5.1s] MOD habitat filtered to within 5 Miles of nest
+2026-04-27 15:25:51 | INFO | goshawk_threshold_zone |   [ 35.9s] erased buffer from HIGH habitat
+2026-04-27 15:27:03 | INFO | goshawk_threshold_zone |   [107.7s] erased buffer from MOD habitat
+2026-04-27 15:29:59 | INFO | goshawk_threshold_zone |   [283.9s] acres calculated on habitat
+2026-04-27 15:30:07 | INFO | goshawk_threshold_zone |   [292.2s] near-distance computed
+2026-04-27 15:30:08 | INFO | goshawk_threshold_zone |   [292.3s] entering growth loop
+2026-04-27 15:30:08 | ERROR | goshawk_threshold_zone | ERROR on nest 1
+2026-04-27 15:30:08 | ERROR | goshawk_threshold_zone | Traceback (most recent call last):
+  File "C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\goshawk_threshold_zone.py", line 449, in main
+    final_fc, buf_ac, high_added, mod_added, total_ac, dt = build_threshold_zone_for_nest(
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\goshawk_threshold_zone.py", line 339, in build_threshold_zone_for_nest
+    pick = pick_best_contiguous(high_lyr, oid_high, selected_high)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\goshawk_threshold_zone.py", line 297, in pick_best_contiguous
+    arcpy.management.SelectLayerByLocation(
+  File "C:\Program Files\ArcGIS\Pro\Resources\ArcPy\arcpy\management.py", line 16945, in SelectLayerByLocation
+    raise e
+  File "C:\Program Files\ArcGIS\Pro\Resources\ArcPy\arcpy\management.py", line 16929, in SelectLayerByLocation
+    gp.SelectLayerByLocation_management(
+  File "C:\Program Files\ArcGIS\Pro\Resources\ArcPy\arcpy\geoprocessing\_base.py", line 533, in <lambda>
+    return lambda *args: val(*gp_fixargs(args, True))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+arcgisscripting.ExecuteError: ERROR 000622: Failed to execute (Select Layer By Location). Parameters are not valid.
+ERROR 000628: Cannot set input into parameter search_distance.
+
+
+2026-04-27 15:30:08 | INFO | goshawk_threshold_zone | [2/136] Nest OID 2
+2026-04-27 15:30:09 | INFO | goshawk_threshold_zone |   [  0.5s] buffer ok (125.6 ac, need 374.4 more)
+2026-04-27 15:30:11 | INFO | goshawk_threshold_zone |   [  2.9s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-27 15:30:17 | INFO | goshawk_threshold_zone |   [  9.1s] MOD habitat filtered to within 5 Miles of nest
+2026-04-27 15:30:43 | INFO | goshawk_threshold_zone |   [ 34.8s] erased buffer from HIGH habitat
+2026-04-27 15:31:36 | INFO | goshawk_threshold_zone |   [ 88.2s] erased buffer from MOD habitat
