@@ -116,6 +116,39 @@ For each nest:
    `Location`, `BufAc`, `HighAc`, `ModAc`, `TotalAc`, `Picks`, `Sec`,
    `Short` to `TRPA_Goshawk_Threshold_Zone`.
 
+After the per-nest build loop completes, a postprocess **trim** runs
+automatically (controlled by `DO_TRIM = True` in `main()`):
+
+8. **Identity overlay vs. source veg.** `arcpy.analysis.Identity` of
+   the threshold-zone FC × `Vegetation_Ecobject_2010` →
+   `TRPA_GTZ_x_Veg`. Each output piece carries the threshold zone's
+   `NestID`/`Location`/etc. plus the underlying veg attributes. Add a
+   geodesic `PieceAc` field on the result.
+9. **Per-piece distance to parent nest.** For each Identity piece,
+   compute `geom.distanceTo(nest_geom)` against its own parent nest
+   (looked up by `NestOID`). Buffer pieces are at distance 0; outermost
+   close-fill bits and far habitat are largest distance. Group pieces
+   by `NestID`, sort each group ascending by distance.
+10. **Trim cumulative.** For each zone with `TotalAc > target_ac`,
+    walk its sorted piece list and cumulative-sum `PieceAc`. Stop
+    *before* the next piece would push past target — drop that piece
+    and everything beyond. Buffer pieces are always at the head of the
+    sorted list, so they're always kept; every trimmed zone still
+    contains its nest.
+11. **Dissolve + write trimmed FC.** Dissolve the kept pieces per
+    zone, recompute geodesic acres, write to
+    `TRPA_Goshawk_Threshold_Zone_Trimmed`. Schema is the original
+    threshold-zone schema plus `OrigAc` (pre-trim `TotalAc`) and
+    `Trimmed` (1 if this row was trimmed, 0 if it was already at or
+    below target). Under-target zones pass through unchanged with
+    `Trimmed = 0`, `OrigAc = TotalAc`.
+
+The trimmed FC is the canonical "no zone over 500 ac" deliverable.
+The raw `TRPA_Goshawk_Threshold_Zone` and the Identity intermediate
+`TRPA_GTZ_x_Veg` are kept in the output GDB for audit / further
+analysis (the notebook's §12 fire-severity overlay reuses
+`TRPA_GTZ_x_Veg`).
+
 ## Key assumptions
 
 - **"Suitable habitat" = HIGH ∪ MOD** classes from the CWHR habitat
@@ -157,7 +190,9 @@ For each nest:
   planar acres on work layers for speed; in v1 the pipeline is fast
   enough without that split.
 
-## Output schema (`TRPA_Goshawk_Threshold_Zone`)
+## Output schemas
+
+### `TRPA_Goshawk_Threshold_Zone` (raw build, may be over target)
 
 | Field | Type | Meaning |
 |---|---|---|
@@ -176,6 +211,27 @@ The catch-all "Filled" / "LowAc" columns from earlier iterations are
 removed in v1. The math `BufAc + HighAc + ModAc ≤ TotalAc` is the
 expected relation; any difference is the close + interior-hole-fill
 contribution and isn't broken out separately.
+
+### `TRPA_Goshawk_Threshold_Zone_Trimmed` (postprocess output, all rows ≤ target)
+
+Same schema as the raw FC, plus two audit fields:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `OrigAc` | DOUBLE | Pre-trim `TotalAc` from the raw FC. For rows where `Trimmed = 0`, equals `TotalAc`. |
+| `Trimmed` | SHORT | 1 if this row was trimmed by the postprocess, 0 if it was already ≤ target. |
+
+`TotalAc` in the trimmed FC is recomputed (geodesic) on the dissolved
+kept-pieces polygon. By construction, no row has `TotalAc > target`.
+
+### `TRPA_GTZ_x_Veg` (Identity overlay intermediate, kept for audit)
+
+`arcpy.analysis.Identity(threshold_fc, veg_src)` output. One row per
+threshold-zone × veg-polygon intersection. Carries the threshold
+zone's full schema plus all veg attributes (`WHRTYPE`, `WHRSIZE`,
+`WHRDENSITY`, `CWHR`, `COVERTYPE`, `WHRLIFEFORM`, etc.) and a geodesic
+`PieceAc`. The trim postprocess uses this; the notebook's §12
+fire-severity overlay also reuses it.
 
 ## Known caveats
 
@@ -240,6 +296,33 @@ production use the .py.
   triggers wildlife review.
 
 ## Changelog
+
+### 2026-05-01 — trim postprocess
+
+The probe-based stop catches most overshoots, but the morphological
+close still pushes some nests over (the close adds 30–280 ac on top
+of the picked habitat for nests with concave/fragmented habitat). On
+the most recent full run, ~79/136 zones came in over 500 ac.
+
+Added a postprocess **trim** that runs automatically after the build
+loop in `goshawk_threshold_zone.py` (`DO_TRIM = True` in `main()`):
+
+- New `trim_zones_to_target()` function. Steps: Identity threshold ×
+  veg → `TRPA_GTZ_x_Veg` with geodesic `PieceAc`; per-piece distance
+  to parent nest (Python `geom.distanceTo`); group/sort pieces per
+  nest; cumulative-sum until next piece would push past target;
+  dissolve kept pieces; recompute geodesic acres; write
+  `TRPA_Goshawk_Threshold_Zone_Trimmed`.
+- Buffer pieces are at distance 0 → always at the head of the sorted
+  list → always kept. Every trimmed zone still contains its nest.
+- Output FC adds `OrigAc` (pre-trim `TotalAc`) and `Trimmed` (1/0)
+  for audit. Under-target rows pass through with original geometry,
+  `Trimmed = 0`.
+- Notebook mirrors this as §13 with cell-by-cell visibility.
+
+The trimmed FC is the canonical "no zone over 500 ac" deliverable.
+The raw FC and the Identity intermediate are kept in the output GDB
+for review and downstream analysis.
 
 ### 2026-04-29 — v1 simplification
 

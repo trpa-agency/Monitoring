@@ -35,6 +35,18 @@ footprint. Without this, the close adds 30-280 ac of "Filled" on top
 of the pre-fill running sum and the final TotalAc systematically
 overshoots.
 
+After the build loop, a postprocess trim runs (controlled by `DO_TRIM`):
+    8. Identity overlay of the threshold-zone FC vs. the source veg
+       layer -> per-zone pieces with `PieceAc` (geodesic).
+    9. For each over-target zone, sort its pieces by distance to the
+       parent nest, cumulative-sum `PieceAc`, drop everything past the
+       cutoff, dissolve the kept pieces. Buffer pieces are at distance
+       0 so they always survive — every output zone always contains
+       its nest.
+   10. Write the trimmed FC `TRPA_Goshawk_Threshold_Zone_Trimmed` with
+       the original schema plus `OrigAc` (pre-trim total) and
+       `Trimmed` (1/0).
+
 Run:
     "C:\\Program Files\\ArcGIS\\Pro\\bin\\Python\\envs\\arcgispro-py3\\python.exe" goshawk_threshold_zone.py
 """
@@ -363,6 +375,192 @@ def build_zone_for_nest(
 
 
 # -------------------
+# POSTPROCESS: TRIM TO TARGET
+# -------------------
+def trim_zones_to_target(
+    *,
+    threshold_fc: str,
+    output_gdb: str,
+    veg_src: str,
+    nests_fc: str,
+    target_ac: float,
+    id1_name: str = "TRPA_GTZ_x_Veg",
+    trim_name: str = "TRPA_Goshawk_Threshold_Zone_Trimmed",
+):
+    """
+    Postprocess: any zone in `threshold_fc` whose `TotalAc > target_ac`
+    is dissolved back to ≤ `target_ac` along real veg-piece boundaries.
+
+    Steps:
+      1. `arcpy.analysis.Identity` of threshold zones × `veg_src` ->
+         `id1_name` (kept in output_gdb so it can be inspected).
+      2. Add per-piece geodesic `PieceAc` field on the Identity result.
+      3. For each piece, compute geodesic distance to its parent
+         nest's point geometry (looked up by `NestOID`). Buffer pieces
+         are at distance 0; outermost close-fill bits are far.
+      4. Group pieces by `NestID`, sort each group by distance asc.
+         Cumulative-sum `PieceAc`; stop before the next piece would
+         push past `target_ac`. Drop everything from there outward.
+      5. Dissolve kept pieces per nest into a new trimmed polygon,
+         recompute geodesic acres, write to `trim_name` with original
+         schema plus `OrigAc` (pre-trim total) and `Trimmed` (1/0).
+
+    Buffer pieces are always at distance 0, so they're always in the
+    kept set — every output zone always contains its nest.
+
+    Returns (trim_fc_path, n_trimmed, id1_fc_path).
+    """
+    log.info("-" * 60)
+    log.info("Postprocess: trim over-target zones to <= %.1f ac" % target_ac)
+    log.info("-" * 60)
+    t_start = time.time()
+
+    # 1. Identity threshold zones x veg
+    id1_fc = output_gdb + "\\" + id1_name
+    if arcpy.Exists(id1_fc):
+        arcpy.management.Delete(id1_fc)
+    log.info(f"Running Identity: {threshold_fc} x {veg_src}")
+    arcpy.analysis.Identity(
+        in_features=threshold_fc,
+        identity_features=veg_src,
+        out_feature_class=id1_fc,
+        join_attributes="ALL",
+    )
+    n_pieces = int(arcpy.management.GetCount(id1_fc)[0])
+    log.info(f"  Identity result: {n_pieces:,} pieces -> {id1_fc}")
+
+    # 2. PieceAc on the result
+    add_acres(id1_fc, "PieceAc", "AREA_GEODESIC")
+    log.info(f"  PieceAc computed (geodesic).")
+
+    # 3. Per-piece distance to the parent nest's point geometry
+    nest_geoms: dict = {}
+    with arcpy.da.SearchCursor(nests_fc, ["OBJECTID", "SHAPE@"]) as cur:
+        for oid, g in cur:
+            nest_geoms[oid] = g
+
+    oid_field_id1 = arcpy.Describe(id1_fc).OIDFieldName
+    pieces_by_nest: dict = {}  # nest_id -> [(piece_oid, piece_ac, dist), ...]
+    with arcpy.da.SearchCursor(
+        id1_fc,
+        [oid_field_id1, "NestID", "NestOID", "PieceAc", "SHAPE@"],
+    ) as cur:
+        for poid, nid, noid, pa, geom in cur:
+            ng = nest_geoms.get(noid)
+            if ng is None or geom is None:
+                d = float("inf")
+            else:
+                d = geom.distanceTo(ng)
+            pieces_by_nest.setdefault(nid, []).append((poid, float(pa or 0.0), d))
+    for nid in pieces_by_nest:
+        pieces_by_nest[nid].sort(key=lambda r: r[2])
+
+    # 4. Read THRESHOLD_FC; identify over-target nests and decide kept pieces
+    all_threshold_rows: dict = {}
+    over_target = []  # (nest_id, total_ac)
+    with arcpy.da.SearchCursor(
+        threshold_fc,
+        ["NestID", "NestOID", "Location", "BufAc", "HighAc", "ModAc",
+         "TotalAc", "Picks", "Sec", "SHAPE@"],
+    ) as cur:
+        for nid, noid, loc, ba, ha, ma, ta, picks, sec, geom in cur:
+            all_threshold_rows[nid] = (noid, loc, ba, ha, ma, ta, picks, sec, geom)
+            if ta is not None and ta > target_ac + 0.01:
+                over_target.append((nid, ta))
+
+    log.info(f"Threshold zones total: {len(all_threshold_rows)}")
+    log.info(f"Over target ({target_ac:.0f} ac): {len(over_target)}")
+
+    keep_oids_per_nest: dict = {}
+    for nid, ta in over_target:
+        pieces = pieces_by_nest.get(nid, [])
+        keep = []
+        running = 0.0
+        for poid, pa, d in pieces:
+            if running + pa > target_ac:
+                break
+            keep.append(poid)
+            running += pa
+        keep_oids_per_nest[nid] = (keep, running)
+
+    # 5. Build the trimmed output FC (same schema as threshold + OrigAc, Trimmed)
+    trim_fc = output_gdb + "\\" + trim_name
+    if arcpy.Exists(trim_fc):
+        arcpy.management.Delete(trim_fc)
+
+    sr = arcpy.Describe(threshold_fc).spatialReference
+    arcpy.management.CreateFeatureclass(
+        output_gdb, trim_name, "POLYGON", spatial_reference=sr,
+    )
+    for fn, ft, kw in [
+        ("NestID", "TEXT", {"field_length": 64}),
+        ("NestOID", "LONG", {}),
+        ("Location", "TEXT", {"field_length": 128}),
+        ("BufAc", "DOUBLE", {}),
+        ("HighAc", "DOUBLE", {}),
+        ("ModAc", "DOUBLE", {}),
+        ("TotalAc", "DOUBLE", {}),
+        ("OrigAc", "DOUBLE", {}),
+        ("Picks", "LONG", {}),
+        ("Sec", "DOUBLE", {}),
+        ("Trimmed", "SHORT", {}),
+        ("Short", "SHORT", {}),
+    ]:
+        arcpy.management.AddField(trim_fc, fn, ft, **kw)
+
+    ic_fields = [
+        "SHAPE@", "NestID", "NestOID", "Location",
+        "BufAc", "HighAc", "ModAc", "TotalAc", "OrigAc",
+        "Picks", "Sec", "Trimmed", "Short",
+    ]
+
+    n_trimmed = 0
+    with arcpy.da.InsertCursor(trim_fc, ic_fields) as ic:
+        for nid, (noid, loc, ba, ha, ma, orig_ta, picks, sec, geom) in all_threshold_rows.items():
+            if nid in keep_oids_per_nest:
+                keep_oids, _running = keep_oids_per_nest[nid]
+                if not keep_oids:
+                    new_geom = geom
+                    new_ta = orig_ta
+                    trimmed_flag = 0
+                    log.warning(f"  {nid}: no pieces to keep - using original geom")
+                else:
+                    where = f"{oid_field_id1} IN ({','.join(str(o) for o in keep_oids)})"
+                    sel_lyr = mem("trim_sel")
+                    arcpy.management.MakeFeatureLayer(id1_fc, sel_lyr, where)
+                    diss = mem("trim_diss")
+                    arcpy.management.Dissolve(sel_lyr, diss)
+                    arcpy.management.Delete(sel_lyr)
+                    with arcpy.da.SearchCursor(diss, ["SHAPE@"]) as dc:
+                        new_geom = next(dc)[0]
+                    add_acres(diss, "Acres", "AREA_GEODESIC")
+                    new_ta = sum_field(diss, "Acres")
+                    arcpy.management.Delete(diss)
+                    trimmed_flag = 1
+                    n_trimmed += 1
+            else:
+                new_geom = geom
+                new_ta = orig_ta
+                trimmed_flag = 0
+
+            short = 1 if new_ta is not None and new_ta < target_ac - 0.01 else 0
+            ic.insertRow([
+                new_geom, nid, noid, loc,
+                float(ba or 0), float(ha or 0), float(ma or 0),
+                float(new_ta or 0), float(orig_ta or 0),
+                int(picks or 0), float(sec or 0),
+                trimmed_flag, short,
+            ])
+
+    elapsed = time.time() - t_start
+    log.info(
+        f"Trim postprocess done in {elapsed:.1f}s. "
+        f"Trimmed: {n_trimmed} | Output: {trim_fc}"
+    )
+    return trim_fc, n_trimmed, id1_fc
+
+
+# -------------------
 # MAIN
 # -------------------
 def main() -> None:
@@ -377,6 +575,9 @@ def main() -> None:
     HAB_HIGH = SOURCE_GDB + "\\" + "amgo_ecobject_cwhr_habmodel_high"
     HAB_MOD = SOURCE_GDB + "\\" + "amgo_ecobject_cwhr_habmodel_moderate"
 
+    # Source veg layer for the trim postprocess (Identity overlay).
+    VEG_SRC = r"C:\GIS\TahoeMaps\Tahoe_Data.gdb\Vegetation_Ecobject_2010"
+
     OUT_NAME = "TRPA_Goshawk_Threshold_Zone"
     out_fc = OUTPUT_GDB + "\\" + OUT_NAME
 
@@ -389,6 +590,11 @@ def main() -> None:
     PROBE_HOMESTRETCH_AC = 100.0
     MAX_ITERS = 5000
 
+    # Trim postprocess: True -> after the build loop, run Identity vs. veg
+    # and trim any over-target zone back to <= TARGET_AC. Produces an
+    # additional `_Trimmed` FC. False -> skip; only the raw FC is written.
+    DO_TRIM = True
+
     arcpy.env.workspace = SOURCE_GDB
     ensure_file_gdb(OUTPUT_GDB)
 
@@ -400,7 +606,9 @@ def main() -> None:
     log.info(f"Nests FC:     {NESTS_FC}")
     log.info(f"HIGH habitat: {HAB_HIGH}")
     log.info(f"MOD habitat:  {HAB_MOD}")
+    log.info(f"Veg source:   {VEG_SRC}")
     log.info(f"Output FC:    {out_fc}")
+    log.info(f"Trim:         {DO_TRIM}")
     log.info(
         f"Target ac: {TARGET_AC} | Buffer: {BUFFER_DIST} | search: {SEARCH_RADIUS} "
         f"| min_acres: {MIN_ACRES} | close: {CLOSE_DIST}"
@@ -497,13 +705,32 @@ def main() -> None:
 
     elapsed = time.time() - t_start
     log.info("=" * 60)
-    log.info(f"Done. Output: {out_fc}")
+    log.info(f"Build done. Output: {out_fc}")
     log.info(
         f"Processed: {len(all_nests)} | failures: {failures} | "
         f"shorts: {len(shorts)} | elapsed: {elapsed/60:.1f} min"
     )
     if shorts:
         log.info(f"Short NEST_IDs: {shorts}")
+
+    # -------- Trim postprocess --------
+    if DO_TRIM:
+        try:
+            trim_fc, n_trimmed, id1_fc = trim_zones_to_target(
+                threshold_fc=out_fc,
+                output_gdb=OUTPUT_GDB,
+                veg_src=VEG_SRC,
+                nests_fc=NESTS_FC,
+                target_ac=TARGET_AC,
+            )
+            log.info("=" * 60)
+            log.info(f"Trim done. Output: {trim_fc}")
+            log.info(f"Trimmed: {n_trimmed} | Identity FC: {id1_fc}")
+        except Exception:
+            log.error("Trim postprocess failed:")
+            log.error(traceback.format_exc())
+    else:
+        log.info("DO_TRIM=False — skipping trim postprocess.")
 
     clear_in_memory()
     log.info("in_memory cleared")
