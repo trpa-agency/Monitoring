@@ -1,28 +1,31 @@
+# =============================================================================
+# Osprey_Survey_Update.py
+# Created:      May 5th, 2026
+# Last Updated: May 11th, 2026
+# Evelyn Malamut, Tahoe Regional Planning Agency
+#
+# This python script was developed to update the Osprey Survey Reference map
+# with the most recent survey results, so that we can reference our previous
+# survey information in the field.
+#
+# This script uses Python 3.13.7 and was designed to be used with the ArcGIS
+# Pro python environment "arcgispro-py3-plotly", which refers to the default
+# cloned Python environment with plotly installed as an additional library.
+# =============================================================================
+ 
 import arcpy
 from datetime import datetime
 import os
-import sys
-from sqlalchemy.engine import URL
-from sqlalchemy import create_engine
-import sqlalchemy as sa
 import pandas as pd
 from arcgis import GIS
-from arcgis.features import FeatureSet, GeoAccessor, GeoSeriesAccessor, FeatureLayer
-import pandas as pd
-import numpy as np
-import requests
-
+from arcgis.features import FeatureLayer
+ 
 # ---------------------------------------------------------------------------
 # CONFIGURATION
 # ---------------------------------------------------------------------------
  
-# QA mode — set to True to preview records without writing anything to SDE.
-# All filtering, joining, and duplicate checking still runs; results are
-# printed and saved to CSV. Set to False when ready to append for real.
-QA_ONLY = True
- 
 # Cutoff date — records ON or AFTER this date will be appended
-CUTOFF_DATE = datetime(2025, 1, 1)
+CUTOFF_DATE = datetime(2026, 1, 1)
  
 # Unique identifier shared between the Feature Service and sdeOspreyReference
 UNIQUE_ID_FIELD = "Nest_ID"
@@ -30,18 +33,18 @@ DATE_FIELD      = "Nest_Date"   # comes from the Feature Service (sdeOspreyColle
  
 # Fields pulled from the Feature Service (survey observation fields).
 # New_Nest is excluded — it is always hardcoded "No" for stacked records.
+# Nest_Date from the Feature Service maps to Date_Updated in sdeOspreyReference.
 SURVEY_FIELDS = [
     "Nest_Status",
     "Nest_Status_Code",
-    "Nest_Date",
 ]
  
 # Static fields read from sdeOspreyReference by Nest_ID and carried into each
 # new row. Excludes:
-#   - Final_Status        (hardcoded "NA" for all new survey rows)
+#   - Final_Status        (hardcoded "UNK" for all new survey rows)
 #   - New_Nest            (hardcoded "No" for all stacked records)
-#   - Nest_Date           (comes from the survey data, not the reference FC)
-#   - Year_Updated        (field removed)
+#   - Date_Updated        (mapped from Nest_Date in the Feature Service)
+#   - Year_Updated        (derived from the year of Nest_Date)
 #   - GlobalID, Shape, created_user, created_date,
 #     last_edited_user, last_edited_date, OBJECTID  (auto-populated by SDE)
 REFERENCE_STATIC_FIELDS = [
@@ -70,8 +73,8 @@ sdeOspreyCollect   = os.path.join(sdeCollect, r"sde.SDE.Survey\sde.SDE.Osprey_Ne
 # ---------------------------------------------------------------------------
  
 portal_user = "emalamut"
+portal_pwd = "trpa1234"
 #portal_pwd  = str(os.environ.get('Password'))
-portal_pwd  = "trpa1234"
 portal_url  = "https://maps.trpa.org/portal/"
  
 gis = GIS(portal_url, portal_user, portal_pwd)
@@ -87,8 +90,9 @@ print(f"Total records from Feature Service: {len(sdf)}")
 # STEP 2 — Filter survey data to required fields, parse dates
 # ---------------------------------------------------------------------------
  
-# Include New_Nest in the initial pull for QA CSV only — not inserted
-survey_cols = [UNIQUE_ID_FIELD, "New_Nest"] + SURVEY_FIELDS
+# Include New_Nest and Nest_Date in the initial pull — New_Nest for QA CSV only,
+# Nest_Date maps to Date_Updated in sdeOspreyReference and drives date filtering
+survey_cols = [UNIQUE_ID_FIELD, "New_Nest", DATE_FIELD] + SURVEY_FIELDS
 sdf = sdf.loc[:, survey_cols].drop_duplicates()
  
 sdf[DATE_FIELD] = pd.to_datetime(sdf[DATE_FIELD], unit="ms", errors="coerce")
@@ -122,13 +126,12 @@ print(f"Unique Nest IDs after deduplication: {len(recent_df)}")
 # STEP 4 — Read sdeOspreyReference: geometry and static attributes.
 # ---------------------------------------------------------------------------
  
-reference_read_fields = [UNIQUE_ID_FIELD, "SHAPE@"] + REFERENCE_STATIC_FIELDS
-# reference_read_fields = [UNIQUE_ID_FIELD, "SHAPE@", DATE_FIELD] + REFERENCE_STATIC_FIELDS  # DATE_FIELD included if duplicate check is re-enabled
+reference_read_fields = [UNIQUE_ID_FIELD, "SHAPE@", "Date_Updated"] + REFERENCE_STATIC_FIELDS
  
 geometry_lookup = {}   # { nest_id: arcpy geometry }
 ref_rows        = []   # rows for building the reference DataFrame
 seen_ref_ids    = set()
-# existing_pairs  = set()  # { (nest_id, nest_date) } — re-enable to prevent re-inserting same row
+existing_pairs  = set()  # { (nest_id, date_updated) } — prevents re-inserting same row
  
 with arcpy.da.SearchCursor(sdeOspreyReference, reference_read_fields) as cursor:
     for row in cursor:
@@ -138,8 +141,8 @@ with arcpy.da.SearchCursor(sdeOspreyReference, reference_read_fields) as cursor:
         if record["SHAPE@"] is not None:
             geometry_lookup[nest_id] = record["SHAPE@"]
  
-        # Track existing (Nest_ID, Nest_Date) pairs to avoid re-inserting
-        # existing_pairs.add((nest_id, record[DATE_FIELD]))
+        # Track existing (Nest_ID, Date_Updated) pairs to avoid re-inserting
+        existing_pairs.add((nest_id, record["Date_Updated"]))
  
         # Only capture static reference attributes once per Nest_ID
         if nest_id not in seen_ref_ids:
@@ -209,14 +212,14 @@ for _, row in joined_df.iterrows():
     date_val = row[DATE_FIELD]
     py_date  = date_val.to_pydatetime() if pd.notna(date_val) else None
  
-    # if (nest_id, py_date) in existing_pairs:  # re-enable to skip already-inserted rows
-    #     already_exist.append(nest_id)
-    #     continue
+    if (nest_id, py_date) in existing_pairs:
+        already_exist.append(nest_id)
+        continue
  
     to_insert.append((nest_id, py_date, row))
  
-# if already_exist:
-#     print(f"Skipped {len(already_exist)} record(s) already present in sdeOspreyReference.")
+if already_exist:
+    print(f"Skipped {len(already_exist)} record(s) already present in sdeOspreyReference.")
  
 print(f"Net-new records to append: {len(to_insert)}")
  
@@ -224,82 +227,27 @@ if not to_insert:
     print("Nothing to append.")
     raise SystemExit(0)
  
-def safe_val(val):
-    """Convert any pandas NA/NaN/NaT to None for arcpy InsertCursor."""
-    if val is None:
-        return None
-    if isinstance(val, float) and pd.isna(val):
-        return None
-    try:
-        if pd.isna(val):
-            return None
-    except (TypeError, ValueError):
-        pass
-    return val
- 
 # ---------------------------------------------------------------------------
-# STEP 8 — QA preview (runs when QA_ONLY = True)
+# STEP 8 — Save final records to CSV for manual append into sdeOspreyReference
 # ---------------------------------------------------------------------------
  
-if QA_ONLY:
-    print("\n" + "=" * 60)
-    print("QA MODE — no records will be written to sdeOspreyReference.")
-    print(f"Records ready to append: {len(to_insert)}")
-    print("=" * 60)
+final_rows = []
+for nest_id, py_date, row in to_insert:
+    final_rows.append({
+        UNIQUE_ID_FIELD: nest_id,
+        "New_Nest": "No",
+        **{f: (None if pd.isna(row[f]) else row[f]) for f in SURVEY_FIELDS},
+        "Date_Updated": py_date,
+        "Year_Updated": py_date.year if py_date is not None else None,
+        "Final_Status": "UNK",
+        **{f: (None if pd.isna(row[f]) else row[f]) for f in REFERENCE_STATIC_FIELDS},
+    })
  
-    preview_rows = []
-    for nest_id, py_date, row in to_insert:
-        preview_row = {
-            UNIQUE_ID_FIELD: nest_id,
-            "New_Nest": "No",
-            DATE_FIELD: py_date,
-            **{f: safe_val(row[f]) for f in SURVEY_FIELDS if f != DATE_FIELD},
-            "Final_Status": "NA",
-            **{f: safe_val(row[f]) for f in REFERENCE_STATIC_FIELDS},
-        }
-        preview_rows.append(preview_row)
+final_df = pd.DataFrame(final_rows)
+print(f"\nRecords ready for manual append: {len(final_df)}")
+print(final_df.to_string(index=False))
  
-    preview_df = pd.DataFrame(preview_rows)
-    print("\nPreview of records to be appended:")
-    print(preview_df.to_string(index=False))
- 
-    qa_csv = os.path.join(working_folder, f"OspreyReference_QA_PREVIEW_{run_date}.csv")
-    preview_df.to_csv(qa_csv, index=False)
-    print(f"\nQA preview saved to: {qa_csv}")
-    print("\nSet QA_ONLY = False to run the actual append.")
-    raise SystemExit(0)
- 
-# ---------------------------------------------------------------------------
-# STEP 9 — Append joined records back into sdeOspreyReference
-#
-#   Field order:
-#       SHAPE@ | Nest_ID | New_Nest | survey fields | Final_Status | static ref fields
-# ---------------------------------------------------------------------------
- 
-insert_fields = (
-    ["SHAPE@", UNIQUE_ID_FIELD, "New_Nest"]
-    + SURVEY_FIELDS
-    + ["Final_Status"]
-    + REFERENCE_STATIC_FIELDS
-)
- 
-rows_inserted = 0
-with arcpy.da.InsertCursor(sdeOspreyReference, insert_fields) as cursor:
-    for nest_id, py_date, row in to_insert:
-        geometry = geometry_lookup[nest_id]
- 
-        survey_values = [
-            py_date if field == DATE_FIELD else safe_val(row[field])
-            for field in SURVEY_FIELDS
-        ]
- 
-        cursor.insertRow(
-            [geometry, nest_id, "No"]       # New_Nest always "No" for stacked records
-            + survey_values
-            + ["NA"]                         # Final_Status always "NA" for new survey rows
-            + [safe_val(row[field]) for field in REFERENCE_STATIC_FIELDS]
-        )
-        rows_inserted += 1
- 
-print(f"Successfully appended {rows_inserted} record(s) to sdeOspreyReference.")
+final_csv = os.path.join(working_folder, f"OspreyReference_TO_APPEND_{run_date}.csv")
+final_df.to_csv(final_csv, index=False)
+print(f"\nFinal CSV saved to: {final_csv}")
 print("Done.")
