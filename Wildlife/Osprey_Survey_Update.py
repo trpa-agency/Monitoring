@@ -1,3 +1,18 @@
+# =============================================================================
+# Osprey_Survey_Update.py
+# Created:      May 5th, 2026
+# Last Updated: May 11th, 2026
+# Evelyn Malamut, Tahoe Regional Planning Agency
+#
+# This python script was developed to update the Osprey Survey Reference map
+# with the most recent survey results, so that we can reference our previous
+# survey information in the field.
+#
+# This script uses Python 3.13.7 and was designed to be used with the ArcGIS
+# Pro python environment "arcgispro-py3-plotly", which refers to the default
+# cloned Python environment with plotly installed as an additional library.
+# =============================================================================
+
 import arcpy
 from datetime import datetime
 import os
