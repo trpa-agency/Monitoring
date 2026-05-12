@@ -5,9 +5,9 @@
 
 ## Purpose
 
-For each Northern Goshawk (*Accipiter gentilis*) nest in the TRPA basin
-this pipeline produces a single polygon — the **Goshawk Threshold Zone**
-— that represents the protected area used for threshold/wildlife
+For each Northern Goshawk (*Accipiter gentilis*) nest in the Tahoe Basin
+this pipeline produces a single polygon, the **Goshawk Threshold Zone**, 
+that represents the protected area used for threshold/wildlife
 planning. The zone is built as a 0.25-mile nest buffer plus enough
 **contiguous** suitable habitat to reach a target of **500 acres
 total**, with interior holes filled and boundary concavities collapsed
@@ -16,11 +16,11 @@ by a small morphological close.
 If a nest is in genuinely sparse habitat (water, urban, or rock
 surrounds), the zone is the buffer + whatever HIGH/MOD habitat reached
 contiguously. Such nests are flagged short and listed in the run
-summary. We do not reach across miles of non-habitat to manufacture a
+summary. We do not reach across area of non-habitat to manufacture a
 500-ac zone.
 
 The output feeds threshold-evaluation reporting and project-review
-screening — any project intersecting a goshawk threshold zone triggers
+screening, any project intersecting a goshawk threshold zone triggers
 wildlife review.
 
 ## Data sources
