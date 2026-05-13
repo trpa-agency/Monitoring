@@ -76,8 +76,7 @@ output_gdb = r"F:\GIS\PROJECTS\Monitoring\Wildlife\Wildlife_Map\Osprey_Reference
 # ---------------------------------------------------------------------------
 
 portal_user = "emalamut"
-portal_pwd = "trpa1234"
-#portal_pwd  = str(os.environ.get('Password'))
+portal_pwd = PORTAL_PWD
 portal_url  = "https://maps.trpa.org/portal/"
 
 gis = GIS(portal_url, portal_user, portal_pwd)
