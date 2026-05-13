@@ -75,7 +75,7 @@ output_gdb = r"F:\GIS\PROJECTS\Monitoring\Wildlife\Wildlife_Map\Osprey_Reference
 # STEP 1 — Connect to Portal and pull Feature Service survey data
 # ---------------------------------------------------------------------------
 
-portal_user = "emalamut"
+portal_user = PORTAL_USER
 portal_pwd = PORTAL_PWD
 portal_url  = "https://maps.trpa.org/portal/"
 
