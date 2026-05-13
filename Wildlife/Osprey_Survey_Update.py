@@ -19,6 +19,7 @@ import os
 import pandas as pd
 from arcgis import GIS
 from arcgis.features import FeatureLayer
+from dotenv import load_dotenv
 
 # ---------------------------------------------------------------------------
 # CONFIGURATION
@@ -74,9 +75,10 @@ output_gdb = r"F:\GIS\PROJECTS\Monitoring\Wildlife\Wildlife_Map\Osprey_Reference
 # ---------------------------------------------------------------------------
 # STEP 1 — Connect to Portal and pull Feature Service survey data
 # ---------------------------------------------------------------------------
+load_dotenv()
 
-portal_user = PORTAL_USER
-portal_pwd = PORTAL_PWD
+portal_user = os.environ.get('PORTAL_USER')
+portal_pwd = os.environ.get('PORTAL_PWD')
 portal_url  = "https://maps.trpa.org/portal/"
 
 gis = GIS(portal_url, portal_user, portal_pwd)
