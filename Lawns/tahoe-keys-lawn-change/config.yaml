@@ -1,0 +1,97 @@
+project:
+  name: tahoe-keys-lawn-change
+  owner: mason.bindl@trpa.gov
+
+paths:
+  raw: data/raw
+  processed: data/processed
+  outputs: outputs
+  logs: logs
+
+# Analysis CRS. NAD83 UTM 10N. Every raster is warped onto one common grid
+# in this CRS so pixels line up across years and against the lidar.
+crs_epsg: 26910
+
+sources:
+  parcels_rest: "https://maps.trpa.org/server/rest/services/Parcels/FeatureServer/0"
+  zoning_rest: "https://maps.trpa.org/server/rest/services/Zoning/MapServer/0"
+  # Tahoe Keys plan area plus its two special areas. These three polygons
+  # dissolved are the study boundary; parcels are selected on the same IDs.
+  keys_zoning_ids: ["102", "102_SA1", "102_SA2"]
+
+  naip:
+    stac_url: "https://planetarycomputer.microsoft.com/api/stac/v1"
+    collection: naip
+    # Years to pull from Planetary Computer. As of 2026-09 the Keys quads
+    # (ca_m_3812008_se and _ne) are available for 2016, 2018, 2020, 2022.
+    # 2024 was not on Planetary Computer or the USGS NAIP service at build time.
+    years: [2016, 2018, 2020, 2022]
+    # Years not on Planetary Computer: point at a local 4-band GeoTIFF
+    # (or a folder of quarter quads). Bands must be R, G, B, NIR in that order.
+    # Example:
+    #   2024: data/raw/naip/local/ca_2024_keys.tif
+    local:
+      2024: null
+
+  lidar:
+    year: 2022
+    dsm: data/raw/lidar/2022_dsm.tif
+    dtm: data/raw/lidar/2022_dtm.tif
+    # Optional. Polygon layer (gpkg/shp) of building footprints. If null the
+    # notebook derives a rough building mask from the nDSM (tall, flat, low NDVI).
+    building_footprints: null
+
+analysis:
+  # Common grid pixel size in metres. NAIP native is 0.6; leave it there.
+  pixel_size_m: 0.6
+  # Anything at or above this height (nDSM) is canopy or structure, not lawn.
+  canopy_height_m: 0.5
+  # Grow the canopy mask outward by this much to swallow drip-line shadow
+  # and lidar-vs-imagery edge offset.
+  canopy_buffer_m: 1.0
+  # Parcel polygons are shrunk inward by this much before tabulation so
+  # fence lines and road shoulders don't count.
+  parcel_inset_m: 0.5
+  # NDVI threshold for "green low vegetation". null = derive per year with
+  # Otsu on the pervious, non-canopy pixels. A number fixes it for all years.
+  ndvi_threshold: null
+  # Pixels darker than this (mean of R,G,B on the 8-bit scale) are treated as
+  # shadow and excluded from both numerator and denominator.
+  shadow_brightness_max: 40
+  # Patches of lawn smaller than this are dropped as speckle.
+  min_mapping_unit_m2: 5
+  # Parcel land uses included in the change analysis. Others are tabulated
+  # but reported separately.
+  landuse_include:
+    - Single Family Residential
+    - Vacant
+    - Multi-Family Residential
+
+change:
+  # Seasons when Tahoe Keys irrigation was shut off or heavily restricted.
+  irrigation_off_years: [2021, 2022]
+  # Image years assigned to each window. "during" must be an image year
+  # that falls inside irrigation_off_years. "post" may be empty until a
+  # post-shutoff image exists.
+  pre_years: [2016, 2018, 2020]
+  during_years: [2022]
+  post_years: [2024]
+  # A parcel "has lawn" in a year when lawn area is at least this many m2.
+  lawn_present_min_m2: 20
+  # A change counts when it is at least this fraction of the pre-period
+  # lawn area AND at least abs_change_min_m2 in absolute terms.
+  rel_change_min: 0.30
+  abs_change_min_m2: 20
+  # "Recovered" means post lawn area reaches this fraction of pre lawn area.
+  recovery_fraction: 0.70
+
+validation:
+  # Stratified random sample of parcels for manual digitizing in Pro.
+  n_per_stratum: 12
+  random_seed: 42
+  # Reference lawn polygons digitized on each year's image. One layer per
+  # year named lawn_<year>, with an APN field. Read only if the file exists.
+  reference_gpkg: data/raw/validation/reference_lawn.gpkg
+
+run:
+  write_to_db: false
