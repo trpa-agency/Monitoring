@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lake Tahoe Currents — TRPA</title>
   <meta name="description" content="Surface currents of Lake Tahoe, animated from the UC Davis TERC lake model." />
+  <link rel="icon" href="assets/favicon.ico" />
 
   <!-- Calcite Design System -->
   <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
@@ -44,17 +45,25 @@
 
     .app { height: 100%; display: grid; grid-template-rows: auto 1fr; min-height: 0; }
 
-    /* Header */
-    .dashboard-header {
-      background: var(--brand-dark); color: #fff; padding: 0.7rem 1.5rem;
-      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    /* App header: the shared maps.trpa.gov tool shell (thin, white, agency logo, back link) */
+    #appHeader {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+      padding: 0.45rem 1rem; background: #fff; border-bottom: 1px solid var(--gray-border);
+      box-shadow: 0 1px 4px rgba(0,59,113,0.06); z-index: 5;
     }
-    .dashboard-header svg { width: 24px; height: 40px; flex: none; }
-    .dashboard-header .subtitle { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; font-weight: 600; }
-    .dashboard-header h1 { font-size: 1.3rem; font-weight: 700; margin: 0; line-height: 1.2; }
-    .dashboard-header .spacer { flex: 1; }
-    .dashboard-header .source { font-size: 0.8rem; opacity: 0.85; }
-    .dashboard-header calcite-button { --calcite-color-text-1: #fff; }
+    .hdr-brand { display: flex; align-items: center; gap: 0.7rem; min-width: 0; }
+    .hdr-brand img { height: 36px; width: auto; display: block; }
+    .htitle { display: flex; flex-direction: column; line-height: 1.15; }
+    .hagency { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--trpa-blue); }
+    .hname { font-size: 0.98rem; font-weight: 700; color: var(--trpa-navy); margin: 0; }
+    .hdr-back { font-size: 0.72rem; font-weight: 600; color: var(--gray-text); text-decoration: none; border-left: 1px solid var(--gray-border); padding-left: 0.7rem; white-space: nowrap; }
+    .hdr-back:hover { color: var(--trpa-blue); }
+    .hdr-links { display: flex; align-items: center; gap: 0.3rem; }
+    .hdr-links .source { font-size: 0.72rem; color: var(--gray-text); margin-right: 0.5rem; }
+    .beta-chip {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-accent-text, #B55A10);
+      border: 1px solid var(--brand-accent-text, #B55A10); border-radius: 999px; padding: 0.1rem 0.5rem; margin-right: 0.4rem;
+    }
 
     /* Main */
     .main { display: grid; grid-template-columns: minmax(0, 1fr) 440px; min-height: 0; }
@@ -71,18 +80,15 @@
       background: var(--night); color: var(--night-muted); font-size: 0.85rem; gap: 0.75rem;
     }
     .loading-inner { display: grid; justify-items: center; gap: 0.6rem; max-width: 36ch; text-align: center; }
-    .stage-chips { position: absolute; left: 1rem; top: 1rem; z-index: 2; display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .pill {
-      font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
-      padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--night-line);
-      color: var(--night-muted); background: rgba(5, 13, 24, 0.75);
+      font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+      padding: 0.15rem 0.55rem; border-radius: 999px; border: 1px solid var(--gray-border);
+      color: var(--gray-text); background: var(--gray-bg); white-space: nowrap;
     }
-    .pill.forecast { color: #1b0f02; background: var(--trpa-orange); border-color: var(--trpa-orange); }
-    .pill.probe { color: #fff; background: var(--trpa-forest); border-color: var(--trpa-forest); }
-    .stage-help {
-      position: absolute; right: 1rem; top: 1rem; z-index: 2; font-size: 0.72rem; color: var(--night-muted);
-      background: rgba(5, 13, 24, 0.6); padding: 0.2rem 0.5rem; border-radius: 4px;
-    }
+    .pill.forecast { color: #fff; background: var(--trpa-orange); border-color: var(--trpa-orange); }
+    .stage-help { font-size: 0.74rem; color: var(--gray-text); }
+    .scale { display: flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; color: var(--gray-text); font-variant-numeric: tabular-nums; }
+    .scale .bar { height: 6px; border-left: 1.5px solid var(--trpa-navy); border-right: 1.5px solid var(--trpa-navy); border-bottom: 1.5px solid var(--trpa-navy); }
 
     /* Panel */
     .panel {
@@ -135,7 +141,7 @@
       .main { grid-template-columns: 1fr; }
       .stage { height: 70vh; min-height: 440px; }
       .panel { border-left: 0; border-top: 1px solid var(--gray-border); overflow: visible; }
-      .dashboard-header .source { display: none; }
+      .hdr-links .source, .hdr-back { display: none; }
     }
     @media (prefers-reduced-motion: reduce) { .kpi-card .wind-arrow { transition: none; } }
   </style>
@@ -143,27 +149,28 @@
 <body>
 
 <div class="app">
-  <header class="dashboard-header">
-    <svg id="glyph" viewBox="0 0 22 38" aria-hidden="true"></svg>
-    <div>
-      <div class="subtitle">Tahoe Regional Planning Agency</div>
-      <h1>Lake Tahoe Currents</h1>
+  <header id="appHeader">
+    <div class="hdr-brand">
+      <a href="https://www.trpa.gov" title="Tahoe Regional Planning Agency"><img src="assets/TRPALogo_COLOR.png?v=2" alt="Tahoe Regional Planning Agency logo" /></a>
+      <div class="htitle">
+        <span class="hagency">Tahoe Regional Planning Agency</span>
+        <h1 class="hname">Lake Tahoe Currents</h1>
+      </div>
+      <a class="hdr-back" href="https://maps.trpa.gov/tools/">All maps and apps</a>
     </div>
-    <div class="spacer"></div>
-    <div class="source">Model: UC Davis Tahoe Environmental Research Center</div>
-    <calcite-button id="shareBtn" appearance="transparent" kind="neutral" scale="s" icon-start="link" title="Copy a link to this moment">Share</calcite-button>
-    <calcite-button id="pngBtn" appearance="transparent" kind="neutral" scale="s" icon-start="image" title="Save the current frame as a PNG">PNG</calcite-button>
+    <div class="hdr-links">
+      <span class="beta-chip" title="In review">Beta</span>
+      <span class="source">Model: UC Davis Tahoe Environmental Research Center</span>
+      <calcite-button id="shareBtn" appearance="outline" kind="neutral" scale="s" icon-start="link" title="Copy a link to this moment">Share</calcite-button>
+      <calcite-button id="pngBtn" appearance="outline" kind="neutral" scale="s" icon-start="image" title="Save the current frame as a PNG">PNG</calcite-button>
+    </div>
   </header>
 
   <div class="main">
     <section class="stage" id="stage" aria-label="Animated map of Lake Tahoe surface currents">
+      <canvas id="base"></canvas>
       <canvas id="trails"></canvas>
       <canvas id="overlay"></canvas>
-      <div class="stage-chips">
-        <span class="pill" id="modePill">Model hindcast</span>
-        <span class="pill probe" id="probePill" hidden>Probe set</span>
-      </div>
-      <div class="stage-help" id="stageHelp">Click the lake to pin a probe</div>
       <div id="hover" hidden></div>
       <div class="loading" id="loading">
         <div class="loading-inner">
@@ -176,7 +183,10 @@
     <aside class="panel">
       <div class="when" aria-live="off">
         <div class="day" id="day">Loading</div>
-        <div class="clock" id="clock">--:--<small>PDT</small></div>
+        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap">
+          <div class="clock" id="clock">--:--<small>PDT</small></div>
+          <span class="pill" id="modePill">Model hindcast</span>
+        </div>
       </div>
 
       <div class="controls">
@@ -202,9 +212,10 @@
         <calcite-label>
           <span class="field-label">Playback</span>
           <calcite-select id="speedSel" label="Playback speed" scale="s">
+            <calcite-option value="1">1 hour per second</calcite-option>
+            <calcite-option value="2" selected>2 hours per second</calcite-option>
             <calcite-option value="4">4 hours per second</calcite-option>
-            <calcite-option value="7" selected>7 hours per second</calcite-option>
-            <calcite-option value="14">14 hours per second</calcite-option>
+            <calcite-option value="7">7 hours per second</calcite-option>
           </calcite-select>
         </calcite-label>
       </div>
@@ -217,8 +228,12 @@
         <div class="ramp" id="ramp"></div>
         <div class="ends"><span id="rampLo"></span><span id="rampMid"></span><span id="rampHi"></span></div>
         <div class="cap" id="rampCap"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem; flex-wrap:wrap">
+          <span class="stage-help" id="stageHelp">Click the lake to pin a probe</span>
+          <span class="scale"><span class="bar" id="scaleBar"></span><span id="scaleLbl"></span></span>
+        </div>
         <calcite-notice id="tempCaution" kind="warning" icon="exclamation-mark-triangle" scale="s" open hidden>
-          <span slot="message">Model surface temperatures run about 9 degrees warmer than TERC's nearshore sensors this fall. Read the colors as warmer and cooler water, not as exact temperatures.</span>
+          <span slot="message">Model surface temperatures can run several degrees warmer than TERC's nearshore sensors. Read the colors as warmer and cooler water, not as exact temperatures.</span>
         </calcite-notice>
       </div>
 
@@ -274,14 +289,17 @@
           <div id="grid"></div>
         </calcite-tab>
         <calcite-tab>
+          <calcite-notice icon="information" scale="s" open>
+            <span slot="message" id="sourceNote">Source: UC Davis TERC lake model and Lake Tahoe Airport ASOS. Provisional model output, not for navigation.</span>
+          </calcite-notice>
           <div class="about">
             <p>Each streak is a particle of surface water carried by the modeled current. Particles move at the model's real speed for the playback rate shown, so their trails show how far water travels. Brighter streaks are faster.</p>
             <ul>
               <li>Currents and temperature: UC Davis Tahoe Environmental Research Center (TERC) three-dimensional lake model, published every two hours on TERC's Forecasted Conditions page. Grid cells are about 200 meters.</li>
               <li>Wind: Lake Tahoe Airport observations from the Iowa Environmental Mesonet ASOS archive.</li>
-              <li>TERC keeps about one week of past model hours online. This page uses an archive saved Oct. 4, 2026, covering Sept. 20 to Oct. 6. Hours after Oct. 4 at 2 p.m. are forecast.</li>
+              <li id="archiveNote">Archive details load with the data.</li>
               <li>Times are Pacific. The model files carry no time zone; the daily warming cycle and the lag behind airport winds both point to local time.</li>
-              <li>Model surface temperatures are about 9 degrees Fahrenheit warmer than TERC's Rubicon and Homewood nearshore sensors on Oct. 4. Use temperature colors for patterns, not values.</li>
+              <li>Model surface temperatures can run several degrees warmer than TERC's nearshore sensors. Use temperature colors for patterns, not values.</li>
               <li>The small swirls in open water come from the model at its 200 meter grid. Read the lake-wide pattern, not any single swirl.</li>
               <li>Keyboard: space plays and pauses, left and right arrows step two hours.</li>
               <li>Model output is provisional. It is not for navigation or swim safety decisions. Check <a href="https://tahoe.ucdavis.edu/real-time-conditions" target="_blank" rel="noopener">TERC real-time conditions</a> before going on the water.</li>
@@ -300,20 +318,27 @@
 const CFG = {
   dataUrl: 'data/currents.bin',   // gzip bytes; the loader also accepts base64 .txt or raw bytes
   metaUrl: 'data/meta.json',
-  density: 1 / 11,               // particles per CSS px of lake area
-  maxParticles: 26000,
-  ageMinS: 2.5, ageMaxS: 7,      // particle lifetimes in real seconds
-  fade: 0.11,                    // trail fade per frame
-  speedRampMph: 0.8,
+  density: 1 / 18,               // particles per CSS px of lake area
+  maxParticles: 14000,
+  ageMinS: 8, ageMaxS: 20,       // particle lifetimes in real seconds (long, slow drifts)
+  // Trail fade: erase alpha every fadeEvery frames with fadeAlpha. Average decay is fadeAlpha / fadeEvery per frame.
+  // Fading every frame with a tiny alpha leaves a residue because 8-bit alpha stops decreasing once a * alpha < 0.5;
+  // a larger alpha applied less often reaches a much lower floor with the same trail length and no visible pulse.
+  fadeEvery: 4, fadeAlpha: 0.045,
+  speedRampMph: 0.5,             // top of the color ramp; typical lake-wide means are 0.05 to 0.3 mph
+  lineWidthPx: 1.2,
+  alphaMin: 0.14, alphaSpan: 0.46,     // slow water soft but present, fast water solid
   ms2mph: 2.23694,
   scaleBarM: 5000,
 };
 const BRAND = { blue: '#0072CE', navy: '#003B71', orange: '#E87722', ice: '#B4CBE8', forest: '#4A6118', earth: '#B47E00', brick: '#9C3E27' };
 const NIGHT = { ground: '#050d18', text: '#e8eef6', muted: '#93a6bd', line: '#1c3150' };
 const BRAND_FONT = 'Open Sans, system-ui, sans-serif';
-// Multi-hue sequential ramps for the particles: lightness rises monotonically from navy to white, then warms to orange for the fastest water.
-const SPEED_STOPS = ['#123058', '#0b5aa8', '#0072CE', '#4ea2e3', '#B4CBE8', '#ffffff', '#f3b46f', '#E87722'];
-const TEMP_STOPS  = ['#1a4a8c', '#0072CE', '#5aa5e2', '#B4CBE8', '#ece3c9', '#efae68', '#E87722', '#c2532a'];
+// Particle ramps. Speed is a single-hue sequential ramp from deep navy (barely above the ground) to white, so slow
+// water recedes and fast water stands out; no hot accent, the lake reads as one calm body. Temperature cools in
+// TRPA blues and warms through sand tones.
+const SPEED_STOPS = ['#1a4a80', '#0f5fa8', '#0b72ce', '#3393dc', '#66ace4', '#93c1e9', '#B4CBE8', '#ffffff'];
+const TEMP_STOPS  = ['#164a8c', '#2c7fcc', '#6aaae3', '#B4CBE8', '#e6e0d2', '#e0c094', '#d9a06a', '#c98756'];
 const NBINS = 32, ABINS = 4;
 
 const $ = id => document.getElementById(id);
@@ -351,19 +376,26 @@ const NAMES = { N: 'north', NNE: 'north-northeast', NE: 'northeast', ENE: 'east-
 /* ── state ── */
 let M, raw, idx, mask, kOf, rows, cols, ncell, times;
 const frameCache = new Map();
-let T = 0, winStart = 0, winEnd = 0, playing = !reduceMotion, hoursPerSec = 7;
+let T = 0, winStart = 0, winEnd = 0, playing = !reduceMotion, hoursPerSec = 2;
 let colorMode = 'speed', layout = 'explore';
 let tempLo = 69, tempHi = 71;
 let P = null, view = null, shorePath = null;
 let probe = null;   // { x, y, cell, series: [{spd, dir, t}] }
+const LOGO = new Image(); LOGO.src = 'assets/TRPALogo_WHITE.png?v=2';
+LOGO.onload = () => { if (view) drawOverlay(); };
+function drawLogo(ctx, right, bottom, h, alpha) {
+  if (!LOGO.complete || !LOGO.naturalWidth) return;
+  const w = h * LOGO.naturalWidth / LOGO.naturalHeight;
+  ctx.save(); ctx.globalAlpha = alpha; ctx.drawImage(LOGO, right - w, bottom - h, w, h); ctx.restore();
+}
 let gridApi = null;
 
 /* ── data ── */
 async function loadBinary(url) {
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: 'default' });
   if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
   let buf;
-  if (url.endsWith('.txt')) {
+  if (url.split('?')[0].endsWith('.txt')) {
     const bin = atob((await res.text()).trim());
     buf = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
@@ -438,15 +470,15 @@ function sampleAt(x, y) {
 }
 
 /* ── drawing setup ── */
-const trails = $('trails'), overlay = $('overlay'), stage = $('stage');
-const tctx = trails.getContext('2d'), octx = overlay.getContext('2d');
+const base = $('base'), trails = $('trails'), overlay = $('overlay'), stage = $('stage');
+const bctx = base.getContext('2d'), tctx = trails.getContext('2d'), octx = overlay.getContext('2d');
 let dpr = 1;
 
 function computeView() {
   const r = stage.getBoundingClientRect();
   if (r.width < 10 || r.height < 10) return;
   dpr = Math.min(window.devicePixelRatio || 1, 2);
-  for (const c of [trails, overlay]) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
+  for (const c of [base, trails, overlay]) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
   const W = r.width, H = r.height;
   const aspect = M.cell_h_m / M.cell_w_m;
   let box, s, cx, cy;
@@ -457,20 +489,31 @@ function computeView() {
     s = Math.min((bh * 0.70) / (rows * aspect), (bw * 0.86) / cols);
     cx = box.x + bw * 0.55; cy = box.y + bh * 0.565;
   } else {
+    // Explore: the lake fills the stage. Only place labels and the small logo share it; everything else is in the panel.
     box = { x: 0, y: 0, w: W, h: H };
-    const padX = W < 600 ? 230 : 150;
-    s = Math.min((H - 64) / (rows * aspect), (W - padX) / cols);
-    cx = W / 2 + (W < 600 ? -8 : 0); cy = H / 2 + 6;
+    const small = W < 600, pad = 18;
+    const padX = small ? 200 : 170;   // room for the place labels either side
+    s = Math.min((H - 2 * pad) / (rows * aspect), (W - padX) / cols);
+    cx = W / 2 + (small ? -6 : 0); cy = H / 2;
   }
   const m = new DOMMatrix().translate(cx, cy).rotate(M.rotation_deg).scale(s, s * aspect).translate(-cols / 2, -rows / 2);
   view = { W, H, s, m, inv: m.inverse(), box, aspect };
+  const sbPx = CFG.scaleBarM / M.cell_w_m * s;
+  $('scaleBar').style.width = `${Math.round(sbPx)}px`;
+  $('scaleLbl').textContent = `${CFG.scaleBarM / 1000} km, ${(CFG.scaleBarM / 1609.34).toFixed(1)} mi`;
   shorePath = new Path2D();
   for (const ring of M.shoreline) {
     ring.forEach(([x, y], i) => i ? shorePath.lineTo(x, y) : shorePath.moveTo(x, y));
     shorePath.closePath();
   }
   tctx.setTransform(1, 0, 0, 1, 0, 0);
-  tctx.fillStyle = NIGHT.ground; tctx.fillRect(0, 0, trails.width, trails.height);
+  tctx.clearRect(0, 0, trails.width, trails.height);
+  // lake body: a quiet navy fill so the map reads as a map even when the water is still
+  bctx.setTransform(1, 0, 0, 1, 0, 0);
+  bctx.clearRect(0, 0, base.width, base.height);
+  setGridTransform(bctx);
+  bctx.fillStyle = '#0b2140';
+  bctx.fill(shorePath, 'evenodd');
   initParticles();
   drawOverlay();
 }
@@ -519,7 +562,7 @@ function step(dtReal) {
     P.x[i] = x + u2 * kx; P.y[i] = y - v2 * ky;
     const sp = Math.hypot(u2, v2);
     let cb;
-    if (colorMode === 'speed') cb = Math.pow(clamp(sp * mph / sr, 0, 1), 0.7) * (NBINS - 1);
+    if (colorMode === 'speed') cb = Math.pow(clamp(sp * mph / sr, 0, 1), 0.55) * (NBINS - 1);
     else {
       const t = nearestT(A.T, x, y) * (1 - w) + nearestT(B.T, x, y) * w;
       cb = isNaN(t) ? 0 : clamp((t - tempLo) / tSpan, 0, 1) * (NBINS - 1);
@@ -530,11 +573,16 @@ function step(dtReal) {
   }
   return counts;
 }
+let frameNo = 0;
 function render(counts) {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.globalAlpha = 1;
-  tctx.fillStyle = `rgba(5,13,24,${CFG.fade})`;
-  tctx.fillRect(0, 0, trails.width, trails.height);
+  if (++frameNo % CFG.fadeEvery === 0) {
+    tctx.globalCompositeOperation = 'destination-out';
+    tctx.fillStyle = `rgba(0,0,0,${CFG.fadeAlpha})`;
+    tctx.fillRect(0, 0, trails.width, trails.height);
+    tctx.globalCompositeOperation = 'source-over';
+  }
   setGridTransform(tctx);
   tctx.save();
   tctx.clip(shorePath, 'evenodd');
@@ -543,13 +591,13 @@ function render(counts) {
   const fill = starts.slice(0, counts.length);
   for (let i = 0; i < P.n; i++) { const k = P.key[i]; if (k !== 0xffff) P.order[fill[k]++] = i; }
   const colors = colorMode === 'speed' ? SPEED_COLORS : TEMP_COLORS;
-  tctx.lineWidth = 0.85 / view.s;
+  tctx.lineWidth = CFG.lineWidthPx / view.s;
   tctx.lineCap = 'round';
   for (let k = 0; k < counts.length; k++) {
     if (!counts[k]) continue;
     const cb = (k / ABINS) | 0, ab = k % ABINS;
     tctx.strokeStyle = colors[cb];
-    tctx.globalAlpha = 0.14 + 0.62 * (ab / (ABINS - 1));
+    tctx.globalAlpha = CFG.alphaMin + CFG.alphaSpan * (ab / (ABINS - 1));
     tctx.beginPath();
     for (let j = starts[k]; j < starts[k + 1]; j++) {
       const i = P.order[j];
@@ -562,7 +610,7 @@ function render(counts) {
 }
 function resetTrails() {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
-  tctx.fillStyle = NIGHT.ground; tctx.fillRect(0, 0, trails.width, trails.height);
+  tctx.clearRect(0, 0, trails.width, trails.height);
   for (let i = 0; i < P.n; i++) { P.px[i] = P.x[i]; P.py[i] = P.y[i]; }
 }
 
@@ -581,8 +629,9 @@ function drawOverlay() {
   const fs = reel ? Math.max(8, view.box.w * 0.0165) : (view.W < 600 ? 9.5 : 11);
   if (reel) {
     const b = view.box;
-    ctx.strokeStyle = NIGHT.line; ctx.lineWidth = 1;
-    ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1);
+    // crop guide for the 9:16 export, kept faint so it reads as a guide rather than a frame
+    ctx.strokeStyle = 'rgba(180,203,232,0.22)'; ctx.lineWidth = 1; ctx.setLineDash([4, 6]);
+    ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1); ctx.setLineDash([]);
   }
   ctx.font = `600 ${fs}px ${BRAND_FONT}`;
   ctx.textBaseline = 'middle';
@@ -637,24 +686,7 @@ function drawWindArrow(ctx, x, y, r, wind, labelSize) {
   }
   ctx.restore();
 }
-function drawExploreFurniture(ctx) {
-  const W = view.W, H = view.H, small = W < 600;
-  // wind compass, lower left
-  const wind = windNow();
-  const r = small ? 18 : 24, cx = 16 + r, cy = H - 20 - r;
-  drawWindArrow(ctx, cx, cy, r, wind, 9);
-  ctx.fillStyle = NIGHT.muted; ctx.font = `600 10px ${BRAND_FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  const wtxt = !wind ? 'Wind: no report' : wind.spd < 0.5 ? 'Wind: calm' : `Wind ${wind.spd.toFixed(0)} mph from the ${compass(wind.from)}`;
-  ctx.fillText(wtxt.toUpperCase(), cx + r + 10, cy - 7);
-  ctx.fillText('LAKE TAHOE AIRPORT', cx + r + 10, cy + 7);
-  // scale bar, lower right (above the help chip)
-  const px = CFG.scaleBarM / M.cell_w_m * view.s;
-  const x1 = W - 16, x0 = x1 - px, y = H - 22;
-  ctx.strokeStyle = 'rgba(232,238,246,0.75)'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(x0, y - 4); ctx.lineTo(x0, y); ctx.lineTo(x1, y); ctx.lineTo(x1, y - 4); ctx.stroke();
-  ctx.fillStyle = NIGHT.muted; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
-  ctx.fillText(`${CFG.scaleBarM / 1000} KM  ·  ${(CFG.scaleBarM / 1609.34).toFixed(1)} MI`, x1, y - 5);
-}
+function drawExploreFurniture() { /* Explore keeps the stage clean: lake and labels only; the logo is in the header */ }
 function drawReelFurniture(ctx) {
   const b = view.box, u = b.w / 100;
   const x0 = b.x + 6 * u, y0 = b.y + 7.5 * u;
@@ -703,12 +735,7 @@ function drawReelFurniture(ctx) {
   const cy = b.y + b.h - 4 * u;
   ctx.fillText('MODEL: UC DAVIS TERC LAKE MODEL', x0, cy - 3.2 * u);
   ctx.fillText(`WIND: LAKE TAHOE AIRPORT  ${fmtShort(winStart).toUpperCase()} TO ${fmtShort(winEnd).toUpperCase()} 2026`, x0, cy);
-  ctx.textAlign = 'right';
-  ctx.fillStyle = '#ffffff';
-  ctx.font = `700 ${2.6 * u}px ${BRAND_FONT}`;
-  ctx.fillText('TAHOE REGIONAL', b.x + b.w - 5 * u, b.y + 9 * u);
-  ctx.fillText('PLANNING AGENCY', b.x + b.w - 5 * u, b.y + 12 * u);
-  ctx.textAlign = 'left';
+  drawLogo(ctx, b.x + b.w - 5 * u, b.y + b.h - 4 * u, 7 * u, 0.95);
 }
 
 /* ── panel ── */
@@ -773,14 +800,14 @@ function setProbe(x, y) {
   const cell = Math.floor(y) * cols + Math.floor(x);
   if (!mask[cell]) return;
   probe = { x, y, cell, series: cellSeries(cell) };
-  $('probeCard').hidden = false; $('probePill').hidden = false;
+  $('probeCard').hidden = false;
   $('probeLabel').textContent = `Probe ${nearestPlace(x, y)}`;
   $('stageHelp').textContent = 'Click the lake to move the probe';
   updateProbeTrace(); drawOverlay(); updatePanel(true); writeHash();
 }
 function clearProbe() {
   probe = null;
-  $('probeCard').hidden = true; $('probePill').hidden = true;
+  $('probeCard').hidden = true;
   $('stageHelp').textContent = 'Click the lake to pin a probe';
   updateProbeTrace(); drawOverlay(); writeHash();
 }
@@ -980,7 +1007,7 @@ function loop(ts) {
 function stepOnce(hours) {
   T = clamp(T + hours * 60, winStart, winEnd);
   resetTrails();
-  for (let i = 0; i < 40; i++) { const c = step(1 / 60); render(c); }
+  for (let i = 0; i < 240; i++) { const c = step(1 / 60); render(c); }
   drawOverlay(); updatePanel(true); movePlayhead(true);
 }
 function setPlaying(on) {
@@ -1019,7 +1046,8 @@ function savePng() {
   const c = document.createElement('canvas');
   c.width = trails.width; c.height = trails.height;
   const ctx = c.getContext('2d');
-  ctx.drawImage(trails, 0, 0); ctx.drawImage(overlay, 0, 0);
+  ctx.fillStyle = NIGHT.ground; ctx.fillRect(0, 0, c.width, c.height);
+  ctx.drawImage(base, 0, 0); ctx.drawImage(trails, 0, 0); ctx.drawImage(overlay, 0, 0);
   c.toBlob(blob => {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -1029,21 +1057,25 @@ function savePng() {
   }, 'image/png');
 }
 
-/* ── header glyph from the shoreline ── */
-function drawGlyph() {
-  const outer = M.shoreline.reduce((a, r) => r.length > a.length ? r : a, []);
-  const xs = outer.map(p => p[0]), ys = outer.map(p => p[1]);
-  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-  const sc = Math.min(22 / (x1 - x0), 38 / (y1 - y0));
-  const d = outer.filter((_, i) => i % 3 === 0).map((p, i) => `${i ? 'L' : 'M'}${((p[0] - x0) * sc).toFixed(1)} ${((p[1] - y0) * sc).toFixed(1)}`).join('') + 'Z';
-  $('glyph').innerHTML = `<path d="${d}" fill="${BRAND.blue}" stroke="${BRAND.ice}" stroke-width="0.6"/>`;
+function describeArchive() {
+  const first = times[0], last = times[times.length - 1], fc = tmin(M.forecast_issued);
+  const saved = M.archive_saved ? tmin(M.archive_saved) : fc;
+  const d = fromMin(fc);
+  const h = d.getUTCHours(), ampm = h >= 12 ? 'p.m.' : 'a.m.', h12 = h % 12 === 0 ? 12 : h % 12;
+  const minutes = d.getUTCMinutes() ? `:${String(d.getUTCMinutes()).padStart(2, '0')}` : '';
+  $('archiveNote').textContent = `TERC keeps about two weeks of past model hours online and this page keeps ${M.rolling_days || 21} days. `
+    + `The archive was updated ${fmtShort(saved)}, ${fromMin(saved).getUTCFullYear()} and covers ${fmtShort(first)} to ${fmtShort(last)}. `
+    + `Hours after ${fmtShort(fc)} at ${h12}${minutes} ${ampm} are forecast.`;
+  $('sourceNote').textContent = `Source: UC Davis TERC lake model and Lake Tahoe Airport ASOS. Updated ${fmtShort(saved)}, ${fromMin(saved).getUTCFullYear()}. Provisional model output, not for navigation.`;
 }
 
 /* ── boot ── */
 async function boot() {
   try {
-    M = await (await fetch(CFG.metaUrl)).json();
-    raw = await loadBinary(CFG.dataUrl);
+    // meta.json changes daily: always revalidate. The binary is keyed by the archive timestamp so a
+    // refreshed archive is a new URL and an unchanged one stays cached.
+    M = await (await fetch(CFG.metaUrl, { cache: 'no-cache' })).json();
+    raw = await loadBinary(CFG.dataUrl + (M.archive_saved ? `?v=${encodeURIComponent(M.archive_saved)}` : ''));
   } catch (err) {
     $('loadingMsg').textContent = `The lake model data did not load. ${err.message}. Reload the page to try again.`;
     return;
@@ -1053,7 +1085,7 @@ async function boot() {
   let k = 0;
   for (let i = 0; i < M.mask_idx_rle.length; i += 2) for (let j = 0; j < M.mask_idx_rle[i + 1]; j++) { const c = M.mask_idx_rle[i] + j; idx[k] = c; kOf[c] = k; mask[c] = 1; k++; }
   times = M.times.map(tmin);
-  drawGlyph();
+  describeArchive();
   buildWindows();
   computeView();
   T = tmin(M.default_start);

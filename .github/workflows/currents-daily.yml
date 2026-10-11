@@ -1,0 +1,64 @@
+name: Lake Tahoe Currents daily update
+
+# Refreshes the rolling model archive and publishes the Currents page to GitHub Pages.
+# Nothing is committed: the previous archive is read from the live site, merged with the
+# latest TERC hours and airport winds, and the whole Currents folder is redeployed.
+# One-time setup: repo Settings > Pages > Source: GitHub Actions.
+
+on:
+  schedule:
+    - cron: "30 14 * * *"   # 14:30 UTC, 7:30 a.m. Pacific daylight time
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: currents-pages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy requests pyyaml
+
+      - name: Stage the page
+        run: |
+          mkdir -p site
+          cp Currents/index.html site/
+          cp -r Currents/assets site/assets
+
+      - name: Update the archive
+        working-directory: Currents
+        run: |
+          python scripts/update_currents.py \
+            --prev https://trpa-agency.github.io/Monitoring/data \
+            --out ../site/data
+
+      - name: Keep the run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-log
+          path: Currents/logs/*.log
+          retention-days: 30
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
