@@ -316,8 +316,11 @@
 'use strict';
 /* ── CONFIG ── */
 const CFG = {
-  dataUrl: 'data/currents.bin',   // gzip bytes; the loader also accepts base64 .txt or raw bytes
-  metaUrl: 'data/meta.json',
+  // Archive locations, tried in order. On github.io the daily workflow publishes the rolling archive to the
+  // currents-data branch; everywhere else (and if that fetch fails) the committed seed next to the page is used.
+  dataBases: (location.hostname.endsWith('github.io') ? ['https://raw.githubusercontent.com/trpa-agency/Monitoring/currents-data/'] : []).concat(['data/']),
+  dataFile: 'currents.bin',       // gzip bytes; the loader also accepts base64 .txt or raw bytes
+  metaFile: 'meta.json',
   density: 1 / 18,               // particles per CSS px of lake area
   maxParticles: 14000,
   ageMinS: 8, ageMaxS: 20,       // particle lifetimes in real seconds (long, slow drifts)
@@ -1071,13 +1074,24 @@ function describeArchive() {
 
 /* ── boot ── */
 async function boot() {
-  try {
-    // meta.json changes daily: always revalidate. The binary is keyed by the archive timestamp so a
-    // refreshed archive is a new URL and an unchanged one stays cached.
-    M = await (await fetch(CFG.metaUrl, { cache: 'no-cache' })).json();
-    raw = await loadBinary(CFG.dataUrl + (M.archive_saved ? `?v=${encodeURIComponent(M.archive_saved)}` : ''));
-  } catch (err) {
-    $('loadingMsg').textContent = `The lake model data did not load. ${err.message}. Reload the page to try again.`;
+  let lastErr = null;
+  for (const base of CFG.dataBases) {
+    try {
+      // meta.json changes daily: always revalidate. The binary is keyed by the archive timestamp so a
+      // refreshed archive is a new URL and an unchanged one stays cached.
+      const mres = await fetch(base + CFG.metaFile, { cache: 'no-cache' });
+      if (!mres.ok) throw new Error(`meta.json HTTP ${mres.status}`);
+      const m = await mres.json();
+      raw = await loadBinary(base + CFG.dataFile + (m.archive_saved ? `?v=${encodeURIComponent(m.archive_saved)}` : ''));
+      M = m; lastErr = null;
+      break;
+    } catch (err) {
+      lastErr = err;
+      console.warn(`Archive not available at ${base}: ${err.message}`);
+    }
+  }
+  if (lastErr) {
+    $('loadingMsg').textContent = `The lake model data did not load. ${lastErr.message}. Reload the page to try again.`;
     return;
   }
   rows = M.rows; cols = M.cols; ncell = M.ncell;
