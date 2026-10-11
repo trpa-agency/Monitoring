@@ -28,10 +28,19 @@ sources:
     years: [2016, 2018, 2020, 2022]
     # Years not on Planetary Computer: point at a local 4-band GeoTIFF
     # (or a folder of quarter quads). Bands must be R, G, B, NIR in that order.
+    # An entry is either a path (NAIP-style, flight date parsed from the
+    # trailing YYYYMMDD in the file name) or a mapping with path, acq_date,
+    # and an optional source label for files that carry no date in the name.
     # Example:
     #   2024: data/raw/naip/local/ca_2024_keys.tif
     local:
       2024: null
+      # Nearmap sample export (reference NMD-7838). EPSG:2226, 1 ft GSD,
+      # captured 2026-07-07. Warped and averaged down onto the 0.6 m grid.
+      2026:
+        path: data/Nearmap/TRPA_Nearmap_Sum26_NIR_0_0.tif
+        acq_date: "2026-07-07"
+        source: "Nearmap 2D export, 1 ft"
 
   lidar:
     year: 2022
@@ -71,11 +80,11 @@ change:
   # Seasons when Tahoe Keys irrigation was shut off or heavily restricted.
   irrigation_off_years: [2021, 2022]
   # Image years assigned to each window. "during" must be an image year
-  # that falls inside irrigation_off_years. "post" may be empty until a
-  # post-shutoff image exists.
+  # that falls inside irrigation_off_years. "post" may list years that do
+  # not exist yet; 03_change uses whichever are present.
   pre_years: [2016, 2018, 2020]
   during_years: [2022]
-  post_years: [2024]
+  post_years: [2024, 2026]
   # A parcel "has lawn" in a year when lawn area is at least this many m2.
   lawn_present_min_m2: 20
   # A change counts when it is at least this fraction of the pre-period

@@ -14,8 +14,12 @@ Open the ArcGIS Pro Python Command Prompt and run:
 ```
 conda create --name keys-lawn --clone arcgispro-py3
 conda activate keys-lawn
-conda install -c conda-forge rasterio pystac-client planetary-computer pyyaml python-dotenv
+conda install -c conda-forge rasterio pystac-client planetary-computer pyyaml python-dotenv scikit-learn scikit-image
 ```
+
+On Mason's workstation (2026-09-23) the clone did not carry scikit-learn or
+scikit-image, so they are in the install line above. Any that are already
+present are simply skipped.
 
 Then pick `keys-lawn` as the kernel in Jupyter (or set it as the active
 environment in Pro's Package Manager). The first cell of every notebook

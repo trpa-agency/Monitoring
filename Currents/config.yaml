@@ -1,0 +1,25 @@
+project:
+  name: lake-tahoe-currents
+  owner: mbindl@trpa.gov
+
+paths:
+  data: data          # the archive the page reads (meta.json, currents.bin); also the committed seed
+  logs: logs
+
+sources:
+  # TERC publishes the lake model as one .npy per model hour under flow/ and temperature/,
+  # indexed by contents.json. Filenames are Pacific local time, "YYYY-MM-DD HH.npy".
+  terc_s3: https://lake-tahoe-conditions.s3.us-west-2.amazonaws.com
+  # Iowa Environmental Mesonet ASOS archive, hourly METAR wind for Lake Tahoe Airport.
+  asos_url: https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py
+  asos_station: TVL
+
+run:
+  rolling_days: 21        # hindcast hours older than this (before the latest issued hour) are dropped
+  event_days: 5           # length of the "wind event" default window, chosen as the windiest span
+  wind_window_min: 70     # airport observations within this many minutes of a model hour are averaged
+  v_sign: 1               # 1 keeps TERC's v as north-positive; set -1 if currents prove to run against the wind
+
+deploy:
+  # Where the live archive is served from. The CI run reads the previous archive here before merging.
+  site_url: https://trpa-agency.github.io/Monitoring

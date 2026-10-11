@@ -9,7 +9,15 @@ rasterio calls we would otherwise repeat in every notebook.
 """
 import json
 import math
+import os
 from pathlib import Path
+
+# rasterio 1.3 builds the temporary in-memory datasets behind rasterize() and
+# mask() with the MEM:::DATAPOINTER syntax, which GDAL 3.10 and later (the GDAL
+# bundled with ArcGIS Pro, and therefore the keys-lawn env) refuses by default.
+# GDAL reads this option from the environment at call time, so setting it here
+# is enough as long as src.grid is imported before any rasterize call.
+os.environ.setdefault("GDAL_MEM_ENABLE_OPEN", "YES")
 
 import numpy as np
 import rasterio

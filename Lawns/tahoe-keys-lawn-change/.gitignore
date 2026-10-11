@@ -8,6 +8,7 @@
 # Data — never commit
 data/raw/
 data/processed/
+data/Nearmap/
 outputs/
 logs/
 
