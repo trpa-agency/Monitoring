@@ -9,14 +9,14 @@ Single-file TRPA dashboard (Calcite, Plotly.js, AG Grid, Open Sans) that animate
 - `data/meta.json`: grid shape, lake mask (run-length encoded), shoreline rings, place labels, per-hour stats, airport wind vectors, time list.
 - `data/currents.bin`: gzip of packed int8 u, int8 v, uint8 temperature per lake cell per model hour (12,430 cells). The loader also accepts base64 `.txt` or raw bytes.
 - `scripts/update_currents.py`: the daily archive update (TERC S3 `.npy` hours plus TVL winds, 21 day rolling window). `config.yaml` holds sources and run parameters, `src/io.py` the config loader and logger, `docs/METHODS.md` the full method, `docs/CHANGELOG.md` dated changes.
-- `.github/workflows/currents-daily.yml` (repo root): runs the script daily and deploys the Currents folder to GitHub Pages without committing data.
+- `.github/workflows/currents-daily.yml` (repo root): runs the script daily and force-pushes the archive as a single commit on the `currents-data` branch. Pages serves main, so the page reads the archive from raw.githubusercontent.com on github.io and from `data/` otherwise.
 
 ## Data provenance
 
 - Currents and temperature: TERC Forecasted Conditions page, 3D lake model, 2 hour steps, about 200 m cells. Archive saved Oct. 4, 2026, covering Sept. 20 to Oct. 6. Hours after Oct. 4 at 2 p.m. are forecast.
 - Wind: Iowa Environmental Mesonet ASOS archive, Lake Tahoe Airport (TVL).
 - Times are Pacific local. Model surface temperatures run about 9 F warmer than TERC nearshore sensors; use them for pattern only.
-- `data/` is the committed seed and is refreshed by running the script locally; the daily CI run reads the live Pages copy instead and never commits. The seed also carries the grid definition (mask, shoreline, places) that the script requires.
+- `data/` is the committed seed and is refreshed by running the script locally; the daily CI run reads the `currents-data` branch instead and never commits to main. The seed also carries the grid definition (mask, shoreline, places) that the script requires.
 - TERC publishes the model as `.npy` files in the public `lake-tahoe-conditions` S3 bucket (found by reading the Forecasted Conditions page script). Arrays run south to north and must be flipped; u is east and v is north, verified by lake-mean currents following the airport wind. A daily all-zero placeholder file at 07:00 is skipped.
 
 ## Run locally

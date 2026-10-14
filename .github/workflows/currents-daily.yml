@@ -1,9 +1,10 @@
 name: Lake Tahoe Currents daily update
 
-# Refreshes the rolling model archive and publishes the Currents page to GitHub Pages.
-# Nothing is committed: the previous archive is read from the live site, merged with the
-# latest TERC hours and airport winds, and the whole Currents folder is redeployed.
-# One-time setup: repo Settings > Pages > Source: GitHub Actions.
+# Refreshes the rolling model archive behind Currents/index.html.
+# The page is served by GitHub Pages from the main branch. The archive is NOT committed to main:
+# each run reads the previous archive from the currents-data branch, merges the latest TERC hours
+# and airport winds, and force-pushes the result as a single commit on that branch (no history, no
+# bloat). The page fetches it from raw.githubusercontent.com and falls back to the committed seed.
 
 on:
   schedule:
@@ -11,20 +12,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: currents-pages
+  group: currents-data
   cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -35,18 +31,12 @@ jobs:
       - name: Install dependencies
         run: pip install numpy requests pyyaml
 
-      - name: Stage the page
-        run: |
-          mkdir -p site
-          cp Currents/index.html site/
-          cp -r Currents/assets site/assets
-
       - name: Update the archive
         working-directory: Currents
         run: |
           python scripts/update_currents.py \
-            --prev https://trpa-agency.github.io/Monitoring/data \
-            --out ../site/data
+            --prev https://raw.githubusercontent.com/${{ github.repository }}/currents-data \
+            --out ../build/data
 
       - name: Keep the run log
         if: always()
@@ -56,9 +46,13 @@ jobs:
           path: Currents/logs/*.log
           retention-days: 30
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - id: deploy
-        uses: actions/deploy-pages@v4
+      - name: Publish the archive to the currents-data branch
+        working-directory: build/data
+        run: |
+          git init -q
+          git checkout -q -b currents-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add meta.json currents.bin
+          git commit -q -m "Archive update $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" currents-data

@@ -29,7 +29,7 @@ Keeps a rolling archive of modeled Lake Tahoe surface currents and temperature, 
 
 ## Deployment
 
-`.github/workflows/currents-daily.yml` runs at 14:30 UTC daily. It stages `index.html` and `assets/`, runs the script with the live site as `--prev` and `site/data` as `--out`, and deploys the folder to GitHub Pages. No commits, so the 4 MB archive never enters git history. Requires Pages source set to GitHub Actions on the repository.
+The page is served by GitHub Pages from the main branch at `https://trpa-agency.github.io/Monitoring/Currents/`. `.github/workflows/currents-daily.yml` runs at 14:30 UTC daily: it reads the previous archive from the `currents-data` branch (raw.githubusercontent.com), runs the script, and force-pushes the two output files as a single commit on that branch. Main never receives data commits and the branch keeps no history, so the 6 MB archive does not bloat the repository. The page tries the data branch first when served on github.io and falls back to the committed seed in `Currents/data/`. The first run finds no branch, falls back to the seed, and creates the branch.
 
 ## Key assumptions
 
