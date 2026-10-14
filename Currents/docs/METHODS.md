@@ -13,6 +13,7 @@ Keeps a rolling archive of modeled Lake Tahoe surface currents and temperature, 
 |---|---|---|---|
 | TERC lake model, `lake-tahoe-conditions` S3 bucket | `.npy` per model hour, `flow/` (2 x 174 x 102 float64, u and v in m/s) and `temperature/` (174 x 102 float64, degrees C) | Every two hours; bucket holds about two weeks back and three days ahead | Same files the TERC Forecasted Conditions page reads. Filenames are Pacific local time. Arrays run south to north; land is NaN. |
 | Iowa Environmental Mesonet ASOS archive | CSV, hourly METAR for TVL (Lake Tahoe Airport) | Hourly | Knots and from-direction. |
+| TRPA Tahoe_Elevation map service | Rendered rasters: Deep Water Bathymetry (Sonar 2000, layer 2) and Nearshore Topo Bathy DEM (Green LiDAR 2018, layer 0) | Static | Sampled once by `scripts/build_bathymetry.py` into `data/bathy.json` for the page's depth shading. The service rejects dynamic raster renderers, so the classified colors are ranked by luminance into a stepped shade and smoothed. Grid rotation sign chosen by which lands more lake cells on data (94 percent at -1.85). |
 | Seed archive in `data/` | `meta.json`, `currents.bin` | Committed once | Supplies the lake mask, shoreline rings, place labels, and grid constants. The daily run never changes those. |
 
 ## Processing steps (`scripts/update_currents.py`)

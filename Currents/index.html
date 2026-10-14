@@ -87,6 +87,10 @@
     }
     .pill.forecast { color: #fff; background: var(--trpa-orange); border-color: var(--trpa-orange); }
     .stage-help { font-size: 0.74rem; color: var(--gray-text); }
+    /* Reel on a phone: the stage takes the whole screen with a close button back to Explore */
+    .reel-close { position: absolute; top: calc(0.75rem + env(safe-area-inset-top, 0px)); right: 0.75rem; z-index: 6; }
+    body.reel-full { overflow: hidden; }
+    body.reel-full .stage { position: fixed; inset: 0; height: 100vh !important; height: 100svh !important; min-height: 0 !important; z-index: 50; }
     .scale { display: flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; color: var(--gray-text); font-variant-numeric: tabular-nums; }
     .scale .bar { height: 6px; border-left: 1.5px solid var(--trpa-navy); border-right: 1.5px solid var(--trpa-navy); border-bottom: 1.5px solid var(--trpa-navy); }
 
@@ -144,9 +148,19 @@
     @media (max-width: 900px) {
       .app { height: auto; }
       .main { grid-template-columns: 1fr; }
-      .stage { height: 70vh; min-height: 440px; }
+      /* phone: the map is the first screen; the clock row peeks below it to invite a scroll */
+      .stage { height: calc(100vh - 128px); height: calc(100svh - 128px); min-height: 420px; }
       .panel { border-left: 0; border-top: 1px solid var(--gray-border); overflow: visible; }
       .hdr-links .source, .hdr-back { display: none; }
+    }
+    @media (max-width: 600px) {
+      #appHeader { flex-wrap: nowrap; padding: 0.35rem 0.75rem; gap: 0.5rem; }
+      .hdr-brand img { height: 30px; }
+      .hagency { font-size: 0.5rem; white-space: nowrap; }
+      .hname { font-size: 0.9rem; }
+      #shareBtn, #pngBtn { display: none; }
+      .beta-chip { margin-right: 0.2rem; }
+      .panel { padding: 0.9rem 1rem 1.5rem; }
     }
     @media (prefers-reduced-motion: reduce) { .kpi-card .wind-arrow { transition: none; } }
   </style>
@@ -178,6 +192,7 @@
       <canvas id="trails"></canvas>
       <canvas id="overlay"></canvas>
       <div id="hover" hidden></div>
+      <calcite-button id="reelClose" class="reel-close" icon-start="x" kind="neutral" appearance="solid" round scale="m" label="Back to Explore" title="Back to Explore" hidden></calcite-button>
       <div class="loading" id="loading">
         <div class="loading-inner">
           <calcite-loader label="Loading lake model" inline></calcite-loader>
@@ -228,13 +243,17 @@
 
       <div class="legend">
         <calcite-segmented-control id="colorSeg" scale="s" width="full">
-          <calcite-segmented-control-item value="speed" checked>Color by speed</calcite-segmented-control-item>
-          <calcite-segmented-control-item value="temp">Color by temperature</calcite-segmented-control-item>
+          <calcite-segmented-control-item value="speed">Color by speed</calcite-segmented-control-item>
+          <calcite-segmented-control-item value="temp" checked>Color by temperature</calcite-segmented-control-item>
         </calcite-segmented-control>
         <div class="ramp" id="ramp"></div>
         <div class="ends"><span id="rampLo"></span><span id="rampMid"></span><span id="rampHi"></span></div>
         <div class="cap" id="rampCap"></div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem; flex-wrap:wrap">
+          <calcite-label layout="inline" style="margin:0">
+            <calcite-switch id="bathySw" label="Depth shading" checked scale="s"></calcite-switch>
+            <span class="stage-help">Depth shading</span>
+          </calcite-label>
           <span class="stage-help" id="stageHelp">Click the lake to pin a probe</span>
           <span class="scale"><span class="bar" id="scaleBar"></span><span id="scaleLbl"></span></span>
         </div>
@@ -299,7 +318,7 @@
             <span slot="message" id="sourceNote">Source: UC Davis TERC lake model and Lake Tahoe Airport ASOS. Provisional model output, not for navigation.</span>
           </calcite-notice>
           <div class="about">
-            <p>Each comet is a particle of surface water carried by the modeled current. Particles move at the model's real speed for the playback rate shown, so comet length shows how far water travels. Brighter, longer comets are faster. The About button in the header explains the model.</p>
+            <p>Each streak is a particle of surface water carried by the modeled current. Particles move at the model's real speed for the playback rate shown, so streak length shows how far water travels. Brighter, longer streaks are faster. The About button in the header explains the model.</p>
             <ul>
               <li>Currents and temperature: UC Davis Tahoe Environmental Research Center (TERC) three-dimensional lake model, published every two hours on TERC's Forecasted Conditions page. Grid cells are about 200 meters.</li>
               <li>Wind: Lake Tahoe Airport observations from the Iowa Environmental Mesonet ASOS archive.</li>
@@ -320,7 +339,7 @@
 <calcite-dialog id="infoDlg" heading="About this map" modal width-scale="m" scale="m" kind="brand">
   <div class="dialog-body">
     <h3>What you are looking at</h3>
-    <p>Every streak is a particle of surface water carried by the modeled current. Each frame the map moves every particle a small step along the flow, draws it as a comet with a bright head and a fading tail, and lets it live a few seconds before a new one takes its place. Long bright comets are fast water; short faint ones are nearly still. Together they trace the lake-wide circulation, which is the thing to read. Any single swirl is below what the model can resolve.</p>
+    <p>Every streak is a particle of surface water carried by the modeled current. Each frame the map moves every particle a small step along the flow, leaves a short glowing streak behind it, and lets it live a few seconds before a new one takes its place. Long bright streaks are fast water; short faint ones are nearly still. Together they trace the lake-wide circulation, which is the thing to read. Any single swirl is below what the model can resolve.</p>
 
     <h3>The model behind it</h3>
     <p>The UC Davis Tahoe Environmental Research Center (TERC) runs a three-dimensional hydrodynamic model of Lake Tahoe. It divides the lake into cells about 200 meters across and many layers deep, then solves how wind stress, surface heating and cooling, and the lake's own density structure move the water. The model is driven by weather forecasts, so it produces a hindcast of the past week and a forecast of the next three days, refreshed every two hours. This page shows only the top layer: surface current direction and speed, and surface temperature.</p>
@@ -330,6 +349,7 @@
     <ul>
       <li>Currents and temperature: TERC lake model, published on the <a href="https://tahoe.ucdavis.edu/forecasted-conditions" target="_blank" rel="noopener">Forecasted Conditions</a> page. Two-hour steps, about 200 meter cells.</li>
       <li>Wind: Lake Tahoe Airport hourly observations from the Iowa Environmental Mesonet ASOS archive.</li>
+      <li>Depth shading: TRPA's Deep Water Bathymetry (sonar, 2000) and nearshore green lidar DEM (2018), smoothed onto the model grid. Darker is deeper. It is a backdrop, not a measurement surface.</li>
       <li>Archive: this page keeps a rolling three week record, updated daily. TERC itself keeps about two weeks online.</li>
     </ul>
 
@@ -354,17 +374,20 @@ const CFG = {
   dataBases: ['data/'],
   dataFile: 'currents.bin',       // gzip bytes; the loader also accepts base64 .txt or raw bytes
   metaFile: 'meta.json',
-  density: 1 / 30,               // particles per CSS px of lake area (comets need fewer particles than dots)
-  maxParticles: 6000,
-  ageMinS: 6, ageMaxS: 16,       // particle lifetimes in real seconds
-  // Comet trails: each particle keeps its last `tail` positions and is redrawn every frame as a tapered
-  // polyline, bright and wide at the head, thin and faint at the tail (the mapped.earth look). No
-  // accumulation canvas, so no fade residue and the trail length follows the water speed.
-  tail: 13,                      // history points per comet
-  tailStride: 2,                 // frames between history points (tail spans tail * tailStride frames)
-  headWidthPx: 1.6, tailWidthPx: 0.35,
-  headAlphaMin: 0.35, headAlphaSpan: 0.6,   // head alpha by speed; the tail tapers from there
+  bathyFile: 'bathy.json',       // optional depth shade per lake cell (built by scripts/build_bathymetry.py)
+  bathyDeep: [6, 22, 46], bathyShallow: [16, 62, 112],   // underlay colors, deepest to shallowest, kept dark
+  // Streak texture (the mapped.earth look): many short-lived particles, each leaving a short bright streak
+  // on a canvas that fades quickly, so the lake reads as a dense moving texture rather than a few long comets.
+  density: 1 / 3,                // particles per CSS px of lake area: near-total coverage, the lines are the lake
+  maxParticles: 48000,
+  ageMinS: 4, ageMaxS: 12,       // particle lifetimes in real seconds
+  fade: 0.05,                    // per-frame alpha erase; about 45 frames of trail, continuous flow lines
+  trailScale: 2,                 // trail canvas device pixels per CSS px: hairlines regardless of screen DPR
+  coreWidthPx: 0.55,             // hairline stroke (CSS px)
+  glowWidthPx: 0, glowAlpha: 0,  // no halo: it fattens the lines and muddies the color
+  alphaMin: 0.16, alphaSpan: 0.6,      // alpha by speed: slow water present but dim, fast water bright
   speedRampMph: 0.5,             // top of the color ramp; typical lake-wide means are 0.05 to 0.3 mph
+  tempSpanF: 3,                  // temperature ramp spans this many degrees F, centered on the window median
   baseHoursPerSec: 1,            // 1x playback = one model hour per real second
   ms2mph: 2.23694,
   scaleBarM: 5000,
@@ -375,11 +398,13 @@ const BRAND_FONT = 'Open Sans, system-ui, sans-serif';
 // Particle ramps. Speed is a single-hue sequential ramp from deep navy (barely above the ground) to white, so slow
 // water recedes and fast water stands out; no hot accent, the lake reads as one calm body. Temperature cools in
 // TRPA blues and warms through sand tones.
-// Speed ramp: deep TRPA blue through sky and ice to white, then a warm pale gold for the fastest water,
-// so the comets glow against the navy lake the way mapped.earth's wind does against dark terrain.
-const SPEED_STOPS = ['#0f4f9c', '#0b72ce', '#2f98e6', '#67bdf3', '#a8ddf8', '#e4f4fd', '#ffffff', '#ffd98a'];
-const TEMP_STOPS  = ['#164a8c', '#2c7fcc', '#6aaae3', '#B4CBE8', '#e6e0d2', '#e0c094', '#d9a06a', '#c98756'];
-const NBINS = 16, ABINS = 2;
+// Speed ramp sampled from mapped.earth's wind streamlines (globe, speed mode): slate navy through steel and sky
+// blue to aqua and a pale cyan white. Grayer mids than TRPA blue, no pure white; the fast end stays cool.
+const SPEED_STOPS = ['#1b3a66', '#2e5a8c', '#4677ad', '#5f95c6', '#79b3d8', '#95cfe4', '#b0e4ef', '#d2fafc'];
+// Temperature ramp: diverging, cold navy and blue through a bright pale middle to gold and orange, so both the
+// cool and warm ends of the window read and the median water is the brightest, as in the reference reel.
+const TEMP_STOPS  = ['#0a2f6e', '#0b5fb0', '#2b93d8', '#7fc6ec', '#d6ecf5', '#f7e2a8', '#f5b75a', '#ef7d3a'];
+const NBINS = 16, ABINS = 4;
 
 const $ = id => document.getElementById(id);
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -417,10 +442,13 @@ const NAMES = { N: 'north', NNE: 'north-northeast', NE: 'northeast', ENE: 'east-
 let M, raw, idx, mask, kOf, rows, cols, ncell, times;
 const frameCache = new Map();
 let T = 0, winStart = 0, winEnd = 0, playing = !reduceMotion, speedMult = 2, hoursPerSec = 2;
-let colorMode = 'speed', layout = 'explore';
+let colorMode = 'temp', layout = 'explore';
 let tempLo = 69, tempHi = 71;
 let P = null, view = null, shorePath = null;
 let probe = null;   // { x, y, cell, series: [{spd, dir, t}] }
+let bathy = null;   // Uint8Array shade per lake cell (0 deepest, 255 shallowest), or null
+let showBathy = true;
+let lakeImage = null;   // offscreen cols x rows canvas of the shaded lake, scaled onto the base canvas
 const LOGO = new Image(); LOGO.src = 'assets/TRPALogo_WHITE.png?v=2';
 LOGO.onload = () => { if (view) drawOverlay(); };
 function drawLogo(ctx, right, bottom, h, alpha) {
@@ -514,11 +542,14 @@ const base = $('base'), trails = $('trails'), overlay = $('overlay'), stage = $(
 const bctx = base.getContext('2d'), tctx = trails.getContext('2d'), octx = overlay.getContext('2d');
 let dpr = 1;
 
+let tdpr = 2;
 function computeView() {
   const r = stage.getBoundingClientRect();
   if (r.width < 10 || r.height < 10) return;
   dpr = Math.min(window.devicePixelRatio || 1, 2);
-  for (const c of [base, trails, overlay]) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
+  tdpr = r.width < 600 ? Math.min(Math.max(dpr, 1.5), 2) : Math.max(dpr, CFG.trailScale);
+  for (const c of [base, overlay]) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
+  trails.width = Math.round(r.width * tdpr); trails.height = Math.round(r.height * tdpr);
   const W = r.width, H = r.height;
   const aspect = M.cell_h_m / M.cell_w_m;
   let box, s, cx, cy;
@@ -527,14 +558,16 @@ function computeView() {
     if (bw > W - 24) { bw = W - 24; bh = bw * 16 / 9; }
     box = { x: (W - bw) / 2, y: (H - bh) / 2, w: bw, h: bh };
     s = Math.min((bh * 0.70) / (rows * aspect), (bw * 0.86) / cols);
-    cx = box.x + bw * 0.55; cy = box.y + bh * 0.565;
+    // wide frames shift the lake right to balance the left-side labels; narrow (phone) frames center it and
+    // draw labels inside the water, so nothing runs off the edge
+    cx = box.x + bw * (bw < 500 ? 0.5 : 0.55); cy = box.y + bh * 0.565;
   } else {
     // Explore: the lake fills the stage. Only place labels and the small logo share it; everything else is in the panel.
     box = { x: 0, y: 0, w: W, h: H };
-    const small = W < 600, pad = 18;
-    const padX = small ? 200 : 170;   // room for the place labels either side
+    const small = W < 600, pad = small ? 10 : 18;
+    const padX = small ? 36 : 170;    // desktop keeps label room either side; phones put labels inside the water
     s = Math.min((H - 2 * pad) / (rows * aspect), (W - padX) / cols);
-    cx = W / 2 + (small ? -6 : 0); cy = H / 2;
+    cx = W / 2; cy = H / 2;
   }
   const m = new DOMMatrix().translate(cx, cy).rotate(M.rotation_deg).scale(s, s * aspect).translate(-cols / 2, -rows / 2);
   view = { W, H, s, m, inv: m.inverse(), box, aspect };
@@ -548,18 +581,13 @@ function computeView() {
   }
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.clearRect(0, 0, trails.width, trails.height);
-  // lake body: a quiet navy fill so the map reads as a map even when the water is still
-  bctx.setTransform(1, 0, 0, 1, 0, 0);
-  bctx.clearRect(0, 0, base.width, base.height);
-  setGridTransform(bctx);
-  bctx.fillStyle = '#0b2140';
-  bctx.fill(shorePath, 'evenodd');
+  paintBase();
   initParticles();
   drawOverlay();
 }
-function setGridTransform(ctx) {
+function setGridTransform(ctx, scale = dpr) {
   const m = view.m;
-  ctx.setTransform(dpr * m.a, dpr * m.b, dpr * m.c, dpr * m.d, dpr * m.e, dpr * m.f);
+  ctx.setTransform(scale * m.a, scale * m.b, scale * m.c, scale * m.d, scale * m.e, scale * m.f);
 }
 function toScreen(x, y) { const p = view.m.transformPoint(new DOMPoint(x, y)); return [p.x, p.y]; }
 
@@ -568,33 +596,18 @@ let densityScale = 1;   // lowered automatically when frames run slow (see loop)
 function initParticles() {
   const lakeAreaPx = ncell * view.s * view.s * view.aspect;
   const small = view.W < 600;
-  const n = Math.max(800, Math.min(CFG.maxParticles * (small ? 0.6 : 1), Math.round(lakeAreaPx * CFG.density * densityScale)));
-  const K = CFG.tail;
-  P = { n, K, x: new Float32Array(n), y: new Float32Array(n),
-        hx: new Float32Array(n * K), hy: new Float32Array(n * K), hi: new Uint8Array(n), len: new Uint8Array(n),
+  const n = Math.max(800, Math.min(CFG.maxParticles * (small ? 0.35 : 1), Math.round(lakeAreaPx * CFG.density * densityScale * (small ? 0.7 : 1))));
+  P = { n, x: new Float32Array(n), y: new Float32Array(n), px: new Float32Array(n), py: new Float32Array(n),
         age: new Float32Array(n), life: new Float32Array(n), key: new Uint16Array(n), order: new Uint32Array(n) };
   for (let i = 0; i < n; i++) { spawn(i); P.age[i] = Math.random() * P.life[i]; }
 }
 function spawn(i) {
   const c = idx[(Math.random() * idx.length) | 0];
   const x = (c % cols) + Math.random(), y = Math.floor(c / cols) + Math.random();
-  P.x[i] = x; P.y[i] = y;
-  P.hi[i] = 0; P.len[i] = 1; P.hx[i * P.K] = x; P.hy[i * P.K] = y;
+  P.x[i] = P.px[i] = x; P.y[i] = P.py[i] = y;
   P.age[i] = 0; P.life[i] = CFG.ageMinS + Math.random() * (CFG.ageMaxS - CFG.ageMinS);
 }
-let stepTick = 0;
-function pushHistory(i, x, y) {
-  const K = P.K;
-  if (stepTick % CFG.tailStride === 0) {
-    const h = (P.hi[i] + 1) % K;
-    P.hi[i] = h; P.hx[i * K + h] = x; P.hy[i * K + h] = y;
-    if (P.len[i] < K) P.len[i]++;
-  } else {
-    const h = P.hi[i]; P.hx[i * K + h] = x; P.hy[i * K + h] = y;   // keep the head on the particle between samples
-  }
-}
 function step(dtReal) {
-  stepTick++;
   const [a, b, w] = frameAt(T);
   const A = decode(a), B = decode(b);
   const dtModel = dtReal * hoursPerSec * 3600;
@@ -609,13 +622,11 @@ function step(dtReal) {
     if (P.age[i] > P.life[i] || x < 0 || y < 0 || x >= cols || y >= rows || !mask[cell]) {
       spawn(i); P.key[i] = 0xffff; continue;
     }
-    const u1 = bil(A.U, x, y) * (1 - w) + bil(B.U, x, y) * w;
-    const v1 = bil(A.V, x, y) * (1 - w) + bil(B.V, x, y) * w;
-    const mx = x + u1 * kx * 0.5, my = y - v1 * ky * 0.5;
-    const u2 = bil(A.U, mx, my) * (1 - w) + bil(B.U, mx, my) * w;
-    const v2 = bil(A.V, mx, my) * (1 - w) + bil(B.V, mx, my) * w;
+    // Euler step: per-frame moves are a fraction of a cell, so the midpoint correction is not worth its cost
+    const u2 = bil(A.U, x, y) * (1 - w) + bil(B.U, x, y) * w;
+    const v2 = bil(A.V, x, y) * (1 - w) + bil(B.V, x, y) * w;
+    P.px[i] = x; P.py[i] = y;
     P.x[i] = x + u2 * kx; P.y[i] = y - v2 * ky;
-    pushHistory(i, P.x[i], P.y[i]);
     const sp = Math.hypot(u2, v2);
     let cb;
     if (colorMode === 'speed') cb = Math.sqrt(clamp(sp * mph / sr, 0, 1)) * (NBINS - 1);
@@ -623,7 +634,7 @@ function step(dtReal) {
       const t = nearestT(A.T, x, y) * (1 - w) + nearestT(B.T, x, y) * w;
       cb = isNaN(t) ? 0 : clamp((t - tempLo) / tSpan, 0, 1) * (NBINS - 1);
     }
-    const ab = Math.min(ABINS - 1, Math.floor(Math.sqrt(clamp(sp / 0.14, 0, 0.999)) * ABINS));
+    const ab = Math.min(ABINS - 1, Math.floor(Math.sqrt(clamp(sp / 0.18, 0, 0.999)) * ABINS));
     const key = (cb | 0) * ABINS + ab;
     P.key[i] = key; counts[key]++;
   }
@@ -632,8 +643,12 @@ function step(dtReal) {
 function render(counts) {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.globalAlpha = 1;
-  tctx.clearRect(0, 0, trails.width, trails.height);
-  setGridTransform(tctx);
+  // fade what is there: erase alpha so streaks shorten behind each particle (destination-out converges to clear)
+  tctx.globalCompositeOperation = 'destination-out';
+  tctx.fillStyle = `rgba(0,0,0,${CFG.fade})`;
+  tctx.fillRect(0, 0, trails.width, trails.height);
+  tctx.globalCompositeOperation = 'source-over';
+  setGridTransform(tctx, tdpr);
   tctx.save();
   tctx.clip(shorePath, 'evenodd');
   // counting sort by (color bin, speed-alpha bin)
@@ -642,30 +657,23 @@ function render(counts) {
   const fill = starts.slice(0, counts.length);
   for (let i = 0; i < P.n; i++) { const k = P.key[i]; if (k !== 0xffff) P.order[fill[k]++] = i; }
   const colors = colorMode === 'speed' ? SPEED_COLORS : TEMP_COLORS;
-  const K = P.K, hx = P.hx, hy = P.hy, hi = P.hi, len = P.len, order = P.order;
-  // one stroke per (tail segment, color bin, alpha bin): segment j joins the j-th and (j+1)-th newest points.
-  // Round caps only on the head segment; flat caps on the tail are far cheaper and invisible at tail widths.
-  for (let j = 0; j < K - 1; j++) {
-    const f = 1 - j / (K - 1);                     // 1 at the head, 0 at the tail
-    const taper = f * f;
-    tctx.lineCap = j === 0 ? 'round' : 'butt';
-    tctx.lineWidth = (CFG.tailWidthPx + (CFG.headWidthPx - CFG.tailWidthPx) * f) / view.s;
+  const order = P.order, px = P.px, py = P.py, x = P.x, y = P.y;
+  tctx.lineCap = 'round';
+  // optional glow pass under the core; each pass is one stroke per (color, alpha) bin
+  for (const pass of (CFG.glowWidthPx > 0 ? [0, 1] : [1])) {
+    tctx.lineWidth = (pass ? CFG.coreWidthPx : CFG.glowWidthPx) / view.s;
     for (let k = 0; k < counts.length; k++) {
       if (!counts[k]) continue;
       const cb = (k / ABINS) | 0, ab = k % ABINS;
-      const headAlpha = CFG.headAlphaMin + CFG.headAlphaSpan * (ab / (ABINS - 1));
+      const a = CFG.alphaMin + CFG.alphaSpan * (ab / (ABINS - 1));
       tctx.strokeStyle = colors[cb];
-      tctx.globalAlpha = headAlpha * taper;
+      tctx.globalAlpha = pass ? a : CFG.glowAlpha * a;
       tctx.beginPath();
-      let any = false;
       for (let q = starts[k]; q < starts[k + 1]; q++) {
         const i = order[q];
-        if (len[i] <= j + 1) continue;
-        const b = i * K, a0 = (hi[i] - j + K) % K, a1 = (hi[i] - j - 1 + K) % K;
-        tctx.moveTo(hx[b + a0], hy[b + a0]); tctx.lineTo(hx[b + a1], hy[b + a1]);
-        any = true;
+        tctx.moveTo(px[i], py[i]); tctx.lineTo(x[i], y[i]);
       }
-      if (any) tctx.stroke();
+      tctx.stroke();
     }
   }
   tctx.restore();
@@ -674,8 +682,7 @@ function render(counts) {
 function resetTrails() {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.clearRect(0, 0, trails.width, trails.height);
-  // a time jump: comets restart from their current spot instead of smearing across the jump
-  for (let i = 0; i < P.n; i++) { P.hi[i] = 0; P.len[i] = 1; P.hx[i * P.K] = P.x[i]; P.hy[i * P.K] = P.y[i]; }
+  for (let i = 0; i < P.n; i++) { P.px[i] = P.x[i]; P.py[i] = P.y[i]; }
 }
 
 /* ── overlay: shoreline, labels, probe, wind, scale bar, reel furniture ── */
@@ -697,16 +704,21 @@ function drawOverlay() {
     ctx.strokeStyle = 'rgba(180,203,232,0.22)'; ctx.lineWidth = 1; ctx.setLineDash([4, 6]);
     ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1); ctx.setLineDash([]);
   }
-  ctx.font = `600 ${fs}px ${BRAND_FONT}`;
+  const inside = reel ? view.box.w < 500 : view.W < 600;   // narrow frames: labels sit over the water, with a halo
+  ctx.font = `600 ${inside ? 8.5 : fs}px ${BRAND_FONT}`;
   ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
   for (const p of M.places) {
     const [sx, sy] = toScreen(p.x, p.y);
     ctx.fillStyle = '#ffffff';
     ctx.beginPath(); ctx.arc(sx, sy, reel ? 2 : 2.2, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = 'rgba(232,238,246,0.82)';
     const label = p.name.toUpperCase();
-    if (p.side === 'l') { ctx.textAlign = 'right'; ctx.fillText(label, sx - 7, sy); }
-    else { ctx.textAlign = 'left'; ctx.fillText(label, sx + 7, sy); }
+    const left = inside ? p.side !== 'l' : p.side === 'l';
+    ctx.textAlign = left ? 'right' : 'left';
+    const tx = left ? sx - 7 : sx + 7;
+    if (inside) { ctx.strokeStyle = 'rgba(5,13,24,0.8)'; ctx.lineWidth = 3; ctx.strokeText(label, tx, sy); }
+    ctx.fillStyle = 'rgba(232,238,246,0.86)';
+    ctx.fillText(label, tx, sy);
   }
   if (probe) {
     const [sx, sy] = toScreen(probe.x, probe.y);
@@ -859,6 +871,34 @@ function updatePanel(force) {
   movePlayhead();
 }
 
+/* ── base: lake body, flat or depth shaded ── */
+function buildLakeImage() {
+  const c = document.createElement('canvas'); c.width = cols; c.height = rows;
+  const x = c.getContext('2d'), img = x.createImageData(cols, rows), d = img.data;
+  const [dr, dg, db] = CFG.bathyDeep, [sr, sg, sb] = CFG.bathyShallow;
+  for (let k = 0; k < ncell; k++) {
+    const cell = idx[k], f = bathy[k] / 255, o = cell * 4;
+    d[o] = dr + (sr - dr) * f; d[o + 1] = dg + (sg - dg) * f; d[o + 2] = db + (sb - db) * f; d[o + 3] = 255;
+  }
+  x.putImageData(img, 0, 0);
+  return c;
+}
+function paintBase() {
+  bctx.setTransform(1, 0, 0, 1, 0, 0);
+  bctx.clearRect(0, 0, base.width, base.height);
+  setGridTransform(bctx);
+  bctx.save();
+  bctx.clip(shorePath, 'evenodd');
+  bctx.fillStyle = '#081a33';
+  bctx.fill(shorePath, 'evenodd');
+  if (bathy && showBathy) {
+    if (!lakeImage) lakeImage = buildLakeImage();
+    bctx.imageSmoothingEnabled = true; bctx.imageSmoothingQuality = 'high';
+    bctx.drawImage(lakeImage, 0, 0, cols, rows);   // grid units: one image pixel per cell, smoothed on scale-up
+  }
+  bctx.restore();
+}
+
 /* ── probe ── */
 function setProbe(x, y) {
   const cell = Math.floor(y) * cols + Math.floor(x);
@@ -1006,7 +1046,7 @@ function setWindow(id) {
   for (const o of sel.querySelectorAll('calcite-option')) o.selected = o.value === w.id;
   winStart = w.a; winEnd = w.b;
   if (T < winStart || T > winEnd) T = winStart;
-  // temperature ramp from the window's frames: 2nd to 98th percentile widened to a 2 degree minimum
+  // temperature ramp from the window's frames: a fixed span centered on the median (see CFG.tempSpanF)
   const [ia] = frameAt(winStart), [, ib] = frameAt(winEnd);
   const vals = [];
   for (let f = ia; f <= ib; f += Math.max(1, Math.floor((ib - ia) / 12))) {
@@ -1014,9 +1054,10 @@ function setWindow(id) {
     for (let k = 0; k < ncell; k += 7) { const v = fr[idx[k]]; if (!isNaN(v)) vals.push(v); }
   }
   vals.sort((p, q) => p - q);
-  let lo = vals[Math.floor(vals.length * 0.02)], hi = vals[Math.floor(vals.length * 0.98)];
-  const mid = (lo + hi) / 2; if (hi - lo < 2) { lo = mid - 1; hi = mid + 1; }
-  tempLo = Math.floor(lo * 2) / 2; tempHi = Math.ceil(hi * 2) / 2;
+  // fixed 3 degree ramp centered on the window's median surface temperature: the same span every window,
+  // narrow enough that the model's few degrees of nuance spread across the whole diverging ramp
+  const mid = vals[Math.floor(vals.length * 0.5)];
+  tempLo = Math.round((mid - CFG.tempSpanF / 2) * 10) / 10; tempHi = Math.round((mid + CFG.tempSpanF / 2) * 10) / 10;
   updateLegend(); movePlayhead(true); drawOverlay(); updatePanel(true);
 }
 function jumpTo(m) {
@@ -1080,7 +1121,7 @@ function loop(ts) {
 function stepOnce(hours) {
   T = clamp(T + hours * 60, winStart, winEnd);
   resetTrails();
-  for (let i = 0; i < CFG.tail * CFG.tailStride + 2; i++) { const c = step(1 / 60); render(c); }
+  for (let i = 0; i < 30; i++) { const c = step(1 / 60); render(c); }
   drawOverlay(); updatePanel(true); movePlayhead(true);
 }
 function setPlaying(on) {
@@ -1099,6 +1140,7 @@ function writeHash() {
   p.set('t', fromMin(Math.round(T)).toISOString().slice(0, 16));
   p.set('win', $('windowSel').value || 'event');
   p.set('color', colorMode); p.set('layout', layout); p.set('speed', String(speedMult));
+  if (!showBathy) p.set('bathy', '0');
   if (probe) p.set('probe', `${probe.x.toFixed(2)},${probe.y.toFixed(2)}`);
   history.replaceState(null, '', `#${p.toString()}`);
 }
@@ -1110,7 +1152,8 @@ function readHash() {
   const win = p.get('win'); if (win && WINDOWS.some(w => w.id === win)) setWindow(win);
   const color = p.get('color'); if (color === 'temp' || color === 'speed') { colorMode = color; setSeg('colorSeg', color); updateLegend(); }
   const sp = +p.get('speed'); if ([1, 2, 4, 8].includes(sp)) setSpeed(sp);
-  const lay = p.get('layout'); if (lay === 'reel' || lay === 'explore') { layout = lay; setSeg('layoutSeg', lay); computeView(); }
+  if (p.get('bathy') === '0') { showBathy = false; $('bathySw').checked = false; paintBase(); }
+  const lay = p.get('layout'); if (lay === 'reel' || lay === 'explore') { setSeg('layoutSeg', lay); applyLayout(lay); }
   const t = p.get('t'); if (t && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) { const m = tmin(t); if (m >= times[0] && m <= times[times.length - 1]) { if (m < winStart || m > winEnd) setWindow('all'); T = m; } }
   const pr = p.get('probe'); if (pr) { const [x, y] = pr.split(',').map(Number); if (isFinite(x) && isFinite(y)) setProbe(x, y); }
 }
@@ -1121,7 +1164,7 @@ function savePng() {
   c.width = trails.width; c.height = trails.height;
   const ctx = c.getContext('2d');
   ctx.fillStyle = NIGHT.ground; ctx.fillRect(0, 0, c.width, c.height);
-  ctx.drawImage(base, 0, 0); ctx.drawImage(trails, 0, 0); ctx.drawImage(overlay, 0, 0);
+  ctx.drawImage(base, 0, 0); ctx.drawImage(trails, 0, 0, c.width, c.height); ctx.drawImage(overlay, 0, 0);
   c.toBlob(blob => {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -1165,6 +1208,11 @@ async function boot() {
     $('loadingMsg').textContent = `The lake model data did not load. ${lastErr.message}. Reload the page to try again.`;
     return;
   }
+  try {
+    const bres = await fetch(CFG.dataBases[CFG.dataBases.length - 1] + CFG.bathyFile, { cache: 'default' });
+    if (bres.ok) { const bj = await bres.json(); const bin = atob(bj.shade_b64); bathy = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bathy[i] = bin.charCodeAt(i); }
+  } catch (err) { console.warn(`Depth shading not available: ${err.message}`); }
+  if (!bathy) $('bathySw').closest('calcite-label').hidden = true;
   rows = M.rows; cols = M.cols; ncell = M.ncell;
   idx = new Uint32Array(ncell); mask = new Uint8Array(rows * cols); kOf = new Int32Array(rows * cols).fill(-1);
   let k = 0;
@@ -1179,7 +1227,7 @@ async function boot() {
   buildGrid();
   $('loading').hidden = true;
   // Calcite upgrades its elements asynchronously; wait so hash state is not overwritten by hydration.
-  await Promise.all(['calcite-segmented-control', 'calcite-select', 'calcite-slider', 'calcite-dialog'].map(n => customElements.whenDefined(n)));
+  await Promise.all(['calcite-segmented-control', 'calcite-select', 'calcite-slider', 'calcite-dialog', 'calcite-switch'].map(n => customElements.whenDefined(n)));
   setSpeed(speedMult);
   readHash();
   hashReady = true;
@@ -1202,7 +1250,16 @@ $('infoBtn').addEventListener('click', () => { $('infoDlg').open = true; });
 $('infoClose').addEventListener('click', () => { $('infoDlg').open = false; });
 $('windowSel').addEventListener('calciteSelectChange', e => { setWindow(e.target.selectedOption.value); resetTrails(); writeHash(); });
 $('colorSeg').addEventListener('calciteSegmentedControlChange', e => { colorMode = e.target.selectedItem.value; updateLegend(); drawOverlay(); writeHash(); });
-$('layoutSeg').addEventListener('calciteSegmentedControlChange', e => { layout = e.target.selectedItem.value; computeView(); writeHash(); });
+function applyLayout(l) {
+  layout = l;
+  const full = l === 'reel' && window.innerWidth <= 900;
+  document.body.classList.toggle('reel-full', full);
+  $('reelClose').hidden = !full;
+  computeView();
+}
+$('layoutSeg').addEventListener('calciteSegmentedControlChange', e => { applyLayout(e.target.selectedItem.value); writeHash(); });
+$('reelClose').addEventListener('click', () => { setSeg('layoutSeg', 'explore'); applyLayout('explore'); writeHash(); });
+window.addEventListener('resize', () => { if (M && layout === 'reel') applyLayout('reel'); });
 $('timeSlider').addEventListener('calciteSliderInput', e => {
   sliderBusy = true;
   const m = times[0] + +e.target.value;
@@ -1212,6 +1269,7 @@ $('timeSlider').addEventListener('calciteSliderInput', e => {
 });
 $('timeSlider').addEventListener('calciteSliderChange', () => { sliderBusy = false; writeHash(); });
 $('probeClear').addEventListener('click', clearProbe);
+$('bathySw').addEventListener('calciteSwitchChange', e => { showBathy = e.target.checked; paintBase(); writeHash(); });
 $('pngBtn').addEventListener('click', savePng);
 $('shareBtn').addEventListener('click', async () => {
   writeHash();
@@ -1228,6 +1286,7 @@ stage.addEventListener('click', onClick);
 window.addEventListener('keydown', e => {
   const tag = (e.target.tagName || '').toLowerCase();
   if (tag.startsWith('calcite-') || tag === 'input' || tag === 'select' || tag === 'textarea') return;
+  if (e.key === 'Escape' && document.body.classList.contains('reel-full')) { $('reelClose').click(); return; }
   if (e.code === 'Space') { e.preventDefault(); setPlaying(!playing); }
   else if (e.key === 'ArrowRight') { stepOnce(2); writeHash(); }
   else if (e.key === 'ArrowLeft') { stepOnce(-2); writeHash(); }
@@ -1238,6 +1297,7 @@ new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => { if (M) comp
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (M) drawOverlay(); });
 
 // Debug hook: synchronous cost of one animation frame in ms, independent of requestAnimationFrame throttling.
+window.__currentsView = () => view && ({ W: view.W, H: view.H, s: view.s, box: view.box, e: view.m.e, f: view.m.f, dpr, tdpr, layout, full: document.body.classList.contains('reel-full') });
 window.__currentsBench = (n = 30) => {
   if (!P) return null;
   let ts = 0, tr = 0;
