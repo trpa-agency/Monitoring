@@ -135,6 +135,11 @@
     .about a { color: var(--trpa-blue); }
 
     calcite-tab { padding-top: 0.75rem; }
+    .dialog-body h3 { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--trpa-blue); margin: 1rem 0 0.35rem; }
+    .dialog-body h3:first-child { margin-top: 0; }
+    .dialog-body p, .dialog-body li { font-size: 0.9rem; line-height: 1.55; color: var(--brand-dark); }
+    .dialog-body ul { padding-left: 1.1rem; margin: 0.3rem 0; }
+    .dialog-body a { color: var(--trpa-blue); }
 
     @media (max-width: 900px) {
       .app { height: auto; }
@@ -161,6 +166,7 @@
     <div class="hdr-links">
       <span class="beta-chip" title="In review">Beta</span>
       <span class="source">Model: UC Davis Tahoe Environmental Research Center</span>
+      <calcite-button id="infoBtn" appearance="outline" kind="neutral" scale="s" icon-start="information" title="About the model and this map">About</calcite-button>
       <calcite-button id="shareBtn" appearance="outline" kind="neutral" scale="s" icon-start="link" title="Copy a link to this moment">Share</calcite-button>
       <calcite-button id="pngBtn" appearance="outline" kind="neutral" scale="s" icon-start="image" title="Save the current frame as a PNG">PNG</calcite-button>
     </div>
@@ -209,15 +215,15 @@
           <span class="field-label">Time window</span>
           <calcite-select id="windowSel" label="Time window" scale="s"></calcite-select>
         </calcite-label>
-        <calcite-label>
-          <span class="field-label">Playback</span>
-          <calcite-select id="speedSel" label="Playback speed" scale="s">
-            <calcite-option value="1">1 hour per second</calcite-option>
-            <calcite-option value="2" selected>2 hours per second</calcite-option>
-            <calcite-option value="4">4 hours per second</calcite-option>
-            <calcite-option value="7">7 hours per second</calcite-option>
-          </calcite-select>
-        </calcite-label>
+        <div>
+          <div class="field-label">Playback <span id="speedNote" style="text-transform:none; letter-spacing:0; font-weight:400"></span></div>
+          <calcite-segmented-control id="speedSeg" scale="s" width="full" style="margin-top:0.3rem">
+            <calcite-segmented-control-item value="1">1x</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="2" checked>2x</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="4">4x</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="8">8x</calcite-segmented-control-item>
+          </calcite-segmented-control>
+        </div>
       </div>
 
       <div class="legend">
@@ -293,7 +299,7 @@
             <span slot="message" id="sourceNote">Source: UC Davis TERC lake model and Lake Tahoe Airport ASOS. Provisional model output, not for navigation.</span>
           </calcite-notice>
           <div class="about">
-            <p>Each streak is a particle of surface water carried by the modeled current. Particles move at the model's real speed for the playback rate shown, so their trails show how far water travels. Brighter streaks are faster.</p>
+            <p>Each comet is a particle of surface water carried by the modeled current. Particles move at the model's real speed for the playback rate shown, so comet length shows how far water travels. Brighter, longer comets are faster. The About button in the header explains the model.</p>
             <ul>
               <li>Currents and temperature: UC Davis Tahoe Environmental Research Center (TERC) three-dimensional lake model, published every two hours on TERC's Forecasted Conditions page. Grid cells are about 200 meters.</li>
               <li>Wind: Lake Tahoe Airport observations from the Iowa Environmental Mesonet ASOS archive.</li>
@@ -311,26 +317,55 @@
   </div>
 </div>
 
+<calcite-dialog id="infoDlg" heading="About this map" modal width-scale="m" scale="m" kind="brand">
+  <div class="dialog-body">
+    <h3>What you are looking at</h3>
+    <p>Every streak is a particle of surface water carried by the modeled current. Each frame the map moves every particle a small step along the flow, draws it as a comet with a bright head and a fading tail, and lets it live a few seconds before a new one takes its place. Long bright comets are fast water; short faint ones are nearly still. Together they trace the lake-wide circulation, which is the thing to read. Any single swirl is below what the model can resolve.</p>
+
+    <h3>The model behind it</h3>
+    <p>The UC Davis Tahoe Environmental Research Center (TERC) runs a three-dimensional hydrodynamic model of Lake Tahoe. It divides the lake into cells about 200 meters across and many layers deep, then solves how wind stress, surface heating and cooling, and the lake's own density structure move the water. The model is driven by weather forecasts, so it produces a hindcast of the past week and a forecast of the next three days, refreshed every two hours. This page shows only the top layer: surface current direction and speed, and surface temperature.</p>
+    <p>Wind is the main engine. A sustained southwest wind piles warm surface water on the east shore and drags cold deep water up along the west shore, which is why the biggest currents, and the cold-water upwellings TERC warns swimmers about, follow the strong wind days. Watch the wind card and the wind chart against the lake and the lag is a few hours.</p>
+
+    <h3>Data</h3>
+    <ul>
+      <li>Currents and temperature: TERC lake model, published on the <a href="https://tahoe.ucdavis.edu/forecasted-conditions" target="_blank" rel="noopener">Forecasted Conditions</a> page. Two-hour steps, about 200 meter cells.</li>
+      <li>Wind: Lake Tahoe Airport hourly observations from the Iowa Environmental Mesonet ASOS archive.</li>
+      <li>Archive: this page keeps a rolling three week record, updated daily. TERC itself keeps about two weeks online.</li>
+    </ul>
+
+    <h3>Reading it well</h3>
+    <ul>
+      <li>Color and brightness both follow speed. Switch to temperature to see warm and cool water move; read those colors as pattern, since the model surface can run several degrees warmer than TERC's nearshore sensors.</li>
+      <li>Hours after the forecast issue time are forecast and are marked orange on the chart. They change as new model runs arrive.</li>
+      <li>Click the lake to pin a probe and follow one spot across the whole archive. Click any chart to jump to that hour. Space plays and pauses, arrow keys step two hours.</li>
+      <li>Model output is provisional and not for navigation or swim safety. Check <a href="https://tahoe.ucdavis.edu/real-time-conditions" target="_blank" rel="noopener">TERC real-time conditions</a> before going on the water.</li>
+    </ul>
+  </div>
+  <calcite-button slot="footer-end" id="infoClose" scale="s">Close</calcite-button>
+</calcite-dialog>
+
 <script>
 (() => {
 'use strict';
 /* ── CONFIG ── */
 const CFG = {
-  // Archive locations, tried in order. On github.io the daily workflow publishes the rolling archive to the
-  // currents-data branch; everywhere else (and if that fetch fails) the committed seed next to the page is used.
-  dataBases: (location.hostname.endsWith('github.io') ? ['https://raw.githubusercontent.com/trpa-agency/Monitoring/currents-data/'] : []).concat(['data/']),
+  // Archive locations, tried in order. The daily workflow deploys the page and a fresh data/ folder together
+  // to GitHub Pages; locally the committed seed next to the page is used.
+  dataBases: ['data/'],
   dataFile: 'currents.bin',       // gzip bytes; the loader also accepts base64 .txt or raw bytes
   metaFile: 'meta.json',
-  density: 1 / 18,               // particles per CSS px of lake area
-  maxParticles: 14000,
-  ageMinS: 8, ageMaxS: 20,       // particle lifetimes in real seconds (long, slow drifts)
-  // Trail fade: erase alpha every fadeEvery frames with fadeAlpha. Average decay is fadeAlpha / fadeEvery per frame.
-  // Fading every frame with a tiny alpha leaves a residue because 8-bit alpha stops decreasing once a * alpha < 0.5;
-  // a larger alpha applied less often reaches a much lower floor with the same trail length and no visible pulse.
-  fadeEvery: 4, fadeAlpha: 0.045,
+  density: 1 / 30,               // particles per CSS px of lake area (comets need fewer particles than dots)
+  maxParticles: 6000,
+  ageMinS: 6, ageMaxS: 16,       // particle lifetimes in real seconds
+  // Comet trails: each particle keeps its last `tail` positions and is redrawn every frame as a tapered
+  // polyline, bright and wide at the head, thin and faint at the tail (the mapped.earth look). No
+  // accumulation canvas, so no fade residue and the trail length follows the water speed.
+  tail: 13,                      // history points per comet
+  tailStride: 2,                 // frames between history points (tail spans tail * tailStride frames)
+  headWidthPx: 1.6, tailWidthPx: 0.35,
+  headAlphaMin: 0.35, headAlphaSpan: 0.6,   // head alpha by speed; the tail tapers from there
   speedRampMph: 0.5,             // top of the color ramp; typical lake-wide means are 0.05 to 0.3 mph
-  lineWidthPx: 1.2,
-  alphaMin: 0.14, alphaSpan: 0.46,     // slow water soft but present, fast water solid
+  baseHoursPerSec: 1,            // 1x playback = one model hour per real second
   ms2mph: 2.23694,
   scaleBarM: 5000,
 };
@@ -340,9 +375,11 @@ const BRAND_FONT = 'Open Sans, system-ui, sans-serif';
 // Particle ramps. Speed is a single-hue sequential ramp from deep navy (barely above the ground) to white, so slow
 // water recedes and fast water stands out; no hot accent, the lake reads as one calm body. Temperature cools in
 // TRPA blues and warms through sand tones.
-const SPEED_STOPS = ['#1a4a80', '#0f5fa8', '#0b72ce', '#3393dc', '#66ace4', '#93c1e9', '#B4CBE8', '#ffffff'];
+// Speed ramp: deep TRPA blue through sky and ice to white, then a warm pale gold for the fastest water,
+// so the comets glow against the navy lake the way mapped.earth's wind does against dark terrain.
+const SPEED_STOPS = ['#0f4f9c', '#0b72ce', '#2f98e6', '#67bdf3', '#a8ddf8', '#e4f4fd', '#ffffff', '#ffd98a'];
 const TEMP_STOPS  = ['#164a8c', '#2c7fcc', '#6aaae3', '#B4CBE8', '#e6e0d2', '#e0c094', '#d9a06a', '#c98756'];
-const NBINS = 32, ABINS = 4;
+const NBINS = 16, ABINS = 2;
 
 const $ = id => document.getElementById(id);
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -379,7 +416,7 @@ const NAMES = { N: 'north', NNE: 'north-northeast', NE: 'northeast', ENE: 'east-
 /* ── state ── */
 let M, raw, idx, mask, kOf, rows, cols, ncell, times;
 const frameCache = new Map();
-let T = 0, winStart = 0, winEnd = 0, playing = !reduceMotion, hoursPerSec = 2;
+let T = 0, winStart = 0, winEnd = 0, playing = !reduceMotion, speedMult = 2, hoursPerSec = 2;
 let colorMode = 'speed', layout = 'explore';
 let tempLo = 69, tempHi = 71;
 let P = null, view = null, shorePath = null;
@@ -527,21 +564,37 @@ function setGridTransform(ctx) {
 function toScreen(x, y) { const p = view.m.transformPoint(new DOMPoint(x, y)); return [p.x, p.y]; }
 
 /* ── particles ── */
+let densityScale = 1;   // lowered automatically when frames run slow (see loop)
 function initParticles() {
   const lakeAreaPx = ncell * view.s * view.s * view.aspect;
   const small = view.W < 600;
-  const n = Math.min(CFG.maxParticles * (small ? 0.6 : 1), Math.round(lakeAreaPx * CFG.density));
-  P = { n, x: new Float32Array(n), y: new Float32Array(n), px: new Float32Array(n), py: new Float32Array(n),
+  const n = Math.max(800, Math.min(CFG.maxParticles * (small ? 0.6 : 1), Math.round(lakeAreaPx * CFG.density * densityScale)));
+  const K = CFG.tail;
+  P = { n, K, x: new Float32Array(n), y: new Float32Array(n),
+        hx: new Float32Array(n * K), hy: new Float32Array(n * K), hi: new Uint8Array(n), len: new Uint8Array(n),
         age: new Float32Array(n), life: new Float32Array(n), key: new Uint16Array(n), order: new Uint32Array(n) };
   for (let i = 0; i < n; i++) { spawn(i); P.age[i] = Math.random() * P.life[i]; }
 }
 function spawn(i) {
   const c = idx[(Math.random() * idx.length) | 0];
   const x = (c % cols) + Math.random(), y = Math.floor(c / cols) + Math.random();
-  P.x[i] = P.px[i] = x; P.y[i] = P.py[i] = y;
+  P.x[i] = x; P.y[i] = y;
+  P.hi[i] = 0; P.len[i] = 1; P.hx[i * P.K] = x; P.hy[i * P.K] = y;
   P.age[i] = 0; P.life[i] = CFG.ageMinS + Math.random() * (CFG.ageMaxS - CFG.ageMinS);
 }
+let stepTick = 0;
+function pushHistory(i, x, y) {
+  const K = P.K;
+  if (stepTick % CFG.tailStride === 0) {
+    const h = (P.hi[i] + 1) % K;
+    P.hi[i] = h; P.hx[i * K + h] = x; P.hy[i * K + h] = y;
+    if (P.len[i] < K) P.len[i]++;
+  } else {
+    const h = P.hi[i]; P.hx[i * K + h] = x; P.hy[i * K + h] = y;   // keep the head on the particle between samples
+  }
+}
 function step(dtReal) {
+  stepTick++;
   const [a, b, w] = frameAt(T);
   const A = decode(a), B = decode(b);
   const dtModel = dtReal * hoursPerSec * 3600;
@@ -561,52 +614,59 @@ function step(dtReal) {
     const mx = x + u1 * kx * 0.5, my = y - v1 * ky * 0.5;
     const u2 = bil(A.U, mx, my) * (1 - w) + bil(B.U, mx, my) * w;
     const v2 = bil(A.V, mx, my) * (1 - w) + bil(B.V, mx, my) * w;
-    P.px[i] = x; P.py[i] = y;
     P.x[i] = x + u2 * kx; P.y[i] = y - v2 * ky;
+    pushHistory(i, P.x[i], P.y[i]);
     const sp = Math.hypot(u2, v2);
     let cb;
-    if (colorMode === 'speed') cb = Math.pow(clamp(sp * mph / sr, 0, 1), 0.55) * (NBINS - 1);
+    if (colorMode === 'speed') cb = Math.sqrt(clamp(sp * mph / sr, 0, 1)) * (NBINS - 1);
     else {
       const t = nearestT(A.T, x, y) * (1 - w) + nearestT(B.T, x, y) * w;
       cb = isNaN(t) ? 0 : clamp((t - tempLo) / tSpan, 0, 1) * (NBINS - 1);
     }
-    const ab = Math.min(ABINS - 1, Math.floor(Math.sqrt(clamp(sp / 0.16, 0, 0.999)) * ABINS));
+    const ab = Math.min(ABINS - 1, Math.floor(Math.sqrt(clamp(sp / 0.14, 0, 0.999)) * ABINS));
     const key = (cb | 0) * ABINS + ab;
     P.key[i] = key; counts[key]++;
   }
   return counts;
 }
-let frameNo = 0;
 function render(counts) {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.globalAlpha = 1;
-  if (++frameNo % CFG.fadeEvery === 0) {
-    tctx.globalCompositeOperation = 'destination-out';
-    tctx.fillStyle = `rgba(0,0,0,${CFG.fadeAlpha})`;
-    tctx.fillRect(0, 0, trails.width, trails.height);
-    tctx.globalCompositeOperation = 'source-over';
-  }
+  tctx.clearRect(0, 0, trails.width, trails.height);
   setGridTransform(tctx);
   tctx.save();
   tctx.clip(shorePath, 'evenodd');
+  // counting sort by (color bin, speed-alpha bin)
   const starts = new Uint32Array(counts.length + 1);
   for (let k = 0; k < counts.length; k++) starts[k + 1] = starts[k] + counts[k];
   const fill = starts.slice(0, counts.length);
   for (let i = 0; i < P.n; i++) { const k = P.key[i]; if (k !== 0xffff) P.order[fill[k]++] = i; }
   const colors = colorMode === 'speed' ? SPEED_COLORS : TEMP_COLORS;
-  tctx.lineWidth = CFG.lineWidthPx / view.s;
-  tctx.lineCap = 'round';
-  for (let k = 0; k < counts.length; k++) {
-    if (!counts[k]) continue;
-    const cb = (k / ABINS) | 0, ab = k % ABINS;
-    tctx.strokeStyle = colors[cb];
-    tctx.globalAlpha = CFG.alphaMin + CFG.alphaSpan * (ab / (ABINS - 1));
-    tctx.beginPath();
-    for (let j = starts[k]; j < starts[k + 1]; j++) {
-      const i = P.order[j];
-      tctx.moveTo(P.px[i], P.py[i]); tctx.lineTo(P.x[i], P.y[i]);
+  const K = P.K, hx = P.hx, hy = P.hy, hi = P.hi, len = P.len, order = P.order;
+  // one stroke per (tail segment, color bin, alpha bin): segment j joins the j-th and (j+1)-th newest points.
+  // Round caps only on the head segment; flat caps on the tail are far cheaper and invisible at tail widths.
+  for (let j = 0; j < K - 1; j++) {
+    const f = 1 - j / (K - 1);                     // 1 at the head, 0 at the tail
+    const taper = f * f;
+    tctx.lineCap = j === 0 ? 'round' : 'butt';
+    tctx.lineWidth = (CFG.tailWidthPx + (CFG.headWidthPx - CFG.tailWidthPx) * f) / view.s;
+    for (let k = 0; k < counts.length; k++) {
+      if (!counts[k]) continue;
+      const cb = (k / ABINS) | 0, ab = k % ABINS;
+      const headAlpha = CFG.headAlphaMin + CFG.headAlphaSpan * (ab / (ABINS - 1));
+      tctx.strokeStyle = colors[cb];
+      tctx.globalAlpha = headAlpha * taper;
+      tctx.beginPath();
+      let any = false;
+      for (let q = starts[k]; q < starts[k + 1]; q++) {
+        const i = order[q];
+        if (len[i] <= j + 1) continue;
+        const b = i * K, a0 = (hi[i] - j + K) % K, a1 = (hi[i] - j - 1 + K) % K;
+        tctx.moveTo(hx[b + a0], hy[b + a0]); tctx.lineTo(hx[b + a1], hy[b + a1]);
+        any = true;
+      }
+      if (any) tctx.stroke();
     }
-    tctx.stroke();
   }
   tctx.restore();
   tctx.globalAlpha = 1;
@@ -614,7 +674,8 @@ function render(counts) {
 function resetTrails() {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.clearRect(0, 0, trails.width, trails.height);
-  for (let i = 0; i < P.n; i++) { P.px[i] = P.x[i]; P.py[i] = P.y[i]; }
+  // a time jump: comets restart from their current spot instead of smearing across the jump
+  for (let i = 0; i < P.n; i++) { P.hi[i] = 0; P.len[i] = 1; P.hx[i * P.K] = P.x[i]; P.hy[i * P.K] = P.y[i]; }
 }
 
 /* ── overlay: shoreline, labels, probe, wind, scale bar, reel furniture ── */
@@ -991,10 +1052,11 @@ function onClick(e) {
 }
 
 /* ── loop ── */
-let lastTs = 0, sizeTick = 0;
+let lastTs = 0, sizeTick = 0, costEma = 0, costFrames = 0;
 function loop(ts) {
   const dt = lastTs ? Math.min(0.05, (ts - lastTs) / 1000) : 0.016;
   lastTs = ts;
+  const t0 = performance.now();
   // Self-heal if the stage was measured before the window settled (ResizeObserver normally catches this).
   if (view && ++sizeTick % 30 === 0 && (Math.abs(stage.clientWidth - view.W) > 2 || Math.abs(stage.clientHeight - view.H) > 2)) computeView();
   if (playing && P) {
@@ -1004,13 +1066,21 @@ function loop(ts) {
     render(counts);
     drawOverlay();
     updatePanel(false);
+    // Adaptive quality: if step + render average more than ~14 ms (a 60 fps budget is 16), thin the particle field
+    // by a quarter and try again. Only compute time is measured, so a throttled or hidden tab does not trigger it.
+    const cost = performance.now() - t0;
+    costEma = costEma ? costEma * 0.95 + cost * 0.05 : cost;
+    if (++costFrames >= 150) {
+      costFrames = 0;
+      if (costEma > 14 && densityScale > 0.3) { densityScale *= 0.75; initParticles(); console.info(`currents: frame cost ${costEma.toFixed(1)} ms, particles reduced to ${P.n}`); }
+    }
   }
   requestAnimationFrame(loop);
 }
 function stepOnce(hours) {
   T = clamp(T + hours * 60, winStart, winEnd);
   resetTrails();
-  for (let i = 0; i < 240; i++) { const c = step(1 / 60); render(c); }
+  for (let i = 0; i < CFG.tail * CFG.tailStride + 2; i++) { const c = step(1 / 60); render(c); }
   drawOverlay(); updatePanel(true); movePlayhead(true);
 }
 function setPlaying(on) {
@@ -1028,7 +1098,7 @@ function writeHash() {
   const p = new URLSearchParams();
   p.set('t', fromMin(Math.round(T)).toISOString().slice(0, 16));
   p.set('win', $('windowSel').value || 'event');
-  p.set('color', colorMode); p.set('layout', layout);
+  p.set('color', colorMode); p.set('layout', layout); p.set('speed', String(speedMult));
   if (probe) p.set('probe', `${probe.x.toFixed(2)},${probe.y.toFixed(2)}`);
   history.replaceState(null, '', `#${p.toString()}`);
 }
@@ -1039,6 +1109,7 @@ function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
   const win = p.get('win'); if (win && WINDOWS.some(w => w.id === win)) setWindow(win);
   const color = p.get('color'); if (color === 'temp' || color === 'speed') { colorMode = color; setSeg('colorSeg', color); updateLegend(); }
+  const sp = +p.get('speed'); if ([1, 2, 4, 8].includes(sp)) setSpeed(sp);
   const lay = p.get('layout'); if (lay === 'reel' || lay === 'explore') { layout = lay; setSeg('layoutSeg', lay); computeView(); }
   const t = p.get('t'); if (t && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) { const m = tmin(t); if (m >= times[0] && m <= times[times.length - 1]) { if (m < winStart || m > winEnd) setWindow('all'); T = m; } }
   const pr = p.get('probe'); if (pr) { const [x, y] = pr.split(',').map(Number); if (isFinite(x) && isFinite(y)) setProbe(x, y); }
@@ -1108,7 +1179,8 @@ async function boot() {
   buildGrid();
   $('loading').hidden = true;
   // Calcite upgrades its elements asynchronously; wait so hash state is not overwritten by hydration.
-  await Promise.all(['calcite-segmented-control', 'calcite-select', 'calcite-slider'].map(n => customElements.whenDefined(n)));
+  await Promise.all(['calcite-segmented-control', 'calcite-select', 'calcite-slider', 'calcite-dialog'].map(n => customElements.whenDefined(n)));
+  setSpeed(speedMult);
   readHash();
   hashReady = true;
   setPlaying(playing);
@@ -1120,7 +1192,14 @@ async function boot() {
 $('play').addEventListener('click', () => setPlaying(!playing));
 $('back').addEventListener('click', () => { stepOnce(-2); writeHash(); });
 $('fwd').addEventListener('click', () => { stepOnce(2); writeHash(); });
-$('speedSel').addEventListener('calciteSelectChange', e => { hoursPerSec = +e.target.selectedOption.value; });
+function setSpeed(mult) {
+  speedMult = mult; hoursPerSec = CFG.baseHoursPerSec * mult;
+  setSeg('speedSeg', String(mult));
+  $('speedNote').textContent = `${hoursPerSec} model hour${hoursPerSec === 1 ? '' : 's'} per second`;
+}
+$('speedSeg').addEventListener('calciteSegmentedControlChange', e => { setSpeed(+e.target.selectedItem.value); writeHash(); });
+$('infoBtn').addEventListener('click', () => { $('infoDlg').open = true; });
+$('infoClose').addEventListener('click', () => { $('infoDlg').open = false; });
 $('windowSel').addEventListener('calciteSelectChange', e => { setWindow(e.target.selectedOption.value); resetTrails(); writeHash(); });
 $('colorSeg').addEventListener('calciteSegmentedControlChange', e => { colorMode = e.target.selectedItem.value; updateLegend(); drawOverlay(); writeHash(); });
 $('layoutSeg').addEventListener('calciteSegmentedControlChange', e => { layout = e.target.selectedItem.value; computeView(); writeHash(); });
@@ -1157,6 +1236,16 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && M)
 let rz;
 new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => { if (M) computeView(); }, 120); }).observe(stage);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (M) drawOverlay(); });
+
+// Debug hook: synchronous cost of one animation frame in ms, independent of requestAnimationFrame throttling.
+window.__currentsBench = (n = 30) => {
+  if (!P) return null;
+  let ts = 0, tr = 0;
+  for (let i = 0; i < n; i++) {
+    const a = performance.now(); const c = step(1 / 60); const b = performance.now(); render(c); tr += performance.now() - b; ts += b - a;
+  }
+  return { particles: P.n, stepMs: +(ts / n).toFixed(2), renderMs: +(tr / n).toFixed(2), stageW: view.W, stageH: view.H };
+};
 
 boot();
 })();
