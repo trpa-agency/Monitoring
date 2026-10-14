@@ -55,6 +55,7 @@ jobs:
           python scripts/update_currents.py \
             --prev https://trpa-agency.github.io/Monitoring/Currents/data \
             --out ../site/Currents/data
+          cp data/bathy.json ../site/Currents/data/
 
       - name: Keep the run log
         if: always()

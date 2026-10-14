@@ -13,12 +13,16 @@ sources:
   # Iowa Environmental Mesonet ASOS archive, hourly METAR wind for Lake Tahoe Airport.
   asos_url: https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py
   asos_station: TVL
+  # TRPA bathymetry (rendered map service; the one-off build_bathymetry.py samples it onto the model grid)
+  bathymetry_service: https://maps.trpa.org/server/rest/services/Tahoe_Elevation/MapServer
 
 run:
   rolling_days: 21        # hindcast hours older than this (before the latest issued hour) are dropped
   event_days: 5           # length of the "wind event" default window, chosen as the windiest span
   wind_window_min: 70     # airport observations within this many minutes of a model hour are averaged
   v_sign: 1               # 1 keeps TERC's v as north-positive; set -1 if currents prove to run against the wind
+  bathy_deep_layer: 2     # Deep Water Bathymetry - Sonar 2000
+  bathy_near_layer: 0     # Nearshore Topo Bathy DEM - Green LiDAR 2018
 
 deploy:
   # GitHub Pages (source: GitHub Actions). The workflow deploys the Currents folder under Currents/
