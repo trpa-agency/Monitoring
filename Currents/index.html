@@ -375,19 +375,22 @@ const CFG = {
   dataFile: 'currents.bin',       // gzip bytes; the loader also accepts base64 .txt or raw bytes
   metaFile: 'meta.json',
   bathyFile: 'bathy.json',       // optional depth shade per lake cell (built by scripts/build_bathymetry.py)
-  bathyDeep: [6, 22, 46], bathyShallow: [16, 62, 112],   // underlay colors, deepest to shallowest, kept dark
+  bathyDeep: [5, 18, 42], bathyShallow: [12, 46, 92],    // underlay colors, deepest to shallowest, kept dark
   // Streak texture (the mapped.earth look): many short-lived particles, each leaving a short bright streak
   // on a canvas that fades quickly, so the lake reads as a dense moving texture rather than a few long comets.
-  density: 1 / 3,                // particles per CSS px of lake area: near-total coverage, the lines are the lake
-  maxParticles: 48000,
-  ageMinS: 4, ageMaxS: 12,       // particle lifetimes in real seconds
-  fade: 0.05,                    // per-frame alpha erase; about 45 frames of trail, continuous flow lines
+  // Coverage is density x trail length x alpha. Too much of any of these and strokes pile up until the alpha
+  // saturates to white (seen at 1/3 density with 110 frame trails on a fast machine). Keep the product modest.
+  density: 1 / 7,                // particles per CSS px of lake area
+  maxParticles: 22000,
+  ageMinS: 6, ageMaxS: 16,       // particle lifetimes in real seconds
+  fadeEvery: 1, fadeAlpha: 0.045,   // about 50 frames of trail; per-frame fade this size leaves no residue
   trailScale: 2,                 // trail canvas device pixels per CSS px: hairlines regardless of screen DPR
-  coreWidthPx: 0.55,             // hairline stroke (CSS px)
+  coreWidthPx: 0.5,              // hairline stroke (CSS px)
   glowWidthPx: 0, glowAlpha: 0,  // no halo: it fattens the lines and muddies the color
-  alphaMin: 0.16, alphaSpan: 0.6,      // alpha by speed: slow water present but dim, fast water bright
-  speedRampMph: 0.5,             // top of the color ramp; typical lake-wide means are 0.05 to 0.3 mph
-  tempSpanF: 3,                  // temperature ramp spans this many degrees F, centered on the window median
+  alphaMin: 0.07, alphaSpan: 0.7,      // alpha by speed: slow water faint, fast water bright
+  fastWidthBoost: 1.4,                 // the fastest bin draws wider so it pops
+  speedRampMph: 0.35,            // top of the speed color ramp; fast shore water reaches the bright end
+  tempSpanF: 1.5,                // temperature ramp spans this many degrees F, centered on the window median (narrow: dramatic)
   baseHoursPerSec: 1,            // 1x playback = one model hour per real second
   ms2mph: 2.23694,
   scaleBarM: 5000,
@@ -401,9 +404,9 @@ const BRAND_FONT = 'Open Sans, system-ui, sans-serif';
 // Speed ramp sampled from mapped.earth's wind streamlines (globe, speed mode): slate navy through steel and sky
 // blue to aqua and a pale cyan white. Grayer mids than TRPA blue, no pure white; the fast end stays cool.
 const SPEED_STOPS = ['#1b3a66', '#2e5a8c', '#4677ad', '#5f95c6', '#79b3d8', '#95cfe4', '#b0e4ef', '#d2fafc'];
-// Temperature ramp: diverging, cold navy and blue through a bright pale middle to gold and orange, so both the
-// cool and warm ends of the window read and the median water is the brightest, as in the reference reel.
-const TEMP_STOPS  = ['#0a2f6e', '#0b5fb0', '#2b93d8', '#7fc6ec', '#d6ecf5', '#f7e2a8', '#f5b75a', '#ef7d3a'];
+// Temperature ramp: cold navy through royal and sky blue to teal in the middle, then sand and orange for the
+// warmest water. The middle stays saturated blue, so the lake reads rich rather than pale; brightness carries speed.
+const TEMP_STOPS  = ['#0a2a66', '#0d47a1', '#1565c0', '#1e88e5', '#39b7d8', '#8fd3c4', '#e6c36a', '#f28c3a'];
 const NBINS = 16, ABINS = 4;
 
 const $ = id => document.getElementById(id);
@@ -634,20 +637,23 @@ function step(dtReal) {
       const t = nearestT(A.T, x, y) * (1 - w) + nearestT(B.T, x, y) * w;
       cb = isNaN(t) ? 0 : clamp((t - tempLo) / tSpan, 0, 1) * (NBINS - 1);
     }
-    const ab = Math.min(ABINS - 1, Math.floor(Math.sqrt(clamp(sp / 0.18, 0, 0.999)) * ABINS));
+    const ab = Math.min(ABINS - 1, Math.floor(clamp(sp / 0.12, 0, 0.999) * ABINS));
     const key = (cb | 0) * ABINS + ab;
     P.key[i] = key; counts[key]++;
   }
   return counts;
 }
+let fadeTick = 0;
 function render(counts) {
   tctx.setTransform(1, 0, 0, 1, 0, 0);
   tctx.globalAlpha = 1;
   // fade what is there: erase alpha so streaks shorten behind each particle (destination-out converges to clear)
-  tctx.globalCompositeOperation = 'destination-out';
-  tctx.fillStyle = `rgba(0,0,0,${CFG.fade})`;
-  tctx.fillRect(0, 0, trails.width, trails.height);
-  tctx.globalCompositeOperation = 'source-over';
+  if (++fadeTick % CFG.fadeEvery === 0) {
+    tctx.globalCompositeOperation = 'destination-out';
+    tctx.fillStyle = `rgba(0,0,0,${CFG.fadeAlpha})`;
+    tctx.fillRect(0, 0, trails.width, trails.height);
+    tctx.globalCompositeOperation = 'source-over';
+  }
   setGridTransform(tctx, tdpr);
   tctx.save();
   tctx.clip(shorePath, 'evenodd');
@@ -668,6 +674,7 @@ function render(counts) {
       const a = CFG.alphaMin + CFG.alphaSpan * (ab / (ABINS - 1));
       tctx.strokeStyle = colors[cb];
       tctx.globalAlpha = pass ? a : CFG.glowAlpha * a;
+      tctx.lineWidth = ((pass ? CFG.coreWidthPx : CFG.glowWidthPx) * (ab === ABINS - 1 ? CFG.fastWidthBoost : 1)) / view.s;
       tctx.beginPath();
       for (let q = starts[k]; q < starts[k + 1]; q++) {
         const i = order[q];
@@ -889,7 +896,7 @@ function paintBase() {
   setGridTransform(bctx);
   bctx.save();
   bctx.clip(shorePath, 'evenodd');
-  bctx.fillStyle = '#081a33';
+  bctx.fillStyle = '#06142b';
   bctx.fill(shorePath, 'evenodd');
   if (bathy && showBathy) {
     if (!lakeImage) lakeImage = buildLakeImage();
@@ -1121,7 +1128,7 @@ function loop(ts) {
 function stepOnce(hours) {
   T = clamp(T + hours * 60, winStart, winEnd);
   resetTrails();
-  for (let i = 0; i < 30; i++) { const c = step(1 / 60); render(c); }
+  for (let i = 0; i < 60; i++) { const c = step(1 / 60); render(c); }
   drawOverlay(); updatePanel(true); movePlayhead(true);
 }
 function setPlaying(on) {
