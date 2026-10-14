@@ -21,6 +21,7 @@ run:
   v_sign: 1               # 1 keeps TERC's v as north-positive; set -1 if currents prove to run against the wind
 
 deploy:
-  # Page: GitHub Pages from main. Archive: single-commit currents-data branch, read via raw.githubusercontent.com.
+  # GitHub Pages (source: GitHub Actions). The workflow deploys the Currents folder under Currents/
+  # and reads the previous archive from the live Currents/data/ folder before merging.
   page_url: https://trpa-agency.github.io/Monitoring/Currents/
-  archive_url: https://raw.githubusercontent.com/trpa-agency/Monitoring/currents-data
+  archive_url: https://trpa-agency.github.io/Monitoring/Currents/data
