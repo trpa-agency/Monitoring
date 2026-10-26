@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8765", "--directory", "Currents"],
       "port": 8765
+    },
+    {
+      "name": "monitoring",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "."],
+      "port": 8766
     }
   ]
 }

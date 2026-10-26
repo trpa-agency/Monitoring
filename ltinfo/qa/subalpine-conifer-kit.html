@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" data-site="monitoring" data-slot="card" data-embed="subalpine-conifer">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subalpine Conifer Monitoring (kit fixture)</title>
+  <meta name="description" content="Dashboard for the Subalpine Conifer monitoring program in the Lake Tahoe Basin: mapped extent of subalpine forest, dominant species, stand structure, ownership, and the ground-based plot network that informs remote sensing." />
+
+  <!--
+    KIT FIXTURE. A copy of ForestHealth/monitoring/subalpine-conifer.html rebuilt against
+    ltinfo/kit so the kit can be checked against the published page. Not deployed.
+
+    Subalpine Conifer monitoring dashboard, Tahoe Regional Planning Agency.
+    Embedded in the Dashboard card of
+    https://monitoring.laketahoeinfo.org/monitoring-programs/83
+    so it carries no header or footer chrome of its own. The host card supplies the
+    green DASHBOARD header; the program name and overview sit above it.
+
+    Live data: TRPA Vegetation Type map service (maps.trpa.org), queried at load for
+    subalpine conifer (WHRTYPE = 'SCN'). SNAPSHOT below is the fallback if the query
+    fails, captured Sept. 17, 2026.
+
+    Plot data: none loaded yet. The `plots` and `health` arrays in DATA document the
+    shape the page expects. Sections render an explicit "not yet loaded" state until
+    they are populated.
+  -->
+
+  <!-- Plotly.js must load BEFORE the ArcGIS SDK (UMD registers as AMD otherwise). -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+  <!-- Calcite Design System. Version must match the build bundled in the ArcGIS SDK release below
+       (4.31 pairs with Calcite 2.13): the SDK's Expand and Legend widgets render through calcite-popover,
+       and a mismatched standalone Calcite leaves that popover unpositioned. -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+
+  <!-- ArcGIS Maps SDK for JavaScript -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- LT Info embed kit: shared styles and helpers for every TRPA page the host pulls in. -->
+  <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
+  <script src="../kit/ltinfo-embed.js"></script>
+</head>
+<body>
+  <main class="wrap">
+
+    <!-- ── AT A GLANCE ── -->
+    <section class="section" aria-labelledby="glance-h">
+      <div class="section-label">At a glance</div>
+      <div class="section-head">
+        <h2 id="glance-h">Subalpine forest in the Lake Tahoe Basin</h2>
+        <p>Subalpine conifer forest occupies the highest forested ground in the Basin, generally above 8,500 feet, where short growing seasons, thin soils, heavy snowpack, and wind produce open, slow-growing stands of whitebark pine, western white pine, mountain hemlock, and lodgepole pine. These stands were rarely logged and remain largely within their natural range of variation, so the standard for them is non-degradation rather than restoration.</p>
+      </div>
+      <div class="tiles" id="glance-tiles"></div>
+      <p class="small muted" id="glance-source" style="margin-top:0.5rem"></p>
+    </section>
+
+    <!-- ── EXTENT MAP ── -->
+    <section class="section" aria-labelledby="extent-h">
+      <div class="section-label">Subalpine zone extent</div>
+      <div class="section-head">
+        <h2 id="extent-h">Where subalpine forest is mapped</h2>
+        <p>Mapped extent of the subalpine conifer type from the TRPA vegetation layer. Remote sensing of this footprint, informed by ground plots, is how the program will track change in distribution over time.</p>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h3>Subalpine conifer forest</h3>
+          <calcite-button href="https://maps.trpa.org/server/rest/services/Vegetation_Type/MapServer" target="_blank" rel="noopener noreferrer" appearance="transparent" scale="s" icon-end="launch">Map service</calcite-button>
+        </div>
+        <div class="map-view" id="extent-map" role="region" aria-label="Map of subalpine conifer forest extent">
+          <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
+        </div>
+        <p class="caption">Polygons classified as subalpine conifer (California Wildlife Habitat Relationships type SCN). The tiles above and the tables below give the same information without the map.</p>
+        <p class="source">Source: TRPA Vegetation Type map service, maps.trpa.org. Base mapping from the USFS Existing Vegetation (EVeg) product with TRPA attributes.</p>
+      </div>
+    </section>
+
+    <!-- ── COMPOSITION AND STRUCTURE ── -->
+    <section class="section" aria-labelledby="comp-h">
+      <div class="section-label">Species composition and structure</div>
+      <div class="section-head">
+        <h2 id="comp-h">What the mapped subalpine forest is made of</h2>
+        <p>Dominant species and stand structure as mapped today. This is the remote sensing baseline the plot network will calibrate; plot-measured composition will replace it here once surveys begin.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <h3>Dominant species</h3>
+            <calcite-segmented-control scale="s" data-toggle="dominance">
+              <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+            </calcite-segmented-control>
+          </div>
+          <div class="plot" id="dominance-plot"></div>
+          <div class="hidden" id="dominance-grid"></div>
+          <p class="caption">Acres of subalpine forest by the dominant mapped species or species group.</p>
+          <p class="source" data-source-line>Source: TRPA Vegetation Type map service.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Stand structure</h3>
+            <calcite-segmented-control scale="s" data-toggle="structure">
+              <calcite-segmented-control-item value="size" checked>Tree size</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="density">Canopy cover</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+            </calcite-segmented-control>
+          </div>
+          <div class="plot" id="structure-plot"></div>
+          <div class="hidden" id="structure-grid"></div>
+          <p class="caption" id="structure-caption">Acres by mapped tree size class (California Wildlife Habitat Relationships size classes).</p>
+          <p class="source" data-source-line>Source: TRPA Vegetation Type map service.</p>
+        </div>
+        <div class="card span-2">
+          <div class="card-head"><h3>Land ownership</h3></div>
+          <div class="plot" id="ownership-plot" style="min-height:120px"></div>
+          <p class="caption">Nearly all subalpine forest in the Basin is on National Forest System land managed by the Lake Tahoe Basin Management Unit.</p>
+          <p class="source" data-source-line>Source: TRPA Vegetation Type map service.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WHITEBARK PINE HEALTH ── -->
+    <section class="section" aria-labelledby="health-h">
+      <div class="section-label">Whitebark pine health</div>
+      <div class="section-head">
+        <h2 id="health-h">Condition of whitebark pine</h2>
+        <p>Whitebark pine is federally listed as threatened. Across its range it is losing ground to white pine blister rust, mountain pine beetle, and a warming climate that pushes suitable habitat upslope. Plot surveys will track infection, mortality, and regeneration so that change is detected early.</p>
+      </div>
+      <div id="health-body"></div>
+    </section>
+
+    <!-- ── PLOT NETWORK ── -->
+    <section class="section" aria-labelledby="plots-h">
+      <div class="section-label">Plot network</div>
+      <div class="section-head">
+        <h2 id="plots-h">Ground-based monitoring plots</h2>
+        <p>Permanent plots measure species composition, tree health, and regeneration on the ground. Those measurements calibrate the remote sensing that tracks the whole subalpine zone between plot visits.</p>
+      </div>
+      <div id="plots-body"></div>
+    </section>
+
+    <div class="footer">
+      <div><strong>About the program.</strong> The Subalpine Conifer monitoring program tracks non-degradation of subalpine conifer communities under the Vegetation Preservation threshold category. The applicable standard protects these communities from degradation while allowing restoration such as seed collection and planting of rust-resistant whitebark pine seedlings.</div>
+      <div class="links">
+        <a href="https://thresholds.laketahoeinfo.org/threshold/indicators/191" target="_blank" rel="noopener noreferrer">Threshold indicator: Subalpine Conifer</a>
+        <a href="https://storymaps.arcgis.com/stories/a46630fd0fb048bd84f4fa84fd6bab9d" target="_blank" rel="noopener noreferrer">StoryMap: Subalpine Conifer</a>
+        <a href="https://trpa.app.box.com/s/9wksrvupifkzhrvtc6tlbltonnjijyfc" target="_blank" rel="noopener noreferrer">Forest Health Threshold Standards report</a>
+      </div>
+      <div style="margin-top:0.4rem" id="footer-vintage"></div>
+    </div>
+  </main>
+
+  <script>
+    'use strict';
+
+    /* ───────────────────────── DATA ───────────────────────── */
+    const SERVICE = 'https://maps.trpa.org/server/rest/services/Vegetation_Type/MapServer';
+    const LAYER = 0;
+    const WHERE = "WHRTYPE = 'SCN'";
+
+    const DOMINANCE_LABELS = { SA: 'Subalpine conifer mix', WB: 'Whitebark pine', WW: 'Western white pine', MH: 'Mountain hemlock', LP: 'Lodgepole pine' };
+    const SIZE_LABELS = { '1': 'Seedling (< 1 in.)', '2': 'Sapling (1–6 in.)', '3': 'Pole (6–11 in.)', '4': 'Small tree (11–24 in.)', '5': 'Medium to large (> 24 in.)', '6': 'Multilayered' };
+    const DENSITY_LABELS = { S: 'Sparse (10–24%)', P: 'Open (25–39%)', M: 'Moderate (40–59%)', D: 'Dense (≥ 60%)', '': 'Not classified' };
+    const OWNER_LABELS = { 'NFS Lands': 'National Forest', STATE: 'State', PRIVATE: 'Private', '': 'Unknown' };
+
+    // Fallback captured Sept. 17, 2026 from the same service. Replaced by the live query when it succeeds.
+    const SNAPSHOT = {
+      captured: 'Sept. 17, 2026',
+      totalAcres: 19419,
+      polygons: 71943,
+      dominance: { SA: 16245.5, WB: 2736.7, WW: 416.4, MH: 20.5 },
+      size:      { '2': 7655.8, '3': 3928.6, '4': 7714.1, '5': 117.3, '6': 3.3 },
+      density:   { P: 7085.8, '': 7026.0, M: 4166.0, S: 933.3, D: 208.2 },
+      ownership: { 'NFS Lands': 18886.7, STATE: 433.2, PRIVATE: 99.2 },
+      elevation: { avg: 8824, min: 6517, max: 10755 },
+    };
+
+    const DATA = {
+      // Report figure for context: the Forest Health Threshold Standards report cites roughly 13,350 acres
+      // of subalpine conifer from the Regional Resource Kit rasters. The map service above is a different
+      // product (EVeg polygons) and maps 19,419 acres. Both are shown with their source.
+      reportAcres: 13350,
+      elevationNote: 'generally above 8,500 feet',
+
+      // Plot network. Empty until the program's first survey is loaded.
+      // Expected shape per plot:
+      // { plotId: 'SC-01', name: 'Mount Rose ridge', lat: 39.31, lon: -119.92, elevFt: 9400,
+      //   established: 2026, lastVisit: 2026, visits: 1, dominant: 'WB' }
+      plots: [],
+
+      // Whitebark pine health, one row per plot per survey year.
+      // { plotId: 'SC-01', year: 2026, treesLive: 42, treesDead: 6, blisterRustPct: 18, beetlePct: 4,
+      //   seedlingsPerAcre: 35, notes: '' }
+      health: [],
+    };
+
+    /* ───────────────────────── HELPERS (from the kit) ───────────────────────── */
+    const { FONT, INK, fmt, esc, narrow, wrapLabel, PLOT_CONFIG } = LTI;
+    const BLUE = LTI.COLORS[0];   // LT Info --primary
+    const BASE_LAYOUT = LTI.layout({
+      margin: { t: 8, r: 70, b: 40, l: 10 }, bargap: 0.35,
+      xaxis: { tickformat: ',d', title: { text: 'Acres', font: { size: 12 } } },
+      yaxis: { showgrid: false, autorange: 'reversed' },
+    });
+
+    async function sumBy(field) {
+      const params = new URLSearchParams({
+        where: WHERE, groupByFieldsForStatistics: field, returnGeometry: 'false', f: 'json',
+        outStatistics: JSON.stringify([
+          { statisticType: 'sum', onStatisticField: 'Acres', outStatisticFieldName: 'acres' },
+          { statisticType: 'count', onStatisticField: 'OBJECTID', outStatisticFieldName: 'n' },
+        ]),
+      });
+      const resp = await fetch(`${SERVICE}/${LAYER}/query?${params}`);
+      const json = await resp.json();
+      if (json.error) throw new Error(json.error.message);
+      const out = {};
+      let n = 0;
+      for (const f of json.features) { out[f.attributes[field] ?? ''] = f.attributes.acres; n += f.attributes.n; }
+      return { values: out, n };
+    }
+
+    async function elevationStats() {
+      const out = {};
+      for (const st of ['avg', 'min', 'max']) {
+        const params = new URLSearchParams({
+          where: `${WHERE} AND Elev_Ft > 0`, returnGeometry: 'false', f: 'json',
+          outStatistics: JSON.stringify([{ statisticType: st, onStatisticField: 'Elev_Ft', outStatisticFieldName: 'v' }]),
+        });
+        const json = await (await fetch(`${SERVICE}/${LAYER}/query?${params}`)).json();
+        if (json.error) throw new Error(json.error.message);
+        out[st] = Math.round(json.features[0].attributes.v);
+      }
+      return out;
+    }
+
+    async function loadLive() {
+      const [dom, size, dens, own, elev] = await Promise.all([
+        sumBy('REGIONAL_DOMINANCE_TYPE_1'), sumBy('WHRSIZE'), sumBy('WHRDENSITY'), sumBy('Ownership'), elevationStats(),
+      ]);
+      const total = Object.values(dom.values).reduce((a, b) => a + b, 0);
+      return { captured: 'live', totalAcres: Math.round(total), polygons: dom.n, dominance: dom.values, size: size.values, density: dens.values, ownership: own.values, elevation: elev };
+    }
+
+    function hbar(containerId, entries, opts = {}) {
+      return LTI.hbar(containerId, entries, { ...opts, unit: 'ac', axisTitle: 'Acres', color: opts.color || BLUE }).map(r => ({ ...r, acres: r.value }));
+    }
+    const buildGrid = LTI.grid;
+
+    /* ───────────────────────── RENDER ───────────────────────── */
+    let stats = SNAPSHOT;
+    let live = false;
+
+    function renderGlance() {
+      const nfs = stats.ownership['NFS Lands'] ?? 0;
+      const wb = stats.dominance.WB ?? 0;
+      const tiles = [
+        { v: `${fmt(stats.totalAcres)} <small>acres</small>`, l: 'Mapped subalpine conifer forest' },
+        { v: `${(nfs / stats.totalAcres * 100).toFixed(0)}% <small>National Forest</small>`, l: 'Share on public land managed by the USFS' },
+        { v: `${fmt(wb)} <small>acres</small>`, l: 'Mapped as whitebark pine dominant' },
+        { v: `${fmt(stats.elevation.avg)} <small>ft</small>`, l: `Average elevation (${fmt(stats.elevation.min)} to ${fmt(stats.elevation.max)} ft)` },
+        { v: DATA.plots.length ? fmt(DATA.plots.length) : 'Not yet established', l: 'Ground monitoring plots', pending: !DATA.plots.length },
+        { v: DATA.health.length ? String(Math.max(...DATA.health.map(h => h.year))) : 'No surveys yet', l: 'Most recent plot survey', pending: !DATA.health.length },
+      ];
+      document.getElementById('glance-tiles').innerHTML = tiles.map(t => `<div class="tile${t.pending ? ' pending' : ''}"><div class="v">${t.v}</div><div class="l">${esc(t.l)}</div></div>`).join('');
+      document.getElementById('glance-source').textContent = `Extent, ownership, and species figures are ${live ? 'queried live' : `from a snapshot captured ${stats.captured}`} from the TRPA Vegetation Type map service (${fmt(stats.polygons)} polygons). The Forest Health Threshold Standards report cites roughly ${fmt(DATA.reportAcres)} acres from the Regional Resource Kit rasters; the two products delineate the type differently.`;
+    }
+
+    function renderCharts() {
+      const domRows = hbar('dominance-plot', stats.dominance, { labels: DOMINANCE_LABELS });
+      document.querySelector('[data-toggle="dominance"]').addEventListener('calciteSegmentedControlChange', (e) => {
+        const view = e.target.selectedItem?.value || e.target.value;
+        const plot = document.getElementById('dominance-plot'), grid = document.getElementById('dominance-grid');
+        if (view === 'table') {
+          buildGrid('dominance-grid', [
+            { field: 'label', headerName: 'Dominant species', flex: 2, minWidth: 180 },
+            { field: 'key', headerName: 'Code', minWidth: 80 },
+            { field: 'acres', headerName: 'Acres', type: 'rightAligned', valueFormatter: p => fmt(p.value) },
+          ], domRows, 'subalpine-dominant-species');
+          plot.classList.add('hidden'); grid.classList.remove('hidden');
+        } else { grid.classList.add('hidden'); plot.classList.remove('hidden'); Plotly.Plots.resize(plot); }
+        notifyHeight();
+      });
+
+      const sizeRows = hbar('structure-plot', stats.size, { labels: SIZE_LABELS });
+      const densRows = Object.entries(stats.density).map(([k, v]) => ({ key: k, label: DENSITY_LABELS[k] ?? k, acres: v }));
+      const structureRows = [
+        ...sizeRows.map(r => ({ measure: 'Tree size class', ...r })),
+        ...densRows.map(r => ({ measure: 'Canopy cover class', ...r })),
+      ];
+      document.querySelector('[data-toggle="structure"]').addEventListener('calciteSegmentedControlChange', (e) => {
+        const view = e.target.selectedItem?.value || e.target.value;
+        const plot = document.getElementById('structure-plot'), grid = document.getElementById('structure-grid'), cap = document.getElementById('structure-caption');
+        if (view === 'table') {
+          buildGrid('structure-grid', [
+            { field: 'measure', headerName: 'Measure', flex: 1.4, minWidth: 150 },
+            { field: 'label', headerName: 'Class', flex: 2, minWidth: 180 },
+            { field: 'acres', headerName: 'Acres', type: 'rightAligned', valueFormatter: p => fmt(p.value) },
+          ], structureRows, 'subalpine-stand-structure');
+          plot.classList.add('hidden'); grid.classList.remove('hidden');
+        } else {
+          grid.classList.add('hidden'); plot.classList.remove('hidden');
+          if (view === 'size') { hbar('structure-plot', stats.size, { labels: SIZE_LABELS }); cap.textContent = 'Acres by mapped tree size class (California Wildlife Habitat Relationships size classes).'; }
+          else { hbar('structure-plot', stats.density, { labels: DENSITY_LABELS }); cap.textContent = 'Acres by mapped canopy cover class. Subalpine stands are naturally open; most acreage is in the sparse and open classes.'; }
+        }
+        notifyHeight();
+      });
+
+      hbar('ownership-plot', stats.ownership, { labels: OWNER_LABELS, height: 150 });
+    }
+
+    const emptyState = LTI.emptyState;
+
+    function renderHealth() {
+      const host = document.getElementById('health-body');
+      if (!DATA.health.length) {
+        host.innerHTML = emptyState('No plot surveys have been loaded yet. When they are, this section will report:', [
+          'Share of whitebark pine trees with white pine blister rust, by plot and survey year.',
+          'Mountain pine beetle activity and cumulative mortality.',
+          'Regeneration: whitebark pine seedlings and saplings per acre.',
+          'Change between survey years, once a second visit exists.',
+        ]);
+        return;
+      }
+      // Live rendering path, used once DATA.health is populated.
+      host.innerHTML = '<div class="card"><div class="card-head"><h3>Blister rust incidence by survey year</h3></div><div class="plot" id="health-plot"></div><p class="source">Source: TRPA subalpine conifer plot surveys.</p></div>';
+      const years = [...new Set(DATA.health.map(h => h.year))].sort();
+      const byYear = years.map(y => { const rows = DATA.health.filter(h => h.year === y); return rows.reduce((a, r) => a + r.blisterRustPct, 0) / rows.length; });
+      LTI.plot('health-plot', [{ type: 'scatter', mode: 'lines+markers', x: years, y: byYear, line: { color: BLUE, width: 2 }, marker: { size: 8 }, hovertemplate: '%{x}: %{y:.0f}% infected<extra></extra>' }],
+        { ...BASE_LAYOUT, height: 260, margin: { t: 8, r: 16, b: 40, l: 50 }, xaxis: { ...BASE_LAYOUT.xaxis, tickformat: 'd', title: { text: 'Survey year', font: { size: 12 } } }, yaxis: { ...BASE_LAYOUT.yaxis, autorange: true, showgrid: true, ticksuffix: '%', title: { text: 'Trees infected', font: { size: 12 } } } }, PLOT_CONFIG);
+    }
+
+    function renderPlots() {
+      const host = document.getElementById('plots-body');
+      if (!DATA.plots.length) {
+        host.innerHTML = emptyState('The plot network has not been established yet. When it is, this section will show:', [
+          'A map of plot locations across the subalpine zone.',
+          'Plot count, elevation range, and the species each plot represents.',
+          'Establishment year, last visit, and the number of remeasurements.',
+          'A downloadable plot table.',
+        ]);
+        return;
+      }
+      host.innerHTML = '<div class="card"><div class="card-head"><h3>Monitoring plots</h3></div><div id="plots-grid"></div></div>';
+      buildGrid('plots-grid', [
+        { field: 'plotId', headerName: 'Plot', minWidth: 90 },
+        { field: 'name', headerName: 'Name', flex: 2, minWidth: 160 },
+        { field: 'elevFt', headerName: 'Elevation (ft)', type: 'rightAligned', valueFormatter: p => fmt(p.value) },
+        { field: 'dominant', headerName: 'Dominant', valueFormatter: p => DOMINANCE_LABELS[p.value] ?? p.value },
+        { field: 'established', headerName: 'Established' },
+        { field: 'lastVisit', headerName: 'Last visit' },
+        { field: 'visits', headerName: 'Visits', type: 'rightAligned' },
+      ], DATA.plots, 'subalpine-plots');
+    }
+
+    /* ───────────────────────── MAP ───────────────────────── */
+    function buildMap() {
+      const container = document.getElementById('extent-map');
+      require(['esri/Map', 'esri/views/MapView', 'esri/layers/MapImageLayer', 'esri/widgets/Legend', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/widgets/Fullscreen'],
+        function (Map, MapView, MapImageLayer, Legend, Home, Expand, Fullscreen) {
+          const veg = new MapImageLayer({
+            url: SERVICE,
+            title: 'Subalpine conifer forest',
+            sublayers: [{
+              id: LAYER,
+              title: 'Subalpine conifer forest',
+              definitionExpression: WHERE,
+              renderer: {
+                type: 'unique-value',
+                field: 'REGIONAL_DOMINANCE_TYPE_1',
+                defaultSymbol: { type: 'simple-fill', color: [62, 114, 176, 0.55], outline: { width: 0 } },
+                defaultLabel: 'Subalpine conifer mix',
+                uniqueValueInfos: [
+                  { value: 'WB', label: 'Whitebark pine', symbol: { type: 'simple-fill', color: [228, 153, 55, 0.8], outline: { width: 0 } } },
+                  { value: 'WW', label: 'Western white pine', symbol: { type: 'simple-fill', color: [24, 140, 22, 0.75], outline: { width: 0 } } },
+                  { value: 'MH', label: 'Mountain hemlock', symbol: { type: 'simple-fill', color: [205, 171, 7, 0.85], outline: { width: 0 } } },
+                ],
+              },
+            }],
+          });
+          const map = new Map({ basemap: 'topo-vector', layers: [veg] });
+          const view = new MapView({ container, map, center: [-120.03, 39.05], zoom: 10, constraints: { snapToZoom: false } });
+          view.ui.move('zoom', 'top-left');
+          view.ui.add(new Home({ view }), 'top-left');
+          view.ui.add(new Fullscreen({ view }), 'top-left');
+          view.when(() => {
+            const legend = new Legend({ view, layerInfos: [{ layer: veg }] });
+            // Inline legend on wide screens. On phones use a drawer-mode Expand, which keeps the legend
+            // inside the map frame (floating mode renders a popover that can escape a short iframe).
+            LTI.placeLegend(view, legend, Expand);
+            container.querySelector('.map-placeholder')?.remove();
+          }).catch(err => {
+            const ph = container.querySelector('.map-placeholder');
+            if (ph) ph.textContent = 'The map could not be loaded. The figures above cover the same extent.';
+            console.error('Map failed to load', err);
+          });
+          LTI.guardMap(view);
+        });
+    }
+
+    /* Height reporting is handled by the kit. */
+    const notifyHeight = LTI.notifyHeight;
+
+    /* ───────────────────────── INIT ───────────────────────── */
+    (async function init() {
+      renderHealth();
+      renderPlots();
+      buildMap();
+      try {
+        stats = await loadLive();
+        live = true;
+      } catch (err) {
+        console.warn('Live query failed; using snapshot.', err);
+        stats = SNAPSHOT;
+      }
+      renderGlance();
+      renderCharts();
+      document.querySelectorAll('[data-source-line]').forEach(p => { p.textContent = `Source: TRPA Vegetation Type map service, ${live ? 'queried at page load' : `snapshot captured ${SNAPSHOT.captured}`}.`; });
+      document.getElementById('footer-vintage').textContent = `Vegetation figures ${live ? 'queried live from maps.trpa.org' : `from a snapshot captured ${SNAPSHOT.captured}`}. Plot data: none loaded.`;
+      notifyHeight();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+/* ltinfo-embed.css  v1.0.0  (Oct. 26, 2026)
+   Shared styles for TRPA pages that laketahoeinfo.org pulls in by URL: monitoring
+   dashboards, section embeds, and staff topic pages. Values are the platform's own
+   tokens, sampled from the live site (ltinfo-platform skill, Oct. 13, 2026) and the
+   Forest Health embeds (Oct. 4, 2026). Not a TRPA brand: the embed matches its host.
+
+   Usage
+     <html lang="en" data-site="monitoring" data-slot="card">
+     data-site  monitoring (default) | thresholds | transportation | climate
+                sets --lti-accent, the host's card header color, used for section
+                labels, tile bars, and Calcite controls.
+     data-slot  card (default, body #f7f7f7, a Dashboard card) | white (a threshold
+                or climate panel, or a section embed on a white card body).
+
+   Load after the Calcite and ArcGIS SDK stylesheets so the Calcite variables here win.
+   Pair with ltinfo-embed.js. Breaking changes go to kit/v2/, never to this file. */
+
+:root {
+  /* Platform */
+  --lti-primary:   #3e72b0;   /* page titles, primary series */
+  --lti-link:      #337ab7;   /* links in content */
+  --lti-navy:      #2f3f56;   /* header and footer, not used inside an embed */
+  --lti-green:     #89bf40;   /* platform green */
+  --lti-orange:    #e49937;
+  --lti-teal:      #5a9cb0;
+  --lti-olive:     #646820;
+  --lti-danger:    #be4c4c;
+
+  /* Site accents (card header color on each dashboard) */
+  --lti-accent-monitoring:     #789440;
+  --lti-accent-thresholds:     #6c91a4;
+  --lti-accent-transportation: #2c5282;
+  --lti-accent:       var(--lti-accent-monitoring);
+  --lti-accent-dark:  #61783a;
+  --lti-accent-press: #4e6230;
+
+  /* Grays, the host's 50 to 900 scale */
+  --gray-50:  #fafafa;
+  --gray-100: #efefef;
+  --gray-200: #dcdcdc;
+  --gray-300: #bdbdbd;
+  --gray-400: #989898;
+  --gray-500: #7c7c7c;
+  --gray-600: #656565;
+  --gray-700: #525252;
+  --gray-900: #3d3d3d;
+
+  /* Semantic */
+  --ink:       #333333;   /* card text */
+  --ink-2:     #3d3d3d;   /* label bars, headings */
+  --ink-muted: #8a8a8a;
+  --line:      #efefef;   /* card border */
+  --line-2:    rgba(0, 0, 0, 0.15);   /* row borders, section rules */
+  --surface:   #ffffff;
+  --surface-2: #f7f7f7;   /* card body on the host */
+  --page-bg:   var(--surface-2);
+  --radius:    4px;
+  --font:      'Lexend Deca', sans-serif;
+  --gutter:    16px;
+
+  /* Status, the platform scale */
+  --status-on-track:  #188c16;
+  --status-caution:   #efd13d;
+  --status-off-track: #be4c4c;
+  --status-no-target: #3e72b0;
+
+  /* Data colors. Validate any new categorical set with the dataviz skill. */
+  --chart-1: #3e72b0; --chart-2: #e49937; --chart-3: #89bf40; --chart-4: #5a9cb0;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+  --hazard-1: #3e72b0; --hazard-2: #e49937; --hazard-3: #be4c4c;   /* ordered hazard, low to high */
+  --seq-1: #daf0f3; --seq-2: #b9e1e8; --seq-3: #89cad7; --seq-4: #52aabe;
+  --seq-5: #368ea4; --seq-6: #30748a; --seq-7: #2c5f72;              /* sequential blue */
+
+  /* Calcite components (segmented controls, buttons, loaders) take the site accent. */
+  --calcite-ui-brand: var(--lti-accent); --calcite-ui-brand-hover: var(--lti-accent-dark); --calcite-ui-brand-press: var(--lti-accent-press);
+  --calcite-color-brand: var(--lti-accent); --calcite-color-brand-hover: var(--lti-accent-dark); --calcite-color-brand-press: var(--lti-accent-press);
+  --calcite-sans-family: var(--font); --calcite-font-family: var(--font);
+  --calcite-ui-text-1: var(--ink); --calcite-ui-text-2: var(--ink-2); --calcite-ui-text-3: var(--gray-600);
+  --calcite-color-text-1: var(--ink); --calcite-color-text-2: var(--ink-2); --calcite-color-text-3: var(--gray-600);
+  --calcite-button-corner-radius: var(--radius);
+}
+[data-site="thresholds"]     { --lti-accent: var(--lti-accent-thresholds);     --lti-accent-dark: #567a8c; --lti-accent-press: #466676; }
+[data-site="transportation"] { --lti-accent: var(--lti-accent-transportation); --lti-accent-dark: #1f3a5e; --lti-accent-press: #172c48; }
+[data-site="climate"]        { --lti-accent: var(--lti-primary);               --lti-accent-dark: #2f3f56; --lti-accent-press: #243043; }
+[data-slot="white"]          { --page-bg: var(--surface); }
+
+/* Base */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--font); font-size: 16px; line-height: 1.4;
+  color: var(--ink); background: var(--page-bg);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--lti-link); }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0.25rem var(--gutter) 1rem; }
+h2, h3 { margin: 0; line-height: 1.3; color: var(--gray-900); }
+h2 { font-size: 1.125rem; font-weight: 600; }
+h3 { font-size: 1rem; font-weight: 600; }
+p { margin: 0 0 0.6rem; }
+.muted { color: var(--ink-muted); }
+.small { font-size: 0.875rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hidden { display: none !important; }
+
+/* Sections: an uppercase accent label, a heading, and one lead paragraph */
+.section { padding: 1rem 0 0.5rem; }
+.section + .section { border-top: 1px solid var(--line-2); }
+.section-label {
+  font-size: 0.875rem; font-weight: 700; text-transform: uppercase;
+  color: var(--lti-accent); margin-bottom: 0.15rem;
+}
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.section-head p { color: var(--ink); margin: 0.25rem 0 0; max-width: 780px; }
+
+/* Stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin: 0.5rem 0 0.25rem; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--tile-accent, var(--lti-accent)); border-radius: var(--radius); padding: 0.7rem 0.85rem; min-width: 0; }
+.tile .v { font-size: 1.4rem; font-weight: 700; line-height: 1.15; color: var(--gray-900); }
+.tile .v small { font-size: 0.8rem; font-weight: 500; color: var(--gray-600); }
+.tile .l { font-size: 0.8rem; color: var(--gray-600); margin-top: 0.15rem; }
+.tile.pending { --tile-accent: var(--gray-300); }
+.tile.pending .v { color: var(--ink-muted); font-weight: 500; font-size: 1.05rem; }
+
+/* Layout grids */
+.grid-2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+.grid-3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+@media (min-width: 820px) {
+  .grid-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .span-2 { grid-column: 1 / -1; }
+}
+
+/* Cards follow the host: #efefef label bar (its h3.popover-header) over a white body */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 0 0.75rem; min-width: 0; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; background: var(--gray-100); color: var(--gray-900); padding: 0.5rem 1rem; border-radius: var(--radius) var(--radius) 0 0; margin: 0 0 0.6rem; }
+.card-head h3 { flex: 1 1 auto; font-size: 1rem; font-weight: 600; color: var(--gray-900); }
+.card > :not(.card-head) { margin-left: 1rem; margin-right: 1rem; }
+.card .caption { font-size: 0.85rem; color: var(--gray-600); margin: 0.5rem 1rem 0; }
+.card .source { font-size: 0.8rem; color: var(--ink-muted); margin: 0.3rem 1rem 0; }
+.plot { width: auto; min-height: 240px; }   /* auto, not 100%: the card gives it side margins */
+.chart-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.85rem; color: var(--ink); margin: 0 1rem 0.25rem; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.chart-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: 0 0 auto; }
+.grid-toolbar { display: flex; justify-content: flex-end; margin-bottom: 0.4rem; }
+
+/* Definition cards ("How it is measured") */
+.def { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 0 0.75rem; font-size: 0.9rem; }
+.def h3 { background: var(--gray-100); color: var(--gray-900); font-size: 0.95rem; padding: 0.5rem 1rem; margin: 0 0 0.5rem; border-radius: var(--radius) var(--radius) 0 0; }
+.def p { margin: 0 1rem 0.35rem; color: var(--ink); }
+.def p:last-child { margin-bottom: 0; }
+.def table { width: calc(100% - 2rem); margin: 0.3rem 1rem 0; border-collapse: collapse; font-size: 0.82rem; }
+.def th, .def td { text-align: left; padding: 0.25rem 0.35rem 0.25rem 0; border-bottom: 1px solid var(--line-2); color: var(--ink); }
+.def th { font-weight: 600; color: var(--gray-900); }
+.def td.num, .def th.num { text-align: right; padding-right: 0; }
+.def .small { margin-top: 0.3rem; }
+
+/* Maps */
+.map-view { width: auto; height: 460px; border-radius: var(--radius); overflow: hidden; background: var(--gray-50); position: relative; border: 1px solid var(--line-2); }
+.map-view .map-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); font-size: 0.875rem; gap: 0.5rem; }
+
+/* Empty state: say what will show here, never a chart from placeholder numbers */
+.empty {
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius);
+  padding: 0.9rem 1rem; color: var(--ink); font-size: 0.9rem;
+}
+.empty calcite-icon { flex: 0 0 auto; color: var(--ink-muted); margin-top: 2px; }
+.empty ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+.empty li { margin-bottom: 0.2rem; }
+
+/* Status badge, only where the host does not already show one */
+.badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 999px; color: #fff; background: var(--gray-500); }
+.badge.on-track { background: var(--status-on-track); }
+.badge.caution { background: var(--status-caution); color: var(--ink-2); }
+.badge.off-track { background: var(--status-off-track); }
+
+/* Narrative blocks for topic pages */
+.prose { max-width: 780px; }
+.prose p { margin: 0 0 0.8rem; }
+.prose ul, .prose ol { margin: 0 0 0.8rem; padding-left: 1.3rem; }
+.prose li { margin-bottom: 0.25rem; }
+
+/* AG Grid: 14px cells like the host, the #efefef label-bar header, #fafafa striping.
+   Legacy CSS-theme variables for ag-grid-community 32 and earlier. ltinfo-embed.js sets the
+   same values through the Theming API on 33 and later, so either version matches. */
+.ag-theme-quartz {
+  --ag-font-family: var(--font); --ag-font-size: 14px;
+  --ag-header-background-color: #efefef; --ag-header-foreground-color: #3d3d3d;
+  --ag-foreground-color: #181d1f; --ag-background-color: #ffffff; --ag-odd-row-background-color: #fafafa;
+  --ag-border-color: rgba(0, 0, 0, 0.1); --ag-row-border-color: rgba(0, 0, 0, 0.15);
+  --ag-wrapper-border-radius: 4px; --ag-header-height: 40px; --ag-row-height: 40px;
+  --ag-header-column-resize-handle-color: rgba(0, 0, 0, 0.15);
+  --ag-icon-font-color-header: #656565; --ag-header-cell-hover-background-color: #e3e3e3; --ag-header-font-weight: 600;
+}
+
+/* Footer: about the program, links, data vintage */
+.footer { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--line-2); font-size: 0.875rem; color: var(--gray-600); }
+.footer .links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem; }
+
+@media (max-width: 599px) {
+  html, body { font-size: 15px; }
+  .map-view { height: 360px; }
+  .tile .v { font-size: 1.25rem; }
+}
