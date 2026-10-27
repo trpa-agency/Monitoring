@@ -49,6 +49,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
+  <script src="../kit/ltinfo-map.js"></script>
 </head>
 <body class="lti-harness" data-slot="card">
   <main class="wrap">
@@ -72,7 +73,7 @@
         <div class="section-label">Monitoring sites</div>
         <div class="section-head">
           <h2>Counter locations and the record at each one</h2>
-          <p>Pick a site on the map or from the list. The chart shows that site's counts summed by month; the table view lists the same numbers and downloads as CSV.</p>
+          <p>Click a site on the map or pick it from the list. The map tells the site's story, the chart shows its counts by month against what is typical there, and the table lists the same numbers and downloads as CSV.</p>
         </div>
         <div class="card">
           <div class="card-head">
@@ -95,6 +96,7 @@
           </div>
           <div class="plot" data-ref="plot"></div>
           <div class="hidden" data-ref="grid"></div>
+          <div class="chart-legend" data-ref="series-legend"></div>
           <p class="caption" data-ref="series-caption"></p>
           <p class="source" data-ref="series-source"></p>
         </div>
@@ -139,7 +141,7 @@
           39.06
         ],
         "mapZoom": 10,
-        "seriesCaption": "Daily bicycle and pedestrian counts summed by month. Months with fewer counted days show lower totals; the table lists the days counted.",
+        "seriesCaption": "Bars are daily counts summed by month. The line is what this site typically records in that calendar month across its whole record, so a bar above the line is a busier month than usual. Months with fewer counted days show lower totals; the table lists the days counted.",
         "sourceName": "TRPA LTInfo_Monitoring map service, Bike and Pedestrian Counter Location and Counts",
         "exportPrefix": "bike-ped-counts"
       }

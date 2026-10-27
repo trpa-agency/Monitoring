@@ -1,0 +1,53 @@
+// kit/popups/bike-ped-counter.arcade
+// The story of one bicycle and pedestrian counter. Returns a text popup element.
+//
+// Runs on the client-side sites layer the sites-timeseries fragment builds, and in ArcGIS Pro
+// or a Portal web map on any layer carrying the same attributes:
+//   name       counter name
+//   n          days counted
+//   firstMs    first count date, epoch milliseconds
+//   lastMs     most recent count date, epoch milliseconds
+//   total      people counted over the whole record
+//   perDay     people per counted day
+//   rank       rank by total among sites with data (1 = busiest), may be empty
+//   sites      number of sites with data, may be empty
+//   trendPct   past 12 months against the 12 before, percent, empty until the record loads
+
+function ordinal(k) {
+  var r = k % 100;
+  if (r >= 11 && r <= 13) { return Text(k) + 'th'; }
+  var m = k % 10;
+  return Text(k) + When(m == 1, 'st', m == 2, 'nd', m == 3, 'rd', 'th');
+}
+
+var name = DefaultValue($feature.name, 'This counter');
+
+if (IsEmpty($feature.n) || $feature.n == 0) {
+  return {
+    type: 'text',
+    text: '<b>' + name + '</b> has no counts in the records table yet. The counter is mapped; its record will appear here when counts are loaded.'
+  };
+}
+
+var perDay = Round($feature.perDay);
+var first = Text(Date($feature.firstMs), 'MMMM Y');
+var last = Text(Date($feature.lastMs), 'MMM D, Y');
+
+var lead = '<b>About ' + Text(perDay, '#,###') + ' people a day</b> pass this counter';
+if (!IsEmpty($feature.rank) && !IsEmpty($feature.sites)) {
+  lead = lead + ', the ' + ordinal($feature.rank) + ' busiest of ' + Text($feature.sites) + ' sites with data';
+}
+lead = lead + '.';
+
+var record = 'Counting began ' + first + '. The most recent count is ' + last + ': ' +
+  Text($feature.n, '#,###') + ' counted days and ' + Text($feature.total, '#,###') + ' people in all.';
+
+var trend = '';
+if (!IsEmpty($feature.trendPct)) {
+  var p = Round(Abs($feature.trendPct));
+  trend = ' The past 12 months ran ' +
+    When(p < 1, 'about even with', $feature.trendPct > 0, Text(p) + ' percent above', Text(p) + ' percent below') +
+    ' the 12 before.';
+}
+
+return { type: 'text', text: lead + ' ' + record + trend };

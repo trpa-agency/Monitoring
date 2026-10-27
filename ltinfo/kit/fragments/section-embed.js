@@ -16,6 +16,8 @@ LTI.define('section-embed', async function (root, CONFIG, SNAPSHOT) {
   const { fmt, esc } = LTI;
   const $ = (name) => LTI.ref(root, name);
   const plotEl = $('plot'), gridEl = $('grid'), toggleEl = $('toggle');
+  const C = LTI.colors(root);
+  LTI.skeleton(plotEl, 340);
   CONFIG.seriesLabels = CONFIG.seriesLabels || {};
   SNAPSHOT = SNAPSHOT || { captured: 'unknown', rows: [] };
 
@@ -40,7 +42,7 @@ LTI.define('section-embed', async function (root, CONFIG, SNAPSHOT) {
     const seriesNames = [...new Set(rows.map(r => r.series))];
     const traces = [], legend = [];
     seriesNames.forEach((name, i) => {
-      const color = LTI.COLORS[i % LTI.COLORS.length];
+      const color = C[i % C.length];
       const label = CONFIG.seriesLabels[name] ?? name;
       const byX = new Map(rows.filter(r => r.series === name).map(r => [r.x, r]));
       const ys = xs.map(x => byX.get(x)?.y ?? null);
@@ -63,7 +65,7 @@ LTI.define('section-embed', async function (root, CONFIG, SNAPSHOT) {
       height: 340, showlegend: false, hovermode: 'x unified', barmode: 'group',
       xaxis: { type: CONFIG.xCategorical ? 'category' : undefined, title: { text: CONFIG.xLabel, font: { size: 12 } }, tickangle: LTI.narrow(root) ? -45 : 0 },
       yaxis: { title: { text: CONFIG.yLabel, font: { size: 12 } }, rangemode: 'tozero' },
-    });
+    }, root);
     LTI.plot(plotEl, traces, layout, LTI.PLOT_CONFIG);
     $('legend').innerHTML = seriesNames.length > 1 || CONFIG.targetField ? legend.join('') : '';
   }

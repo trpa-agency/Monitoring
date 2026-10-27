@@ -91,8 +91,23 @@
   color: var(--ink); background: transparent;
   -webkit-font-smoothing: antialiased;
 }
-.lti[data-site="thresholds"]     { --lti-accent: var(--lti-accent-thresholds);     --lti-accent-dark: #567a8c; --lti-accent-press: #466676; }
-.lti[data-site="transportation"] { --lti-accent: var(--lti-accent-transportation); --lti-accent-dark: #1f3a5e; --lti-accent-press: #172c48; }
+/* Per-site series palettes. The first color is the dashboard's own accent, so every chart on a
+   Monitoring Dashboard page leads with the monitoring green; the rest are drawn from the host
+   palette for contrast against it. LTI.colors(root) reads these. */
+.lti[data-site="monitoring"] {
+  --chart-1: #789440; --chart-2: #2f3f56; --chart-3: #b5a64c; --chart-4: #5a9cb0;
+  --chart-5: #e49937; --chart-6: #4e6230; --chart-7: #89cad7; --chart-8: #9c3e27;
+}
+.lti[data-site="thresholds"] {
+  --lti-accent: var(--lti-accent-thresholds); --lti-accent-dark: #567a8c; --lti-accent-press: #466676;
+  --chart-1: #6c91a4; --chart-2: #2f3f56; --chart-3: #e49937; --chart-4: #89bf40;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+}
+.lti[data-site="transportation"] {
+  --lti-accent: var(--lti-accent-transportation); --lti-accent-dark: #1f3a5e; --lti-accent-press: #172c48;
+  --chart-1: #2c5282; --chart-2: #e49937; --chart-3: #89bf40; --chart-4: #5a9cb0;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+}
 .lti[data-site="climate"]        { --lti-accent: var(--lti-primary);               --lti-accent-dark: #2f3f56; --lti-accent-press: #243043; }
 
 /* Harness page: the document around a fragment on GitHub Pages. Not part of the fragment. */
@@ -167,9 +182,31 @@ body.lti-harness[data-slot="white"] { background: #ffffff; }
 .lti .def td.num, .lti .def th.num { text-align: right; padding-right: 0; }
 .lti .def .small { margin-top: 0.3rem; }
 
+/* Skeletons: the shape of what is coming, in gray, while queries run */
+@keyframes lti-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.lti .skeleton { position: relative; overflow: hidden; color: transparent !important; }
+.lti .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-50) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: lti-shimmer 1.6s linear infinite; border-radius: var(--radius); }
+.lti .tile.skeleton { --tile-accent: var(--gray-200); }
+.lti .tile.skeleton::after { inset: 0.5rem 0.75rem; }
+.lti .plot.skeleton { min-height: 240px; }
+@media (prefers-reduced-motion: reduce) { .lti .skeleton::after { animation: none; } }
+
+/* Tiles: an optional direction line under the label */
+.lti .tile .d { font-size: 0.78rem; color: var(--gray-600); margin-top: 0.2rem; }
+
 /* Maps */
 .lti .map-view { width: auto; height: 460px; border-radius: var(--radius); overflow: hidden; background: var(--gray-50); position: relative; border: 1px solid var(--line-2); }
 .lti .map-view .map-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); font-size: 0.875rem; gap: 0.5rem; }
+.lti .map-view .lti-map-ctl { padding: 3px 8px 3px 10px; font-family: var(--font); font-size: 0.8rem; --calcite-label-margin-bottom: 0; }
+.lti .map-view .lti-map-ctl calcite-label { --calcite-label-margin-bottom: 0; margin: 0; color: var(--ink); }
+.lti .map-view .esri-popup__main-container { font-family: var(--font); max-width: 340px; }
+.lti .map-view .esri-popup--is-docked .esri-popup__main-container { width: 320px; max-height: calc(100% - 16px); }
+.lti .map-view .esri-popup__content { margin: 0 15px 10px; }
+.lti .map-view .esri-popup__media-chart { min-height: 150px; }
+.lti .map-view .esri-popup__media-item { max-width: 100%; }
+@media (max-width: 599px) { .lti .map-view .esri-popup--is-docked .esri-popup__main-container { width: calc(100% - 60px); } }
+.lti .map-view .esri-feature__text, .lti .map-view .esri-feature__content-element { font-family: var(--font); font-size: 0.875rem; line-height: 1.45; color: var(--ink); }
+.lti .map-view .esri-popup__header-title { font-family: var(--font); font-weight: 600; font-size: 0.95rem; }
 
 /* Sites fragment: the picker in the card head and the facts list under the map */
 .lti .site-picker { min-width: 260px; max-width: 100%; }

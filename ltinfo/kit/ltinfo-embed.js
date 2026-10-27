@@ -18,12 +18,15 @@
      LTI.define(kind, fn), LTI.mount(root), LTI.mountAll(scope), LTI.include(el, url)
      LTI.ref(root, name)                                                root.querySelector('[data-ref=name]')
      LTI.FONT, LTI.INK, LTI.COLORS, LTI.HAZARD, LTI.SEQ, LTI.accent(root) colors and font
-     LTI.layout(overrides), LTI.PLOT_CONFIG                              Plotly defaults
+     LTI.colors(root)                                                   the fragment's series palette (per data-site)
+     LTI.layout(overrides, root), LTI.PLOT_CONFIG                        Plotly defaults, colorway from the root's palette
      LTI.plot(el, traces, layout, config)                               draw a chart (always this, never Plotly.newPlot)
      LTI.showEmpty(el, title, bullets)                                  swap a chart container for an empty state
+     LTI.skeleton(el, height), LTI.skeletonTiles(el, n)                 gray stand-ins while queries run
+     LTI.change(now, before, unit, when)                                'up from 30 sites in 2022'
      LTI.fmt(n, decimals), LTI.esc(s), LTI.narrow(el), LTI.wrapLabel(s, el)
      LTI.query(url, params)                                             ArcGIS REST query with a JSONP fallback
-     LTI.load(loader, snapshot)                                         live data or the snapshot, and which one
+     LTI.load(loader, snapshot, onSnapshot)                             live data or the snapshot, and which one; snapshot first if live is slow
      LTI.hbar(el, entries, opts)                                        horizontal bar of a {key: value} object
      LTI.grid(el, columnDefs, rowData, exportName)                      AG Grid with the host look and a CSV button
      LTI.toggle(control, views)                                         Chart/Table segmented control wiring
@@ -52,6 +55,14 @@
   const HAZARD = ['#3e72b0', '#e49937', '#be4c4c'];
   const SEQ = ['#daf0f3', '#b9e1e8', '#89cad7', '#52aabe', '#368ea4', '#30748a', '#2c5f72'];
   const accent = (el) => cssVar('--lti-accent', '#789440', el || document.querySelector('.lti') || root);
+  /* The chart series for a fragment: --chart-1 to --chart-8 as computed on its root, which the
+     stylesheet sets per data-site (monitoring green first, thresholds slate first, and so on). */
+  const colors = (el) => {
+    el = el || document.querySelector('.lti') || root;
+    const out = [];
+    for (let i = 1; i <= 8; i++) { const c = cssVar(`--chart-${i}`, '', el); if (c) out.push(c); }
+    return out.length ? out : COLORS;
+  };
 
   /* Formatting */
   const fmt = (n, d = 0) => (n === null || n === undefined || Number.isNaN(Number(n))) ? '—'
@@ -68,7 +79,7 @@
 
   /* Plotly */
   const PLOT_CONFIG = { responsive: true, displayModeBar: false, displaylogo: false };
-  function layout(overrides = {}) {
+  function layout(overrides = {}, el) {
     const base = {
       font: { family: FONT, color: INK, size: 13 },
       paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
@@ -76,7 +87,7 @@
       xaxis: { gridcolor: '#dcdcdc', zerolinecolor: '#bdbdbd', linecolor: '#bdbdbd', automargin: true },
       yaxis: { gridcolor: '#dcdcdc', zeroline: false, automargin: true, tickfont: { size: 12 } },
       hoverlabel: { font: { family: FONT }, bgcolor: '#FFFFFF', bordercolor: '#bdbdbd' },
-      colorway: COLORS,
+      colorway: el ? colors(el) : COLORS,
       legend: { orientation: 'h', y: -0.2 },
       uniformtext: { minsize: 9, mode: 'hide' },
     };
@@ -93,8 +104,21 @@
      size changes after the first draw. */
   function plot(el, traces, lay, config) {
     el = byId(el);
+    if (!el.data) el.innerHTML = '';          // a skeleton or a loading note, not a chart yet
+    el.classList.remove('skeleton');
+    el.classList.add('plot');
     if (lay && lay.height) el.style.height = lay.height + 'px';
     return Plotly.newPlot(el, traces, lay, config || PLOT_CONFIG);
+  }
+  /* Skeletons: gray blocks in the shape of what is coming, never a spinner alone. */
+  function skeleton(el, height) {
+    el = byId(el);
+    el.classList.add('skeleton');
+    if (height) el.style.height = height + 'px';
+  }
+  function skeletonTiles(el, n = 4) {
+    el = byId(el);
+    el.innerHTML = Array.from({ length: n }, () => '<div class="tile skeleton" aria-hidden="true"><div class="v">&nbsp;</div><div class="l">&nbsp;</div></div>').join('');
   }
   /* Replace a chart container's contents with an empty state (see emptyState below). */
   function showEmpty(el, title, bullets) {
@@ -138,15 +162,41 @@
   }
 
   /* Run the live loader; fall back to the snapshot. Returns { data, live }.
-     The snapshot must carry the same shape as the loader's result plus `captured`. */
-  async function load(loader, snapshot) {
+     The snapshot must carry the same shape as the loader's result plus `captured`.
+     With onSnapshot, the snapshot is handed over after `wait` ms (default 1000) if the live
+     query is still running, so the page never sits blank; the live result still resolves and
+     the caller renders again. Two QA switches in the page URL: ?lti-snapshot=1 makes the live
+     query fail at once, ?lti-slow=1 delays it three seconds. */
+  async function load(loader, snapshot, onSnapshot, wait = 1000) {
+    let settled = false;
+    const run = async () => {
+      if (params['lti-snapshot']) throw new Error('Snapshot forced by ?lti-snapshot');
+      if (params['lti-slow']) await new Promise(r => setTimeout(r, 3000));
+      return loader();
+    };
+    const timer = onSnapshot && snapshot ? setTimeout(() => {
+      if (settled) return;
+      console.info(`LTI: live query still running after ${wait} ms, showing the snapshot first.`);
+      try { onSnapshot({ data: snapshot, live: false }); } catch (e) { console.error(e); }
+    }, wait) : null;
     try {
-      const data = await loader();
+      const data = await run();
+      settled = true; if (timer) clearTimeout(timer);
       return { data, live: true };
     } catch (err) {
+      settled = true; if (timer) clearTimeout(timer);
       console.warn('Live query failed; using snapshot.', err);
       return { data: snapshot, live: false };
     }
+  }
+
+  /* A direction phrase for a tile or a caption: change(20, 30, 'sites', 2022) -> 'down from 30 in 2022'. */
+  function change(now, before, unit = '', when = '') {
+    if (before === null || before === undefined || now === null || now === undefined) return '';
+    const tail = `${fmt(before)}${unit ? ' ' + unit : ''}${when ? ' in ' + when : ''}`;
+    if (now > before) return `up from ${tail}`;
+    if (now < before) return `down from ${tail}`;
+    return `same as ${when || 'before'}`;
   }
 
   function sourceText(live, captured, serviceName) {
@@ -157,7 +207,7 @@
      hoverName, sort (default true). Returns the rows for a table view. */
   function hbar(el, entries, { labels = {}, color, height, unit = '', axisTitle, hoverName = '', sort = true, decimals = 0 } = {}) {
     el = byId(el);
-    color = color || COLORS[0];
+    color = color || colors(el.closest('.lti') || el)[0];
     let rows = Object.entries(entries).map(([k, v]) => ({ key: k, label: labels[k] ?? (k || 'Not classified'), value: Number(v) || 0 }));
     if (sort) rows.sort((a, b) => b.value - a.value);
     const total = rows.reduce((a, r) => a + r.value, 0) || 1;
@@ -383,11 +433,11 @@
   else mountAll();
 
   window.LTI = {
-    FONT, INK, COLORS, HAZARD, SEQ, accent,
+    FONT, INK, COLORS, HAZARD, SEQ, accent, colors,
     layout, targetLine, PLOT_CONFIG, plot,
     fmt, esc, narrow, wrapLabel, ref,
     query, load, sourceText,
-    hbar, grid, toggle, showPlot, showGrid, emptyState, showEmpty,
+    hbar, grid, toggle, showPlot, showGrid, emptyState, showEmpty, skeleton, skeletonTiles, change,
     guardMap, placeLegend,
     params: () => ({ ...params }), onParams, setParam,
     notifyHeight,
