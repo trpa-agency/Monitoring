@@ -46,12 +46,9 @@ LTI.define('section-embed', async function (root, CONFIG, SNAPSHOT) {
       const label = CONFIG.seriesLabels[name] ?? name;
       const byX = new Map(rows.filter(r => r.series === name).map(r => [r.x, r]));
       const ys = xs.map(x => byX.get(x)?.y ?? null);
-      traces.push({
-        type: CONFIG.chartType === 'bar' ? 'bar' : 'scatter', mode: 'lines+markers', name: label,
-        x: xs, y: ys, connectgaps: true,
-        line: { color, width: 2 }, marker: { color, size: 7 },
-        hovertemplate: `${esc(label)}: %{y:,.${CONFIG.decimals}f}<extra></extra>`,
-      });
+      traces.push(CONFIG.chartType === 'bar'
+        ? { type: 'bar', name: label, x: xs, y: ys, marker: { color }, hovertemplate: `${esc(label)}: %{y:,.${CONFIG.decimals}f}<extra></extra>` }
+        : { type: 'scatter', mode: 'lines+markers', name: label, x: xs, y: ys, connectgaps: true, line: { color, width: 2 }, marker: { color, size: 7 }, hovertemplate: `${esc(label)}: %{y:,.${CONFIG.decimals}f}<extra></extra>` });
       const target = rows.find(r => r.series === name && r.target !== null)?.target;
       if (target !== undefined && target !== null) {
         traces.push({

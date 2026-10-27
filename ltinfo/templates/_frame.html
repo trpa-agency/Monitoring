@@ -86,7 +86,7 @@
     <strong>Review mock.</strong> This imitates monitoring.laketahoeinfo.org around a TRPA page. Only the framed content ships.
     <form id="controls" style="display:contents">
       <label>Mode <select name="mode" id="mode"><option value="dashboard">Dashboard card</option><option value="section">Embed section</option><option value="topic">Staff topic page</option></select></label>
-      <label>Page <select id="pick"><option value="program-dashboard.html">program-dashboard.html</option><option value="section-embed.html">section-embed.html</option><option value="sites-timeseries.html">sites-timeseries.html</option><option value="topic-page.html">topic-page.html</option><option value="">other</option></select></label>
+      <label>Page <select id="pick"><option value="program-dashboard.html">program-dashboard.html</option><option value="section-embed.html">section-embed.html</option><option value="sites-timeseries.html">sites-timeseries.html</option><option value="topic-page.html">topic-page.html</option><option value="../pages/bike-ped/index.html">pages/bike-ped</option><option value="../pages/noise/index.html">pages/noise</option><option value="../pages/forest-health/index.html">pages/forest-health</option><option value="">other</option></select></label>
       <label>URL <input name="page" id="page" placeholder="relative path or https://..." /></label>
       <button type="submit">Load</button>
     </form>
@@ -151,8 +151,11 @@
       'sites-timeseries.html': { title: 'Bicycle and Pedestrian', cat: 'Transportation', desc: 'Automated counters on shared-use paths and roadways record daily bicycle and pedestrian traffic across the Basin.' },
       'section-embed.html': { title: 'Noise - Plan Areas', cat: 'Noise', desc: 'Community noise levels measured at sites grouped by land use, compared with the standard for each category.' },
       'topic-page.html': { title: 'Noise in the Tahoe Basin', cat: 'Noise', desc: '', vanity: 'noise' },
+      'pages/bike-ped': { title: 'Bicycle and Pedestrian', cat: 'Transportation', desc: 'Automated counters on shared-use paths and roadways record daily bicycle and pedestrian traffic across the Basin.' },
+      'pages/noise': { title: 'Noise in the Tahoe Basin', cat: 'Noise', desc: '', vanity: 'noise' },
+      'pages/forest-health': { title: 'Forest Health Monitoring', cat: 'Forest Health', desc: '', vanity: 'forest-health' },
     };
-    const d = defaults[page.split('/').pop()] || { title: 'Monitoring Program', cat: 'Category', desc: '' };
+    const d = defaults[page.split('/').pop()] || (Object.entries(defaults).find(([k]) => k.startsWith('pages/') && page.includes(k)) || [])[1] || { title: 'Monitoring Program', cat: 'Category', desc: '' };
     const title = q.get('title') || d.title;
     const vanity = q.get('vanity') || d.vanity || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
@@ -189,7 +192,7 @@
     // Toolbar
     document.getElementById('mode').value = mode;
     const pick = document.getElementById('pick'), input = document.getElementById('page');
-    pick.value = defaults[page] ? page : ''; input.value = page;
+    pick.value = [...pick.options].some(o => o.value === page) ? page : ''; input.value = page;
     pick.addEventListener('change', () => { if (pick.value) input.value = pick.value; });
     document.getElementById('controls').addEventListener('submit', (e) => {
       e.preventDefault();
