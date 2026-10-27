@@ -1,0 +1,40 @@
+// kit/popups/yellow-cress-site.arcade
+// The story of one Tahoe yellow cress site in the latest survey year. Returns a text popup
+// element.
+//
+// Runs on the client-side sites layer the program dashboard builds from LTInfo_Monitoring
+// layer 9 (one row per site and year), and in ArcGIS Pro or a Portal web map on any layer
+// carrying the same attributes:
+//   name           site name
+//   year           the survey year shown
+//   status         'Surveyed' or 'No Survey'
+//   owner          land owner, spelled out
+//   count          plants counted in that year, empty when not recorded
+//   firstYear      first year the site appears in the record
+//   surveyedYears  number of years the site was surveyed
+//   occupiedYears  number of surveyed years with at least one plant, empty when counts are not recorded
+//   lastOccupied   most recent year with at least one plant, may be empty
+
+var name = DefaultValue($feature.name, 'This site');
+var year = Text($feature.year);
+var owner = DefaultValue($feature.owner, 'unlisted');
+var surveyed = $feature.status == 'Surveyed';
+
+var lead = IIf(surveyed, '<b>Surveyed in ' + year + '</b>', '<b>Not surveyed in ' + year + '</b>') + '. Land owner: ' + owner + '.';
+
+var count = '';
+if (surveyed && !IsEmpty($feature.count)) {
+  count = IIf($feature.count > 0,
+    ' Plants counted that year: ' + Text($feature.count, '#,###') + '.',
+    ' No plants were found that year.');
+}
+
+var history = ' Tracked since ' + Text($feature.firstYear) + ' across ' + Text($feature.surveyedYears) + ' survey years';
+if (!IsEmpty($feature.occupiedYears)) {
+  history = history + '; plants were found in ' + Text($feature.occupiedYears) + ' of them' +
+    IIf(!IsEmpty($feature.lastOccupied), ', most recently in ' + Text($feature.lastOccupied), '') + '.';
+} else {
+  history = history + '.';
+}
+
+return { type: 'text', text: lead + count + history };

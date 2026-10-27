@@ -4,12 +4,25 @@ name: Lake Tahoe Currents daily update
 # Nothing is committed: the previous archive is read from the live site, merged with the
 # latest TERC hours and airport winds, and the Currents folder is redeployed under
 # https://trpa-agency.github.io/Monitoring/Currents/. Pages source: GitHub Actions.
-# The site root only redirects to Currents/ for now; other Monitoring tools can be added beside it.
+# The site root only redirects to Currents/ for now.
+#
+# The same deployment also stages ltinfo/ (the LT Info Monitoring prototypes) under
+# https://trpa-agency.github.io/Monitoring/ltinfo/. A Pages deployment replaces the whole
+# site, so one workflow has to stage everything; a push that touches ltinfo/ runs the full
+# job, including the archive refresh, which is harmless because the refresh merges from the
+# live site.
 
 on:
   schedule:
     - cron: "30 14 * * *"   # 14:30 UTC, 7:30 a.m. Pacific daylight time
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "ltinfo/**"
+      - "Currents/index.html"
+      - "Currents/assets/**"
+      - ".github/workflows/currents-daily.yml"
 
 permissions:
   contents: read
@@ -48,6 +61,12 @@ jobs:
           <link rel="canonical" href="https://trpa-agency.github.io/Monitoring/Currents/" /></head>
           <body><p>Redirecting to <a href="Currents/">Lake Tahoe Currents</a>.</p></body></html>
           EOF
+
+      - name: Stage the LT Info prototypes
+        run: |
+          mkdir -p site/ltinfo
+          cp -r ltinfo/kit ltinfo/templates ltinfo/pages site/ltinfo/
+          cp ltinfo/CONTRACT.md ltinfo/PLAN.md site/ltinfo/
 
       - name: Update the archive
         working-directory: Currents
