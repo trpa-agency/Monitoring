@@ -331,7 +331,11 @@
   let lastHeight = 0;
   function notifyHeight() {
     if (!framed) return;
-    const height = Math.ceil(root.scrollHeight);
+    // The content height, from the body. documentElement.scrollHeight is never smaller than
+    // the iframe itself, so a frame that starts taller than its content, or grows once while
+    // the page loads, would never shrink back.
+    const b = document.body;
+    const height = Math.ceil(b ? Math.max(b.scrollHeight, b.getBoundingClientRect().height) : root.scrollHeight);
     if (height === lastHeight) return;
     lastHeight = height;
     window.parent.postMessage({ type: 'ltinfo-embed:height', height, source }, '*');

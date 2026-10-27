@@ -56,7 +56,7 @@ Today's Dashboard card loads a URL in an iframe at a fixed height (about 765 px)
 
 | Direction | Message | When | Fields |
 |---|---|---|---|
-| page to host | `{ type: 'ltinfo-embed:height', height: 1234, source: 'subalpine-conifer' }` | load, resize, any content size change, after a Chart/Table switch | `height` is `document.documentElement.scrollHeight` in CSS pixels; `source` is the page's `data-embed` name |
+| page to host | `{ type: 'ltinfo-embed:height', height: 1234, source: 'subalpine-conifer' }` | load, resize, any content size change, after a Chart/Table switch | `height` is the content height, `document.body.scrollHeight`, in CSS pixels (not `documentElement.scrollHeight`, which never reports less than the iframe's own height, so the frame could grow but never shrink); `source` is the page's `data-embed` name |
 | host to page | `{ type: 'ltinfo-embed:params', params: { site: '651' } }` | after the iframe loads, and when the host wants to change a selection | any string keys; the page merges them with its URL query parameters |
 
 If LT Info sets the iframe height from the height message (requested framework change 5), the card stops clipping at 765 px. If it does not, the pages still render at the fixed height with their own scroll. Both sides check `type` only until an origin allowlist exists. This section goes away when inline rendering lands.
