@@ -1,151 +1,120 @@
 <!DOCTYPE html>
-<html lang="en" data-site="monitoring" data-slot="white" data-embed="topic-page">
+<html lang="en" data-embed="topic-page">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Topic page template</title>
-  <meta name="description" content="A long-form monitoring topic page: narrative blocks and embedded charts, maps, and site explorers, built for a staff page at a vanity URL on the Lake Tahoe Info Monitoring Dashboard." />
+  <meta name="description" content="A long-form monitoring topic page: narrative blocks with charts, maps, and site explorers rendered inline, built for a staff page at a vanity URL on the Lake Tahoe Info Monitoring Dashboard." />
 
   <!--
-    TEMPLATE: staff topic page. Narrative blocks and embed sections on one page, for the
+    TEMPLATE: staff topic page. Narrative blocks and fragment sections on one page, for the
     staff page type at a vanity URL under monitoring.laketahoeinfo.org (requested framework
-    change 2). In that framework the narrative is written in the CMS and each embed is a
-    section record; this file is the whole page in one place so the result can be reviewed
-    now and split later. It also works as-is in the Dashboard card. See ../CONTRACT.md.
+    change 2). In ESA's framework the narrative is written in the CMS and each fragment is a
+    section record rendered inline on their origin. This file stands in for that page so the
+    result can be reviewed now. See ../CONTRACT.md.
 
-    Each embed is an iframe pointing at another page built on the kit (a section embed, a
-    sites page, a program dashboard). This page listens for their height messages and sizes
-    each frame, which is the contract LT Info will implement, and posts its own height up.
+    Each fragment section is a <div data-lti-include="..."> pointing at a harness page built
+    on the kit. On load the kit fetches that page, takes the fragment between its markers
+    (markup, config, snapshot), puts it in the placeholder, loads the fragment's module, and
+    mounts it inline. No iframes. Two or more fragments on one page do not interact. If a
+    fragment cannot be fetched or mounted, the placeholder's own children show instead: keep a
+    one-line description and a direct link there.
 
     To make a page from this file:
       1. Copy it, fix the kit paths, set data-embed on <html>.
       2. Write the narrative in the .prose blocks. Keep each block to a few short paragraphs;
-         the embeds carry the numbers.
-      3. Point each iframe's data-src at a built page. Give every iframe a title.
+         the fragments carry the numbers.
+      3. Point each data-lti-include at a built harness page. Write its fallback.
       4. Edit the jump list and the Related links.
       5. Check at 980 and 375 px, then run trpa-dashboard-qa.
 
-    Default content: a short page on noise monitoring with the plan area noise section embed
-    and the bike and pedestrian sites page as examples of embed sections.
+    Default content: a short page on noise monitoring with the plan area noise section and
+    the bicycle and pedestrian sites fragment as examples of inline sections.
   -->
 
+  <!-- The page loads every library its fragments need, once. In ESA's framework the layout does this. -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
   <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
-  <style>
-    .lead { font-size: 1.05rem; color: var(--ink); max-width: 780px; margin: 0.25rem 0 0.75rem; }
-    .jump { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.875rem; margin: 0 0 0.5rem; padding: 0; list-style: none; }
-    .jump a { text-decoration: none; }
-    .jump a:hover { text-decoration: underline; }
-    .embed-section { margin: 0.75rem 0 0.25rem; }
-    .embed-section iframe { display: block; width: 100%; border: 0; background: var(--surface-2); border-radius: var(--radius); min-height: 320px; }
-    .embed-section .embed-note { font-size: 0.8rem; color: var(--ink-muted); margin: 0.3rem 0 0; }
-    .embed-fallback { display: none; }
-    .embed-section.failed iframe { display: none; }
-    .embed-section.failed .embed-fallback { display: block; }
-    .related { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem; }
-    .related a { display: block; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--lti-accent); border-radius: var(--radius); padding: 0.6rem 0.8rem; text-decoration: none; color: var(--ink); font-size: 0.9rem; }
-    .related a strong { display: block; color: var(--lti-link); margin-bottom: 0.15rem; }
-  </style>
 </head>
-<body>
-  <main class="wrap">
+<body class="lti-harness" data-slot="white">
+  <main class="wrap wide">
+    <div class="lti" data-site="monitoring">
 
-    <!-- LEAD -->
-    <section class="section" aria-labelledby="lead-h">
-      <div class="section-label">Overview</div>
-      <h2 id="lead-h">Noise in the Tahoe Basin: what is measured and what the record shows</h2>
-      <p class="lead">TRPA monitors noise in three settings: plan areas across the Basin, the shoreline, and the highway corridors. Each has its own standard, its own sites, and its own cycle. This page gathers the three records in one place.</p>
-      <ul class="jump" aria-label="On this page">
-        <li><a href="#plan-areas">Plan area noise</a></li>
-        <li><a href="#shoreline">Shoreline</a></li>
-        <li><a href="#sites">Site explorer</a></li>
-        <li><a href="#related">Related</a></li>
-      </ul>
-    </section>
+      <!-- LEAD -->
+      <section class="section" id="overview" aria-label="Overview">
+        <div class="section-label">Overview</div>
+        <h2>Noise in the Tahoe Basin: what is measured and what the record shows</h2>
+        <p class="lead">TRPA monitors noise in three settings: plan areas across the Basin, the shoreline, and the highway corridors. Each has its own standard, its own sites, and its own cycle. This page gathers the three records in one place.</p>
+        <ul class="jump" aria-label="On this page">
+          <li><a href="#plan-areas">Plan area noise</a></li>
+          <li><a href="#shoreline">Shoreline</a></li>
+          <li><a href="#sites">Site explorer</a></li>
+          <li><a href="#related">Related</a></li>
+        </ul>
+      </section>
 
-    <!-- NARRATIVE + EMBED -->
-    <section class="section" id="plan-areas" aria-labelledby="plan-h">
-      <div class="section-label">Plan area noise</div>
-      <div class="section-head"><h2 id="plan-h">Community noise by land use</h2></div>
-      <div class="prose">
-        <p>Plan area monitoring measures the community noise equivalent level (CNEL), a 24-hour average that weights evening and night noise more heavily, at sites grouped by land use. Each land use category has its own standard, from 45 decibels in wilderness and critical wildlife habitat to 65 in industrial areas.</p>
-        <p>The chart below shows the average CNEL across sites in four categories for each monitoring period since 1987, against each category's standard.</p>
-      </div>
-      <div class="embed-section">
-        <iframe title="Plan area noise: average CNEL by land use category" data-src="section-embed.html" loading="lazy"></iframe>
-        <div class="embed-fallback">
-          <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This chart did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="section-embed.html" target="_blank" rel="noopener noreferrer">Plan area noise by land use category</a>.</p></div></div>
+      <!-- NARRATIVE + FRAGMENT -->
+      <section class="section" id="plan-areas" aria-label="Plan area noise">
+        <div class="section-label">Plan area noise</div>
+        <div class="section-head"><h2>Community noise by land use</h2></div>
+        <div class="prose">
+          <p>Plan area monitoring measures the community noise equivalent level (CNEL), a 24-hour average that weights evening and night noise more heavily, at sites grouped by land use. Each land use category has its own standard, from 45 decibels in wilderness and critical wildlife habitat to 65 in industrial areas.</p>
+          <p>The chart below shows the average CNEL across sites in four categories for each monitoring period since 1987, against each category's standard.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="shoreline" aria-labelledby="shore-h">
-      <div class="section-label">Shoreline</div>
-      <div class="section-head"><h2 id="shore-h">Single-event noise on the water</h2></div>
-      <div class="prose">
-        <p>Shoreline monitoring records single noise events, mostly from watercraft, at sites around the lake. The standard is the number of events above the limit per day, so the measure is an exceedance rate rather than an average level.</p>
-        <p>Replace this block with the shoreline narrative and add a section embed for the exceedance record (LTInfo_Monitoring table 78) built from the section-embed template.</p>
-      </div>
-    </section>
-
-    <section class="section" id="sites" aria-labelledby="sites-h">
-      <div class="section-label">Site explorer</div>
-      <div class="section-head"><h2 id="sites-h">An embedded sites page</h2></div>
-      <div class="prose">
-        <p>A topic page can carry a whole sites explorer as one of its sections. This one is the bicycle and pedestrian counter page, included here to show how a larger embed sits inside the narrative; a noise page would embed the noise sites instead.</p>
-      </div>
-      <div class="embed-section">
-        <iframe title="Bicycle and pedestrian counter sites and monthly counts" data-src="sites-timeseries.html" loading="lazy"></iframe>
-        <div class="embed-fallback">
-          <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This page did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="sites-timeseries.html" target="_blank" rel="noopener noreferrer">Bicycle and pedestrian counter sites</a>.</p></div></div>
+        <div data-lti-include="section-embed.html">
+          <div class="include-fallback">
+            <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This chart did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="section-embed.html" target="_blank" rel="noopener noreferrer">Plan area noise by land use category</a>.</p></div></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- RELATED -->
-    <section class="section" id="related" aria-labelledby="related-h">
-      <div class="section-label">Related</div>
-      <div class="section-head"><h2 id="related-h">Where to go next</h2></div>
-      <div class="related">
-        <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/61" target="_blank" rel="noopener noreferrer"><strong>Noise: Plan Areas</strong>Program record, partners, and documents</a>
-        <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/62" target="_blank" rel="noopener noreferrer"><strong>Noise: Shorezone</strong>Program record, partners, and documents</a>
-        <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/65" target="_blank" rel="noopener noreferrer"><strong>Noise: Highways</strong>Program record, partners, and documents</a>
-        <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer"><strong>Threshold Dashboard: Noise</strong>Status and trend against the standards</a>
-      </div>
-    </section>
+      <section class="section" id="shoreline" aria-label="Shoreline">
+        <div class="section-label">Shoreline</div>
+        <div class="section-head"><h2>Single-event noise on the water</h2></div>
+        <div class="prose">
+          <p>Shoreline monitoring records single noise events, mostly from watercraft, at sites around the lake. The standard is the number of events above the limit per day, so the measure is an exceedance rate rather than an average level.</p>
+          <p>Replace this block with the shoreline narrative and add a section for the exceedance record (LTInfo_Monitoring table 78) built from the section-embed template.</p>
+        </div>
+      </section>
 
-    <div class="footer">
-      <div>Narrative by TRPA staff. Charts and maps are TRPA pages hosted on GitHub Pages and embedded here; each states its own source and data vintage.</div>
-      <div style="margin-top:0.4rem">Page updated Oct. 26, 2026.</div>
+      <section class="section" id="sites" aria-label="Site explorer">
+        <div class="section-label">Site explorer</div>
+        <div class="section-head"><h2>A sites fragment inline</h2></div>
+        <div class="prose">
+          <p>A topic page can carry a whole sites explorer as one of its sections. This one is the bicycle and pedestrian counter fragment, included here to show how a larger fragment sits inside the narrative; a noise page would include the noise sites instead.</p>
+        </div>
+        <div data-lti-include="sites-timeseries.html">
+          <div class="include-fallback">
+            <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This section did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="sites-timeseries.html" target="_blank" rel="noopener noreferrer">Bicycle and pedestrian counter sites</a>.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RELATED -->
+      <section class="section" id="related" aria-label="Related">
+        <div class="section-label">Related</div>
+        <div class="section-head"><h2>Where to go next</h2></div>
+        <div class="related">
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/61" target="_blank" rel="noopener noreferrer"><strong>Noise: Plan Areas</strong>Program record, partners, and documents</a>
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/62" target="_blank" rel="noopener noreferrer"><strong>Noise: Shorezone</strong>Program record, partners, and documents</a>
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/65" target="_blank" rel="noopener noreferrer"><strong>Noise: Highways</strong>Program record, partners, and documents</a>
+          <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer"><strong>Threshold Dashboard: Noise</strong>Status and trend against the standards</a>
+        </div>
+      </section>
+
+      <div class="footer">
+        <div>Narrative by TRPA staff. Charts and maps are TRPA fragments rendered inline; each states its own source and data vintage.</div>
+        <div style="margin-top:0.4rem">Page updated Oct. 26, 2026.</div>
+      </div>
     </div>
   </main>
-
-  <script>
-    'use strict';
-    /* Size each embedded page from its height message, fall back to a link if it never loads,
-       and pass the page's own query parameters (deep links such as ?site=) down to the embeds. */
-    const frames = [...document.querySelectorAll('.embed-section iframe[data-src]')];
-    const params = new URLSearchParams(location.search);
-    frames.forEach(f => {
-      const url = new URL(f.dataset.src, location.href);
-      for (const [k, v] of params) url.searchParams.set(k, v);
-      f.src = url.href;
-      f.dataset.loaded = '';
-      setTimeout(() => { if (!f.dataset.loaded) f.closest('.embed-section').classList.add('failed'); }, 20000);
-    });
-    window.addEventListener('message', (e) => {
-      const m = e.data;
-      if (!m || m.type !== 'ltinfo-embed:height') return;
-      const f = frames.find(fr => fr.contentWindow === e.source);
-      if (!f) return;
-      f.dataset.loaded = '1';
-      f.style.height = Math.ceil(m.height) + 'px';
-      LTI.notifyHeight();
-    });
-  </script>
 </body>
 </html>

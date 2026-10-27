@@ -40,8 +40,11 @@ ltinfo/
   PLAN.md                 this file
   CONTRACT.md             what a fragment does, the interim iframe contract, and what the port needs from ESA
   kit/
-    ltinfo-embed.css      host tokens, Lexend Deca, card and label bar, stat tile, table toggle, empty state (built Oct. 26)
-    ltinfo-embed.js       query helper with snapshot fallback, Chart/Table toggle, CSV, LTI.plot, wheel-zoom guard, height and params messages (built Oct. 26)
+    ltinfo-embed.css      host tokens and every style, scoped under .lti; harness page styles under .lti-harness (v1.1.0, Oct. 26)
+    ltinfo-embed.js       LTI.define, mount, mountAll, include; query helper with snapshot fallback, Chart/Table toggle, CSV, LTI.plot, setParam, interim height and params messages gated on being framed (v1.1.0, Oct. 26)
+    fragments/
+      section-embed.js    the module behind the section fragment, config-driven
+      sites-timeseries.js the module behind the sites fragment, config-driven
     ltinfo-map.js         LTI.map: human geography basemap, terrain switch, popup loader, selection wiring (phase 4)
     popups/               one Arcade file per layer, fetched at mount and set as the popup's expression (phase 4)
       bike-ped-counter.arcade
@@ -49,12 +52,13 @@ ltinfo/
       yellow-cress-site.arcade
   qa/
     subalpine-conifer-kit.html   fixture: the published Subalpine Conifer embed rebuilt on the kit. Not deployed.
-  templates/                (built Oct. 26 as whole pages; phase 3 splits each into fragment plus harness)
+  templates/                (each a harness page around one fragment; the fragment sits between fragment:start and fragment:end)
     program-dashboard.html    the Forest Health section pattern. Default data: Tahoe Yellow Cress (layer 9, table 86)
+    program-dashboard.js      its module, program-specific, named by data-module on the fragment
     section-embed.html        one chart with title, Chart/Table toggle, CSV, caption, source. Default: plan area noise by land use (table 74)
     sites-timeseries.html     site map, site picker, monthly series, table. Default: bike ped counters (layer 5, table 1). Deep link ?site=
-    topic-page.html           narrative blocks plus sections. Default: a short noise page. Today the sections are iframes; phase 3 makes them inline fragments
-    _frame.html               mock LT Info shell for review: ?mode=dashboard|section|topic&page=...
+    topic-page.html           narrative blocks plus fragment sections rendered inline through data-lti-include. Default: a short noise page
+    _frame.html               mock LT Info shell for review: ?mode=dashboard|section|topic&page=... (interim iframe case)
   pages/
     bike-ped/                 sites-timeseries filled: layer 5 counters, table 1 daily counts
     noise/                    topic page spanning Plan Area (61), Shorezone (62), and Highways (65), with section fragments
@@ -66,12 +70,16 @@ Each published prototype is a single HTML file that links the kit by absolute UR
 
 ## Fragment form (the shape that ports)
 
-- A fragment is one `<section class="lti" data-site="monitoring" data-kind="section-embed">` holding its markup. `data-site` and `data-slot` move from `<html>` to this wrapper.
-- Kit CSS scopes everything under `.lti`. Tokens are declared on `.lti` as well as `:root`, so the fragment carries its own values when ESA's cascade lacks them and defers to ESA's when it has them.
-- Kit JS exposes `LTI.mount(rootEl, config)`. The mount reads `config` and an optional `snapshot`, queries, draws, and wires controls. No element ids: every lookup is `rootEl.querySelector`. Two fragments on one page do not collide.
-- The harness page is the current standalone file: `<html>`, `<head>` with the pinned CDN tags and the kit links, one fragment, and a script that calls `LTI.mount` with the file's `CONFIG` and `SNAPSHOT`. Markers (`<!-- fragment:start -->` and `<!-- fragment:end -->`) delimit what moves.
-- Height and params messages stay in the kit but only run when `window.parent !== window`. Inline, they are inert.
-- Libraries are the harness's job. A fragment never loads a script tag of its own.
+Built Oct. 26, 2026 (phase 3).
+
+- A fragment is one `<section class="lti" data-site="monitoring" data-kind="section-embed">` holding its markup, a `<script type="application/json" data-lti="config">` block, and an optional `data-lti="snapshot"` block. `data-site` sits on this wrapper; `data-slot` sits on the harness body.
+- Kit CSS scopes everything under `.lti`. Tokens are declared on `.lti`, not `:root`, so the stylesheet can sit in ESA's cascade without touching it. When ESA publishes its own variables, the values on `.lti` become a mapping to theirs.
+- Kit JS mounts fragments. `LTI.define(kind, fn)` registers a module; `LTI.mount(root)` reads the JSON blocks and calls `fn(root, config, snapshot)`; `LTI.mountAll()` runs on DOMContentLoaded. A fragment has no element ids: elements carry `data-ref` and the module finds them with `LTI.ref(root, name)`. Two fragments on one page do not collide.
+- Modules: generic kinds live in `kit/fragments/<kind>.js` and load on demand. A program dashboard is specific to its program, so its module sits next to the page and the fragment names it with `data-module`.
+- The harness page is the standalone file: `<html>`, `<head>` with the pinned CDN tags and the kit links, `<body class="lti-harness" data-slot="card">`, and one fragment between `<!-- fragment:start -->` and `<!-- fragment:end -->`. No inline script. The markers delimit what moves.
+- Inline inclusion: `<div data-lti-include="section-embed.html">` on any page. The kit fetches the harness page, takes its fragment, puts it in the placeholder, loads the module, and mounts it. The placeholder's own children are the fallback. This stands in for whatever ESA's framework uses to render a fragment server-side.
+- Deep links read and write the page URL (`LTI.params`, `LTI.setParam` with `replaceState`). Height and params messages stay in the kit but only run when `window.parent !== window`. Inline, they are inert.
+- Libraries are the harness's job, loaded once per page. A fragment never loads a script tag of its own.
 
 ## Map and interaction pass (what the prototypes still need)
 
@@ -116,7 +124,7 @@ Tools repo: one `apps.json` entry per prototype with `"category": "monitoring"`,
 
 1. Kit and contract. Done Oct. 26, 2026. `kit/` is built from the Subalpine Conifer embed and the two skills, `CONTRACT.md` is written, and `tools/assets/trpa-tokens.css` carries a `data-site` accent in the ltinfo layer. `qa/subalpine-conifer-kit.html` renders the same as the published page at 980 and 375 px, with the Table toggle working on ag-grid-community 36 through the Theming API. Local preview: the `monitoring` server in `.claude/launch.json` serves the repo root on port 8766.
 2. Templates. Done Oct. 26, 2026. Four templates plus the review frame, each on real LTInfo_Monitoring data with a snapshot fallback, explicit empty states, and a head comment that says what to replace. Each renders at 980 and 375 px with no console errors and no horizontal scroll. Two rules came out of it: draw every chart with `LTI.plot`, never `Plotly.newPlot`, because Plotly's responsive resize collapses a chart with no definite height when its container changes size after the first draw; and pin `ag-grid-community@36.2.0`.
-3. Fragment form. Restructure the kit and the four templates as described under Fragment form: scoped CSS, `LTI.mount`, no ids, harness markers, messages gated on being framed. The topic page renders its sections inline from the same fragment files instead of iframes, which also proves two fragments on one page. The review frame keeps working for the interim iframe case. Done when every template renders the same as today in its harness, inline in the topic page, and in the frame.
+3. Fragment form. Done Oct. 26, 2026. Kit 1.1.0: CSS scoped under `.lti`, `LTI.define`, `mount`, `mountAll`, `include`, `setParam`, messages gated on being framed. The three fragment templates have no element ids, carry config and snapshot as JSON blocks, and are mounted by `kit/fragments/section-embed.js`, `kit/fragments/sites-timeseries.js`, and `templates/program-dashboard.js`. The topic page renders its two sections inline through `data-lti-include`, zero iframes, and both fragments mount with working Table toggles. Verified: live queries on all four pages, no console errors, no horizontal overflow at 375 px with two fragments on one page, `?site=` deep link in and the URL written back on selection, the review frame still receiving height messages in topic mode (3,482 px), and the Subalpine Conifer fixture rendering inside a `.lti` wrapper with ag-grid pinned.
 4. Map and interaction pass. Build `kit/ltinfo-map.js` and `kit/popups/`, then rework the sites fragment and the program dashboard against the Map and interaction pass list: human geography basemap with terrain switch, Arcade story popups, one-click selection with hover, skeleton loading, comparison defaults, one control vocabulary. Done when the sites fragment on bike ped data reads as a finished product in the review frame at 980 and 375 px, and a second person can find a site's story in one click.
 5. First pages. Bike Ped on the sites fragment, Noise on the topic template with two section fragments, Forest Health hub. Done when each passes `trpa-dashboard-qa`, the Pages workflow publishes it, and it is listed in apps.json.
 6. Design system section. "LT Info Monitoring" as a sibling of the existing Lake Tahoe Info embeds section: monitoring accent and card anatomy, the four fragments as live specimens with links, the section pattern, the map and popup pattern, copy rules, and the pre-CMS checklist.

@@ -14,9 +14,9 @@ A threshold element (one chart or map on thresholds.laketahoeinfo.org) and a cli
 
 ## A fragment
 
-A fragment is the unit that moves between TRPA and ESA. It is one `<section class="lti" data-site="monitoring" data-kind="section-embed">` holding its markup, a config object (fields, service URL, labels, captions), and an optional snapshot with the same shape as the live query. The kit's `LTI.mount(rootEl, config)` runs after the fragment is in the document: it queries, draws, and wires the controls. A fragment has no element ids, loads no scripts of its own, and never reaches outside its root. Two fragments on one page do not interact.
+A fragment is the unit that moves between TRPA and ESA. It is one `<section class="lti" data-site="monitoring" data-kind="section-embed">` holding its markup, a config JSON block (`<script type="application/json" data-lti="config">`: fields, service URL, labels, captions), and an optional snapshot JSON block with the same shape as the live query. A module registered with `LTI.define(kind, fn)` gives the kind its behavior; the kit's `LTI.mount(root)` runs after the fragment is in the document, reads the blocks, and calls the module, which queries, draws, and wires the controls. A fragment has no element ids (elements carry `data-ref`), loads no executable script of its own, and never reaches outside its root. Two fragments on one page do not interact.
 
-In the Monitoring repo each fragment sits inside a harness page, a standalone HTML file that supplies the document, the pinned libraries, the kit, and the mount call, so the fragment can be reviewed at a URL now. Markers in the file delimit the fragment from the harness. In ESA's framework the harness is their layout.
+In the Monitoring repo each fragment sits inside a harness page, a standalone HTML file that supplies the document, the pinned libraries, and the kit, so the fragment can be reviewed at a URL now. `fragment:start` and `fragment:end` markers delimit the fragment from the harness. A page can also pull a fragment in with `<div data-lti-include="url">`, which fetches the harness page, takes the fragment, and mounts it inline; this is how the topic page template composes sections today. In ESA's framework the harness is their layout and the include is however their framework renders a section.
 
 ## What every fragment does
 
@@ -43,7 +43,7 @@ The prototypes are built so that moving them is mechanical. For that to hold, th
 |---|---|---|
 | A way to render a fragment inline: a partial view, a CMS section type, or a static include | The fragment is markup plus a mount call, not a URL | The harness page renders it |
 | A config field per fragment instance (JSON) that staff can edit | Fields, labels, and captions change per program without code changes | A `CONFIG` object in the file |
-| A hook that runs `LTI.mount` after each fragment renders | Charts and maps draw after the markup exists | The harness calls it on load |
+| A hook that runs `LTI.mount` after each fragment renders, or the kit's own DOMContentLoaded pass if fragments are in the initial HTML | Charts and maps draw after the markup exists | The kit mounts on DOMContentLoaded |
 | The kit CSS and JS in the layout, and the four libraries loaded once at pinned versions | One copy per page, no duplicate Plotly or Calcite | Each harness loads its own |
 | Tokens exposed as CSS variables, or an agreed mapping from the kit's variables to theirs | The kit's values are sampled from the live site and will drift | `kit/ltinfo-embed.css` declares them on `:root` and `.lti` |
 
@@ -81,7 +81,7 @@ Most numbers come from the LTInfo_Monitoring map service on `maps.trpa.org` (ano
 3. No console errors on mount, alone and with a second fragment on the same page.
 4. Live query succeeds, and the snapshot renders when the network is blocked.
 5. Every chart has a working Table toggle and CSV download. Sources and vintage are stated.
-6. No element ids, no styles outside `.lti`, no script tags inside the fragment markers.
+6. No element ids, no styles outside `.lti`, no executable script inside the fragment markers (JSON blocks only).
 7. Map on the human geography basemap, terrain switch works, popup comes from its Arcade file, one click selects and the cards follow.
 8. Skeletons show while loading; nothing renders blank.
 9. Height message observed in the review frame (interim only).

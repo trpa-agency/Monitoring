@@ -27,7 +27,7 @@
 
   <!-- Plotly.js must load BEFORE the ArcGIS SDK (UMD registers as AMD otherwise). -->
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
 
   <!-- Calcite Design System. Version must match the build bundled in the ArcGIS SDK release below
        (4.31 pairs with Calcite 2.13): the SDK's Expand and Legend widgets render through calcite-popover,
@@ -46,8 +46,9 @@
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
 </head>
-<body>
+<body class="lti-harness" data-slot="card">
   <main class="wrap">
+  <section class="lti" data-site="monitoring">
 
     <!-- ── AT A GLANCE ── -->
     <section class="section" aria-labelledby="glance-h">
@@ -153,6 +154,7 @@
       </div>
       <div style="margin-top:0.4rem" id="footer-vintage"></div>
     </div>
+  </section>
   </main>
 
   <script>

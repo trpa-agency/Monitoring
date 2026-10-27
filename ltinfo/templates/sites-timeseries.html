@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-site="monitoring" data-slot="card" data-embed="sites-timeseries">
+<html lang="en" data-embed="sites-timeseries">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,30 +7,36 @@
   <meta name="description" content="Monitoring sites on a map with a site picker and the record for the selected site over time, with a table and CSV download." />
 
   <!--
-    TEMPLATE: sites and time series. A map of monitoring sites, a site picker, a few
-    tiles, and the selected site's record over time as a chart with a table and CSV.
-    For any program whose data is a point layer of sites plus a table of observations.
-    Built for the Dashboard card on a monitoring program page; also works as an embed
-    section or inside a staff topic page. See ../CONTRACT.md.
+    TEMPLATE: sites and time series. A map of monitoring sites, a site picker, a few tiles,
+    and the selected site's record over time as a chart with a table and CSV. For any program
+    whose data is a point layer of sites plus a table of observations. Built for the Dashboard
+    card on a monitoring program page; also works as a section or inside a staff topic page.
+    See ../CONTRACT.md.
+
+    This file is a harness around a fragment. The fragment is everything between the
+    fragment:start and fragment:end markers: markup with data-ref hooks, a config JSON block,
+    and a snapshot JSON block. The harness is the document around it. The kit mounts the
+    fragment on DOMContentLoaded with kit/fragments/sites-timeseries.js.
 
     To make a page from this file:
       1. Copy it next to your other pages. Keep the kit paths relative to ltinfo/kit/, or
          switch them to https://trpa-agency.github.io/Monitoring/ltinfo/kit/... when the
          page lives in another repo.
-      2. Set data-embed on <html> and data-site to the host dashboard.
-      3. Edit CONFIG: the sites layer, the records table, the join field, the date and
-         value fields, the aggregation, the labels, and the copy in the HTML below.
-      4. Replace SNAPSHOT with the site list and the default site's series captured from
-         the same queries, and set the date.
+      2. Set data-embed on <html> and data-site on the fragment.
+      3. Edit the config block: the sites layer, the records table, the join field, the date
+         and value fields, the aggregation, and the labels. Field meanings are in
+         kit/fragments/sites-timeseries.js. Edit the copy in the markup below.
+      4. Replace the snapshot block with the site list and the default site's series captured
+         from the same queries, and set the date.
       5. Replace the "How it is measured" cards and the footer with the program's facts.
       6. Check at 980 and 375 px, then run trpa-dashboard-qa.
 
-    Deep links: ?site=<siteId> selects a site on load. The host can also post
-    { type: 'ltinfo-embed:params', params: { site } } and the page posts the same message
-    up when the user picks a site.
+    Deep links: ?site=<siteId> in the page URL selects a site on load, and a selection writes
+    the URL back. When framed (interim), the host can also post
+    { type: 'ltinfo-embed:params', params: { site } } and the page posts the same message up.
 
-    Default data: Bicycle and Pedestrian counter locations (LTInfo_Monitoring/5) and
-    daily counts (LTInfo_Monitoring/1), joined on counter_name, summed by month.
+    Default data: Bicycle and Pedestrian counter locations (LTInfo_Monitoring/5) and daily
+    counts (LTInfo_Monitoring/1), joined on counter_name, summed by month.
   -->
 
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
@@ -43,307 +49,106 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
-  <style>
-    .site-picker { min-width: 260px; max-width: 100%; }
-    .site-facts { display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.8rem; font-size: 0.875rem; margin: 0 1rem 0.5rem; }
-    .site-facts dt { color: var(--gray-600); }
-    .site-facts dd { margin: 0; color: var(--ink); }
-    @media (max-width: 599px) { .site-picker { min-width: 0; width: 100%; } }
-  </style>
 </head>
-<body>
+<body class="lti-harness" data-slot="card">
   <main class="wrap">
 
-    <!-- AT A GLANCE -->
-    <section class="section" aria-labelledby="glance-h">
-      <div class="section-label">At a glance</div>
-      <div class="section-head">
-        <h2 id="glance-h">Where and how much people walk and ride</h2>
-        <p>Automated counters on shared-use paths and a few roadway locations record how many people pass by bicycle or on foot each day. The record shows seasonal use, year-over-year change, and which facilities carry the most trips.</p>
-      </div>
-      <div class="tiles" id="tiles"></div>
-      <p class="small muted" id="glance-source" style="margin-top:0.5rem"></p>
-    </section>
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="sites-timeseries" aria-label="Bicycle and pedestrian counter sites and monthly counts">
 
-    <!-- SITES AND SERIES -->
-    <section class="section" aria-labelledby="sites-h">
-      <div class="section-label">Monitoring sites</div>
-      <div class="section-head">
-        <h2 id="sites-h">Counter locations and the record at each one</h2>
-        <p>Pick a site on the map or from the list. The chart shows that site's counts summed by month; the table view lists the same numbers and downloads as CSV.</p>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <h3>Sites</h3>
-          <calcite-select class="site-picker" id="site-select" label="Select a monitoring site" scale="s"></calcite-select>
+      <!-- AT A GLANCE -->
+      <section class="section" aria-label="At a glance">
+        <div class="section-label">At a glance</div>
+        <div class="section-head">
+          <h2>Where and how much people walk and ride</h2>
+          <p>Automated counters on shared-use paths and a few roadway locations record how many people pass by bicycle or on foot each day. The record shows seasonal use, year-over-year change, and which facilities carry the most trips.</p>
         </div>
-        <div class="map-view" id="map" role="region" aria-label="Map of monitoring sites">
-          <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
-        </div>
-        <dl class="site-facts" id="site-facts" style="margin-top:0.6rem"></dl>
-        <p class="source" id="sites-source"></p>
-      </div>
-      <div class="card" style="margin-top:0.9rem">
-        <div class="card-head">
-          <h3 id="series-title">Monthly counts</h3>
-          <calcite-segmented-control scale="s" id="toggle">
-            <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
-            <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
-          </calcite-segmented-control>
-        </div>
-        <div class="plot" id="plot"></div>
-        <div class="hidden" id="grid"></div>
-        <p class="caption" id="series-caption"></p>
-        <p class="source" id="series-source"></p>
-      </div>
-    </section>
+        <div class="tiles" data-ref="tiles"></div>
+        <p class="small muted" data-ref="glance-source" style="margin-top:0.5rem"></p>
+      </section>
 
-    <!-- HOW IT IS MEASURED (replace with the program's facts) -->
-    <section class="section" aria-labelledby="method-h">
-      <div class="section-label">How it is measured</div>
-      <div class="section-head"><h2 id="method-h">Counters, counts, and coverage</h2></div>
-      <div class="grid-3">
-        <div class="def"><h3>What is counted</h3><p>Each counter records passing bicycles and pedestrians and reports a combined daily total. Counts are directional totals, not unique people.</p></div>
-        <div class="def"><h3>Equipment</h3><p>Permanent infrared and inductive-loop counters (Eco-Counter) on shared-use paths, TRAFx trail counters, and short-term pneumatic tubes on roadways.</p></div>
-        <div class="def"><h3>Coverage</h3><p>Sites come and go as counters are installed, moved, or fail. Months with few counted days are shown with the day count so gaps are visible rather than hidden.</p></div>
-      </div>
-    </section>
+      <!-- SITES AND SERIES -->
+      <section class="section" aria-label="Monitoring sites">
+        <div class="section-label">Monitoring sites</div>
+        <div class="section-head">
+          <h2>Counter locations and the record at each one</h2>
+          <p>Pick a site on the map or from the list. The chart shows that site's counts summed by month; the table view lists the same numbers and downloads as CSV.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Sites</h3>
+            <calcite-select class="site-picker" data-ref="site-select" label="Select a monitoring site" scale="s"></calcite-select>
+          </div>
+          <div class="map-view" data-ref="map" role="region" aria-label="Map of monitoring sites">
+            <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
+          </div>
+          <dl class="site-facts" data-ref="site-facts"></dl>
+          <p class="source" data-ref="sites-source"></p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-ref="series-title">Monthly counts</h3>
+            <calcite-segmented-control scale="s" data-ref="toggle" aria-label="Chart or table">
+              <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+              <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+            </calcite-segmented-control>
+          </div>
+          <div class="plot" data-ref="plot"></div>
+          <div class="hidden" data-ref="grid"></div>
+          <p class="caption" data-ref="series-caption"></p>
+          <p class="source" data-ref="series-source"></p>
+        </div>
+      </section>
 
-    <div class="footer">
-      <div><strong>About the program.</strong> Replace with the program's two-sentence description and who runs it.</div>
-      <div class="links">
-        <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/33" target="_blank" rel="noopener noreferrer">LT Info program page</a>
-        <a href="https://transportation.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">Transportation Tracker</a>
+      <!-- HOW IT IS MEASURED (replace with the program's facts) -->
+      <section class="section" aria-label="How it is measured">
+        <div class="section-label">How it is measured</div>
+        <div class="section-head"><h2>Counters, counts, and coverage</h2></div>
+        <div class="grid-3">
+          <div class="def"><h3>What is counted</h3><p>Each counter records passing bicycles and pedestrians and reports a combined daily total. Counts are directional totals, not unique people.</p></div>
+          <div class="def"><h3>Equipment</h3><p>Permanent infrared and inductive-loop counters (Eco-Counter) on shared-use paths, TRAFx trail counters, and short-term pneumatic tubes on roadways.</p></div>
+          <div class="def"><h3>Coverage</h3><p>Sites come and go as counters are installed, moved, or fail. Months with few counted days are shown with the day count so gaps are visible rather than hidden.</p></div>
+        </div>
+      </section>
+
+      <div class="footer">
+        <div><strong>About the program.</strong> Replace with the program's two-sentence description and who runs it.</div>
+        <div class="links">
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/33" target="_blank" rel="noopener noreferrer">LT Info program page</a>
+          <a href="https://transportation.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">Transportation Tracker</a>
+        </div>
+        <div style="margin-top:0.4rem" data-ref="footer-vintage"></div>
       </div>
-      <div style="margin-top:0.4rem" id="footer-vintage"></div>
-    </div>
+
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "sitesLayer": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/5",
+        "siteIdField": "counter_id",
+        "siteNameField": "counter_name",
+        "recordsTable": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/1",
+        "recordSiteField": "counter_name",
+        "dateField": "count_date",
+        "valueField": "count_of_bike_ped",
+        "aggregate": "sum",
+        "valueLabel": "People counted",
+        "unitLabel": "counts",
+        "defaultSiteId": "counter_14",
+        "mapCenter": [
+          -120.03,
+          39.06
+        ],
+        "mapZoom": 10,
+        "seriesCaption": "Daily bicycle and pedestrian counts summed by month. Months with fewer counted days show lower totals; the table lists the days counted.",
+        "sourceName": "TRPA LTInfo_Monitoring map service, Bike and Pedestrian Counter Location and Counts",
+        "exportPrefix": "bike-ped-counts"
+      }
+      </script>
+      <!-- SNAPSHOT: the site list with per-site record summaries and the default site's monthly series. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","total":{"n":73245,"first":"2016-11-01","last":"2026-09-15"},"sites":[{"id":"counter_57","name":"Apache Ave at East San Bernadino Ave","lon":-120.02009,"lat":38.85886,"n":311,"first":"2025-10-27","last":"2026-09-02","total":18133},{"id":"counter_1","name":"East Shore trail - Hidden Beach","lon":-119.92775,"lat":39.2206,"n":1734,"first":"2019-07-01","last":"2026-07-11","total":985894},{"id":"counter_2","name":"East Shore trail - Incline Village","lon":-119.932,"lat":39.23117,"n":2435,"first":"2019-07-01","last":"2026-08-09","total":1959238},{"id":"counter_55","name":"Lodi & Barbara trail","lon":-119.98104,"lat":38.91631,"n":362,"first":"2023-09-22","last":"2024-09-17","total":26494},{"id":"counter_52","name":"Pioneer Trail W of Larch – Pneumatic tubes","lon":-119.94986,"lat":38.94615,"n":0,"first":null,"last":null,"total":0},{"id":"counter_4","name":"Pneumatic Tube - Carnelian Woods Ave.","lon":-120.08488,"lat":39.22502,"n":22,"first":"2017-08-01","last":"2025-09-04","total":714},{"id":"counter_5","name":"Pneumatic Tube - Fallen Leaf Rd","lon":-120.04562,"lat":38.92513,"n":10,"first":"2018-06-07","last":"2018-06-16","total":536},{"id":"counter_8","name":"Pneumatic Tube - US 50 at Al Tahoe Blvd","lon":-119.97884,"lat":38.93219,"n":13,"first":"2018-07-10","last":"2020-07-15","total":856},{"id":"counter_9","name":"Pneumatic Tube - US 50 at Ski Run Blvd","lon":-119.95862,"lat":38.94822,"n":24,"first":"2018-07-10","last":"2022-08-08","total":1554},{"id":"counter_10","name":"Pneumatic Tube - US 50 at Tahoe Keys Blvd","lon":-119.99653,"lat":38.91862,"n":32,"first":"2018-07-18","last":"2022-07-28","total":1826},{"id":"counter_6","name":"Pneumatic tube - Pioneer Trail at Sierra House","lon":-119.96527,"lat":38.90609,"n":27,"first":"2018-07-30","last":"2022-07-28","total":820},{"id":"counter_7","name":"Pneumatic tube - Sierra Blvd","lon":-119.98516,"lat":38.92431,"n":6,"first":"2018-07-31","last":"2018-08-05","total":249},{"id":"counter_11","name":"Pnuematic Tube - Kings Beach Recreation Area","lon":-120.02389,"lat":39.23631,"n":24,"first":"2017-07-10","last":"2025-08-28","total":1017},{"id":"counter_12","name":"Pnuematic Tube - Village Blvd","lon":-119.95334,"lat":39.24963,"n":19,"first":"2017-07-10","last":"2025-08-27","total":480},{"id":"counter_56","name":"San Bernardino - Shared-use path","lon":-120.02804,"lat":38.85672,"n":984,"first":"2023-11-20","last":"2026-09-02","total":161699},{"id":"counter_53","name":"Shared use bike bath - Northshore trail","lon":-120.12092,"lat":39.18425,"n":1083,"first":"2023-09-29","last":"2026-09-15","total":215209},{"id":"counter_54","name":"Shared-Use Path - Tahoma","lon":-120.1328,"lat":39.06813,"n":1099,"first":"2023-09-13","last":"2026-09-15","total":194040},{"id":"counter_46","name":"Shared-use path - Al Tahoe","lon":-119.97411,"lat":38.93428,"n":1270,"first":"2021-04-27","last":"2026-09-02","total":190153},{"id":"counter_13","name":"Shared-use path - Baldwin Beach","lon":-120.06446,"lat":38.93405,"n":1498,"first":"2017-11-22","last":"2026-06-08","total":285366},{"id":"counter_14","name":"Shared-use path - Camp Richardson","lon":-120.02762,"lat":38.92507,"n":3219,"first":"2017-06-08","last":"2026-07-29","total":1943369},{"id":"counter_15","name":"Shared-use path - Homewood","lon":-120.16547,"lat":39.09228,"n":3185,"first":"2017-06-09","last":"2026-09-15","total":586681},{"id":"counter_47","name":"Shared-use path - LTCC","lon":-119.97138,"lat":38.9234,"n":1099,"first":"2022-08-02","last":"2026-09-02","total":323332},{"id":"counter_16","name":"Shared-use path - Lake Forest","lon":-120.12224,"lat":39.1846,"n":1398,"first":"2016-11-11","last":"2024-01-03","total":275198},{"id":"counter_49","name":"Shared-use path - Lake Tahoe Blvd near Tata","lon":-120.00832,"lat":38.91153,"n":1520,"first":"2022-07-06","last":"2026-09-02","total":308994},{"id":"counter_17","name":"Shared-use path - Lakeshore Blvd","lon":-119.9444,"lat":39.23949,"n":1577,"first":"2016-11-11","last":"2025-09-29","total":631197},{"id":"counter_18","name":"Shared-use path - Lakeside Trail","lon":-120.13969,"lat":39.17134,"n":1254,"first":"2019-12-31","last":"2026-08-02","total":942898},{"id":"counter_19","name":"Shared-use path - Lakeview Commons","lon":-119.96873,"lat":38.94568,"n":1894,"first":"2016-11-08","last":"2026-01-07","total":918435},{"id":"counter_20","name":"Shared-use path - Linear Park","lon":-119.94751,"lat":38.9533,"n":1686,"first":"2017-04-06","last":"2026-01-07","total":869671},{"id":"counter_50","name":"Shared-use path - North Shore Trail","lon":-120.12213,"lat":39.18466,"n":0,"first":null,"last":null,"total":0},{"id":"counter_21","name":"Shared-use path - Pinedrops","lon":-120.03999,"lat":39.24798,"n":1634,"first":"2017-11-22","last":"2026-09-02","total":146705},{"id":"counter_22","name":"Shared-use path - Rabe Meadows","lon":-119.94193,"lat":38.97548,"n":3088,"first":"2016-11-01","last":"2026-09-03","total":1500736},{"id":"counter_48","name":"Shared-use path - RoundHill","lon":-119.9497,"lat":38.98218,"n":912,"first":"2020-12-31","last":"2026-01-04","total":80206},{"id":"counter_24","name":"Shared-use path - Sawmill","lon":-120.02714,"lat":38.88863,"n":3100,"first":"2016-11-22","last":"2026-09-02","total":411125},{"id":"counter_45","name":"Shared-use path - Sierra Blvd","lon":-119.98562,"lat":38.92484,"n":1232,"first":"2021-10-05","last":"2026-09-02","total":161941},{"id":"counter_25","name":"Shared-use path - Ski Run Blvd","lon":-119.95583,"lat":38.94633,"n":1691,"first":"2017-11-22","last":"2026-09-01","total":403822},{"id":"counter_26","name":"Shared-use path - Ski Run to El Dorado Beach","lon":-119.95826,"lat":38.94836,"n":3010,"first":"2017-10-20","last":"2026-09-02","total":1844816},{"id":"counter_27","name":"Shared-use path - South Tahoe Bikeway","lon":-119.99164,"lat":38.92291,"n":508,"first":"2018-12-15","last":"2021-11-28","total":202380},{"id":"counter_28","name":"Shared-use path - Sugar Pine Point ","lon":-120.11865,"lat":39.04601,"n":1259,"first":"2018-04-27","last":"2026-09-02","total":85109},{"id":"counter_29","name":"Shared-use path - Sunnyside","lon":-120.15237,"lat":39.14551,"n":2006,"first":"2019-12-31","last":"2026-09-15","total":332145},{"id":"counter_30","name":"Shared-use path - Trout Creek bridge","lon":-119.97914,"lat":38.93189,"n":2570,"first":"2016-11-08","last":"2026-07-29","total":940193},{"id":"counter_51","name":"Shared-use path - Truckee River Trail","lon":-120.15991,"lat":39.16309,"n":2852,"first":"2018-10-24","last":"2026-09-15","total":1331366},{"id":"counter_32","name":"Shared-use path - US 50 at Pioneer (Stateline)","lon":-119.94569,"lat":38.95401,"n":1646,"first":"2017-11-22","last":"2026-08-02","total":1858409},{"id":"counter_33","name":"Shared-use path - Zephyr Cove","lon":-119.94661,"lat":39.01035,"n":1096,"first":"2017-11-22","last":"2026-06-29","total":15987},{"id":"counter_34","name":"Shared-use path: Dollar Creek trail","lon":-120.10426,"lat":39.19453,"n":2393,"first":"2018-12-19","last":"2026-09-03","total":825028},{"id":"counter_35","name":"Shared-use path: US 50 at Santa Fe Rd","lon":-120.01246,"lat":38.85858,"n":3351,"first":"2016-11-22","last":"2026-09-01","total":193032},{"id":"counter_36","name":"Sidewalk - Al Tahoe Blvd","lon":-119.97417,"lat":38.93438,"n":500,"first":"2017-03-30","last":"2019-12-29","total":27293},{"id":"counter_37","name":"Sidewalk - Carnelian Woods Avenue","lon":-120.08055,"lat":39.22667,"n":1546,"first":"2016-11-11","last":"2026-01-07","total":97260},{"id":"counter_38","name":"Sidewalk - Emerald Bay","lon":-120.11191,"lat":38.95322,"n":1456,"first":"2018-04-27","last":"2026-09-02","total":658255},{"id":"counter_39","name":"Sidewalk - Kings Beach Recreation Area","lon":-120.02287,"lat":39.23596,"n":1735,"first":"2016-12-02","last":"2025-12-26","total":402138},{"id":"counter_40","name":"Sidewalk - Kingsbury Grade","lon":-119.93263,"lat":38.96849,"n":1402,"first":"2017-11-22","last":"2026-09-02","total":72797},{"id":"counter_41","name":"Sidewalk - Pioneer Trail at Meyers","lon":-120.01224,"lat":38.85956,"n":273,"first":"2017-11-22","last":"2018-12-13","total":7539},{"id":"counter_42","name":"Sidewalk - Sierra Blvd","lon":-119.98619,"lat":38.92529,"n":383,"first":"2017-11-22","last":"2018-12-13","total":14957},{"id":"counter_43","name":"Sidewalk - US 50 at Lake Pkwy","lon":-119.93901,"lat":38.96392,"n":1743,"first":"2017-04-06","last":"2026-01-07","total":331369},{"id":"counter_44","name":"Sidewalk - Village Blvd","lon":-119.95281,"lat":39.24964,"n":1624,"first":"2016-11-11","last":"2026-01-04","total":281460},{"id":"counter_58","name":"Tahoe Valley Greenbelt","lon":-120.00126,"lat":38.91236,"n":14,"first":"2026-09-02","last":"2026-09-15","total":1088},{"id":"counter_3","name":"floating pneumatic tube - for editing","lon":-119.99678,"lat":38.91871,"n":708,"first":"2019-07-17","last":"2025-09-04","total":2355}],"series":{"counter_14":[["2017-06",32390,23],["2017-07",64844,31],["2017-08",41391,31],["2017-09",21353,30],["2017-10",16834,31],["2017-11",4849,30],["2017-12",3327,31],["2018-01",3362,31],["2018-02",3232,28],["2018-03",1105,28],["2018-04",0,6],["2018-05",13952,31],["2018-06",42262,30],["2018-07",62397,31],["2018-08",41437,31],["2018-09",24586,30],["2018-10",14706,31],["2018-11",7157,30],["2018-12",1285,31],["2019-01",1098,31],["2019-02",145,28],["2019-03",786,31],["2019-04",1228,26],["2019-05",8111,23],["2019-06",43107,30],["2019-07",64315,31],["2019-08",45725,31],["2019-09",21707,30],["2019-10",15509,31],["2019-11",6619,30],["2019-12",1201,31],["2020-01",2065,31],["2020-02",5341,29],["2020-03",3139,31],["2020-04",7894,30],["2020-05",15543,31],["2020-06",36201,30],["2020-07",62210,31],["2020-08",48900,31],["2020-09",24952,30],["2020-10",27883,31],["2020-11",5190,29],["2020-12",3013,27],["2021-01",2820,31],["2021-02",1529,28],["2021-03",5416,31],["2021-04",16437,30],["2021-05",27145,31],["2021-06",45703,30],["2021-07",54723,31],["2021-08",24418,31],["2021-09",8330,30],["2021-10",8229,27],["2021-11",8959,30],["2021-12",1748,31],["2022-01",12,31],["2022-02",159,28],["2022-03",4996,31],["2022-04",10029,30],["2022-05",19608,31],["2022-06",18640,18],["2022-08",27005,21],["2022-09",22731,30],["2022-10",17479,31],["2022-11",1226,30],["2022-12",528,31],["2023-01",161,31],["2023-02",93,28],["2023-03",455,31],["2023-04",9973,30],["2023-05",17820,31],["2023-06",38292,30],["2023-07",65261,31],["2023-08",40991,31],["2023-09",23089,30],["2023-10",15581,31],["2023-11",4994,30],["2023-12",2853,31],["2024-01",1259,31],["2024-02",1157,29],["2024-03",948,31],["2024-04",8744,30],["2024-05",20727,31],["2024-06",42899,30],["2024-07",55499,31],["2024-08",32054,31],["2024-09",0,27],["2024-10",0,23],["2024-11",913,30],["2024-12",1727,31],["2025-01",2593,31],["2025-02",2041,28],["2025-03",3853,31],["2025-04",9725,30],["2025-05",20681,31],["2025-06",44311,30],["2025-07",59407,31],["2025-08",46095,31],["2025-09",27796,30],["2025-10",14455,31],["2025-11",6725,30],["2025-12",2113,28],["2026-01",1033,26],["2026-02",1548,28],["2026-03",11681,31],["2026-04",8292,30],["2026-05",19886,31],["2026-06",40679,30],["2026-07",54744,29]]}}</script>
+    </section>
+    <!-- fragment:end -->
+
   </main>
-
-  <script>
-    'use strict';
-
-    /* ───────────────────────── CONFIG: edit this block ───────────────────────── */
-    const CONFIG = {
-      sitesLayer: 'https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/5',
-      siteIdField: 'counter_id',        // stable id used in deep links
-      siteNameField: 'counter_name',    // display name, and the join key to the records table
-      recordsTable: 'https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/1',
-      recordSiteField: 'counter_name',  // field in the records table that matches siteNameField
-      dateField: 'count_date',
-      valueField: 'count_of_bike_ped',
-      aggregate: 'sum',                 // 'sum' or 'mean' per month
-      valueLabel: 'People counted',
-      unitLabel: 'counts',
-      defaultSiteId: 'counter_14',
-      mapCenter: [-120.03, 39.06], mapZoom: 10,
-      seriesCaption: 'Daily bicycle and pedestrian counts summed by month. Months with fewer counted days show lower totals; the table lists the days counted.',
-      sourceName: 'TRPA LTInfo_Monitoring map service, Bike and Pedestrian Counter Location and Counts',
-      exportPrefix: 'bike-ped-counts',
-    };
-
-    /* SNAPSHOT: the site list with per-site record summaries and the default site's monthly series. */
-    const SNAPSHOT = {
-      captured: 'Oct. 26, 2026',
-      total: {"n":73245,"first":"2016-11-01","last":"2026-09-15"},
-      sites: [{"id":"counter_57","name":"Apache Ave at East San Bernadino Ave","lon":-120.02009,"lat":38.85886,"n":311,"first":"2025-10-27","last":"2026-09-02","total":18133},{"id":"counter_1","name":"East Shore trail - Hidden Beach","lon":-119.92775,"lat":39.2206,"n":1734,"first":"2019-07-01","last":"2026-07-11","total":985894},{"id":"counter_2","name":"East Shore trail - Incline Village","lon":-119.932,"lat":39.23117,"n":2435,"first":"2019-07-01","last":"2026-08-09","total":1959238},{"id":"counter_55","name":"Lodi & Barbara trail","lon":-119.98104,"lat":38.91631,"n":362,"first":"2023-09-22","last":"2024-09-17","total":26494},{"id":"counter_52","name":"Pioneer Trail W of Larch – Pneumatic tubes","lon":-119.94986,"lat":38.94615,"n":0,"first":null,"last":null,"total":0},{"id":"counter_4","name":"Pneumatic Tube - Carnelian Woods Ave.","lon":-120.08488,"lat":39.22502,"n":22,"first":"2017-08-01","last":"2025-09-04","total":714},{"id":"counter_5","name":"Pneumatic Tube - Fallen Leaf Rd","lon":-120.04562,"lat":38.92513,"n":10,"first":"2018-06-07","last":"2018-06-16","total":536},{"id":"counter_8","name":"Pneumatic Tube - US 50 at Al Tahoe Blvd","lon":-119.97884,"lat":38.93219,"n":13,"first":"2018-07-10","last":"2020-07-15","total":856},{"id":"counter_9","name":"Pneumatic Tube - US 50 at Ski Run Blvd","lon":-119.95862,"lat":38.94822,"n":24,"first":"2018-07-10","last":"2022-08-08","total":1554},{"id":"counter_10","name":"Pneumatic Tube - US 50 at Tahoe Keys Blvd","lon":-119.99653,"lat":38.91862,"n":32,"first":"2018-07-18","last":"2022-07-28","total":1826},{"id":"counter_6","name":"Pneumatic tube - Pioneer Trail at Sierra House","lon":-119.96527,"lat":38.90609,"n":27,"first":"2018-07-30","last":"2022-07-28","total":820},{"id":"counter_7","name":"Pneumatic tube - Sierra Blvd","lon":-119.98516,"lat":38.92431,"n":6,"first":"2018-07-31","last":"2018-08-05","total":249},{"id":"counter_11","name":"Pnuematic Tube - Kings Beach Recreation Area","lon":-120.02389,"lat":39.23631,"n":24,"first":"2017-07-10","last":"2025-08-28","total":1017},{"id":"counter_12","name":"Pnuematic Tube - Village Blvd","lon":-119.95334,"lat":39.24963,"n":19,"first":"2017-07-10","last":"2025-08-27","total":480},{"id":"counter_56","name":"San Bernardino - Shared-use path","lon":-120.02804,"lat":38.85672,"n":984,"first":"2023-11-20","last":"2026-09-02","total":161699},{"id":"counter_53","name":"Shared use bike bath - Northshore trail","lon":-120.12092,"lat":39.18425,"n":1083,"first":"2023-09-29","last":"2026-09-15","total":215209},{"id":"counter_54","name":"Shared-Use Path - Tahoma","lon":-120.1328,"lat":39.06813,"n":1099,"first":"2023-09-13","last":"2026-09-15","total":194040},{"id":"counter_46","name":"Shared-use path - Al Tahoe","lon":-119.97411,"lat":38.93428,"n":1270,"first":"2021-04-27","last":"2026-09-02","total":190153},{"id":"counter_13","name":"Shared-use path - Baldwin Beach","lon":-120.06446,"lat":38.93405,"n":1498,"first":"2017-11-22","last":"2026-06-08","total":285366},{"id":"counter_14","name":"Shared-use path - Camp Richardson","lon":-120.02762,"lat":38.92507,"n":3219,"first":"2017-06-08","last":"2026-07-29","total":1943369},{"id":"counter_15","name":"Shared-use path - Homewood","lon":-120.16547,"lat":39.09228,"n":3185,"first":"2017-06-09","last":"2026-09-15","total":586681},{"id":"counter_47","name":"Shared-use path - LTCC","lon":-119.97138,"lat":38.9234,"n":1099,"first":"2022-08-02","last":"2026-09-02","total":323332},{"id":"counter_16","name":"Shared-use path - Lake Forest","lon":-120.12224,"lat":39.1846,"n":1398,"first":"2016-11-11","last":"2024-01-03","total":275198},{"id":"counter_49","name":"Shared-use path - Lake Tahoe Blvd near Tata","lon":-120.00832,"lat":38.91153,"n":1520,"first":"2022-07-06","last":"2026-09-02","total":308994},{"id":"counter_17","name":"Shared-use path - Lakeshore Blvd","lon":-119.9444,"lat":39.23949,"n":1577,"first":"2016-11-11","last":"2025-09-29","total":631197},{"id":"counter_18","name":"Shared-use path - Lakeside Trail","lon":-120.13969,"lat":39.17134,"n":1254,"first":"2019-12-31","last":"2026-08-02","total":942898},{"id":"counter_19","name":"Shared-use path - Lakeview Commons","lon":-119.96873,"lat":38.94568,"n":1894,"first":"2016-11-08","last":"2026-01-07","total":918435},{"id":"counter_20","name":"Shared-use path - Linear Park","lon":-119.94751,"lat":38.9533,"n":1686,"first":"2017-04-06","last":"2026-01-07","total":869671},{"id":"counter_50","name":"Shared-use path - North Shore Trail","lon":-120.12213,"lat":39.18466,"n":0,"first":null,"last":null,"total":0},{"id":"counter_21","name":"Shared-use path - Pinedrops","lon":-120.03999,"lat":39.24798,"n":1634,"first":"2017-11-22","last":"2026-09-02","total":146705},{"id":"counter_22","name":"Shared-use path - Rabe Meadows","lon":-119.94193,"lat":38.97548,"n":3088,"first":"2016-11-01","last":"2026-09-03","total":1500736},{"id":"counter_48","name":"Shared-use path - RoundHill","lon":-119.9497,"lat":38.98218,"n":912,"first":"2020-12-31","last":"2026-01-04","total":80206},{"id":"counter_24","name":"Shared-use path - Sawmill","lon":-120.02714,"lat":38.88863,"n":3100,"first":"2016-11-22","last":"2026-09-02","total":411125},{"id":"counter_45","name":"Shared-use path - Sierra Blvd","lon":-119.98562,"lat":38.92484,"n":1232,"first":"2021-10-05","last":"2026-09-02","total":161941},{"id":"counter_25","name":"Shared-use path - Ski Run Blvd","lon":-119.95583,"lat":38.94633,"n":1691,"first":"2017-11-22","last":"2026-09-01","total":403822},{"id":"counter_26","name":"Shared-use path - Ski Run to El Dorado Beach","lon":-119.95826,"lat":38.94836,"n":3010,"first":"2017-10-20","last":"2026-09-02","total":1844816},{"id":"counter_27","name":"Shared-use path - South Tahoe Bikeway","lon":-119.99164,"lat":38.92291,"n":508,"first":"2018-12-15","last":"2021-11-28","total":202380},{"id":"counter_28","name":"Shared-use path - Sugar Pine Point ","lon":-120.11865,"lat":39.04601,"n":1259,"first":"2018-04-27","last":"2026-09-02","total":85109},{"id":"counter_29","name":"Shared-use path - Sunnyside","lon":-120.15237,"lat":39.14551,"n":2006,"first":"2019-12-31","last":"2026-09-15","total":332145},{"id":"counter_30","name":"Shared-use path - Trout Creek bridge","lon":-119.97914,"lat":38.93189,"n":2570,"first":"2016-11-08","last":"2026-07-29","total":940193},{"id":"counter_51","name":"Shared-use path - Truckee River Trail","lon":-120.15991,"lat":39.16309,"n":2852,"first":"2018-10-24","last":"2026-09-15","total":1331366},{"id":"counter_32","name":"Shared-use path - US 50 at Pioneer (Stateline)","lon":-119.94569,"lat":38.95401,"n":1646,"first":"2017-11-22","last":"2026-08-02","total":1858409},{"id":"counter_33","name":"Shared-use path - Zephyr Cove","lon":-119.94661,"lat":39.01035,"n":1096,"first":"2017-11-22","last":"2026-06-29","total":15987},{"id":"counter_34","name":"Shared-use path: Dollar Creek trail","lon":-120.10426,"lat":39.19453,"n":2393,"first":"2018-12-19","last":"2026-09-03","total":825028},{"id":"counter_35","name":"Shared-use path: US 50 at Santa Fe Rd","lon":-120.01246,"lat":38.85858,"n":3351,"first":"2016-11-22","last":"2026-09-01","total":193032},{"id":"counter_36","name":"Sidewalk - Al Tahoe Blvd","lon":-119.97417,"lat":38.93438,"n":500,"first":"2017-03-30","last":"2019-12-29","total":27293},{"id":"counter_37","name":"Sidewalk - Carnelian Woods Avenue","lon":-120.08055,"lat":39.22667,"n":1546,"first":"2016-11-11","last":"2026-01-07","total":97260},{"id":"counter_38","name":"Sidewalk - Emerald Bay","lon":-120.11191,"lat":38.95322,"n":1456,"first":"2018-04-27","last":"2026-09-02","total":658255},{"id":"counter_39","name":"Sidewalk - Kings Beach Recreation Area","lon":-120.02287,"lat":39.23596,"n":1735,"first":"2016-12-02","last":"2025-12-26","total":402138},{"id":"counter_40","name":"Sidewalk - Kingsbury Grade","lon":-119.93263,"lat":38.96849,"n":1402,"first":"2017-11-22","last":"2026-09-02","total":72797},{"id":"counter_41","name":"Sidewalk - Pioneer Trail at Meyers","lon":-120.01224,"lat":38.85956,"n":273,"first":"2017-11-22","last":"2018-12-13","total":7539},{"id":"counter_42","name":"Sidewalk - Sierra Blvd","lon":-119.98619,"lat":38.92529,"n":383,"first":"2017-11-22","last":"2018-12-13","total":14957},{"id":"counter_43","name":"Sidewalk - US 50 at Lake Pkwy","lon":-119.93901,"lat":38.96392,"n":1743,"first":"2017-04-06","last":"2026-01-07","total":331369},{"id":"counter_44","name":"Sidewalk - Village Blvd","lon":-119.95281,"lat":39.24964,"n":1624,"first":"2016-11-11","last":"2026-01-04","total":281460},{"id":"counter_58","name":"Tahoe Valley Greenbelt","lon":-120.00126,"lat":38.91236,"n":14,"first":"2026-09-02","last":"2026-09-15","total":1088},{"id":"counter_3","name":"floating pneumatic tube - for editing","lon":-119.99678,"lat":38.91871,"n":708,"first":"2019-07-17","last":"2025-09-04","total":2355}],
-      series: { [ 'counter_14' ]: [["2017-06",32390,23],["2017-07",64844,31],["2017-08",41391,31],["2017-09",21353,30],["2017-10",16834,31],["2017-11",4849,30],["2017-12",3327,31],["2018-01",3362,31],["2018-02",3232,28],["2018-03",1105,28],["2018-04",0,6],["2018-05",13952,31],["2018-06",42262,30],["2018-07",62397,31],["2018-08",41437,31],["2018-09",24586,30],["2018-10",14706,31],["2018-11",7157,30],["2018-12",1285,31],["2019-01",1098,31],["2019-02",145,28],["2019-03",786,31],["2019-04",1228,26],["2019-05",8111,23],["2019-06",43107,30],["2019-07",64315,31],["2019-08",45725,31],["2019-09",21707,30],["2019-10",15509,31],["2019-11",6619,30],["2019-12",1201,31],["2020-01",2065,31],["2020-02",5341,29],["2020-03",3139,31],["2020-04",7894,30],["2020-05",15543,31],["2020-06",36201,30],["2020-07",62210,31],["2020-08",48900,31],["2020-09",24952,30],["2020-10",27883,31],["2020-11",5190,29],["2020-12",3013,27],["2021-01",2820,31],["2021-02",1529,28],["2021-03",5416,31],["2021-04",16437,30],["2021-05",27145,31],["2021-06",45703,30],["2021-07",54723,31],["2021-08",24418,31],["2021-09",8330,30],["2021-10",8229,27],["2021-11",8959,30],["2021-12",1748,31],["2022-01",12,31],["2022-02",159,28],["2022-03",4996,31],["2022-04",10029,30],["2022-05",19608,31],["2022-06",18640,18],["2022-08",27005,21],["2022-09",22731,30],["2022-10",17479,31],["2022-11",1226,30],["2022-12",528,31],["2023-01",161,31],["2023-02",93,28],["2023-03",455,31],["2023-04",9973,30],["2023-05",17820,31],["2023-06",38292,30],["2023-07",65261,31],["2023-08",40991,31],["2023-09",23089,30],["2023-10",15581,31],["2023-11",4994,30],["2023-12",2853,31],["2024-01",1259,31],["2024-02",1157,29],["2024-03",948,31],["2024-04",8744,30],["2024-05",20727,31],["2024-06",42899,30],["2024-07",55499,31],["2024-08",32054,31],["2024-09",0,27],["2024-10",0,23],["2024-11",913,30],["2024-12",1727,31],["2025-01",2593,31],["2025-02",2041,28],["2025-03",3853,31],["2025-04",9725,30],["2025-05",20681,31],["2025-06",44311,30],["2025-07",59407,31],["2025-08",46095,31],["2025-09",27796,30],["2025-10",14455,31],["2025-11",6725,30],["2025-12",2113,28],["2026-01",1033,26],["2026-02",1548,28],["2026-03",11681,31],["2026-04",8292,30],["2026-05",19886,31],["2026-06",40679,30],["2026-07",54744,29]] },
-    };
-
-    /* ───────────────────────── DATA ───────────────────────── */
-    const { fmt, esc } = LTI;
-    const sq = s => String(s).replace(/'/g, "''");
-    const monthKey = ms => new Date(ms).toISOString().slice(0, 7);
-    const monthLabel = k => new Date(k + '-15T00:00:00Z').toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
-    const dateLabel = iso => iso ? new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '—';
-
-    async function loadSites() {
-      const [pts, stats, total] = await Promise.all([
-        LTI.query(CONFIG.sitesLayer, { where: '1=1', outFields: `${CONFIG.siteIdField},${CONFIG.siteNameField}`, returnGeometry: 'true', outSR: '4326' }),
-        LTI.query(CONFIG.recordsTable, { where: '1=1', returnGeometry: 'false', groupByFieldsForStatistics: CONFIG.recordSiteField, outStatistics: [
-          { statisticType: 'count', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'n' },
-          { statisticType: 'min', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'd0' },
-          { statisticType: 'max', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'd1' },
-          { statisticType: 'sum', onStatisticField: CONFIG.valueField, outStatisticFieldName: 'total' } ] }),
-        LTI.query(CONFIG.recordsTable, { where: '1=1', returnGeometry: 'false', outStatistics: [
-          { statisticType: 'count', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'n' },
-          { statisticType: 'min', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'd0' },
-          { statisticType: 'max', onStatisticField: CONFIG.dateField, outStatisticFieldName: 'd1' } ] }),
-      ]);
-      const byName = new Map(stats.features.map(f => [f.attributes[CONFIG.recordSiteField], f.attributes]));
-      const iso = ms => ms ? new Date(ms).toISOString().slice(0, 10) : null;
-      const sites = pts.features.map(f => {
-        const a = f.attributes, s = byName.get(a[CONFIG.siteNameField]);
-        return { id: a[CONFIG.siteIdField], name: a[CONFIG.siteNameField], lon: f.geometry.x, lat: f.geometry.y,
-          n: s?.n ?? 0, first: iso(s?.d0), last: iso(s?.d1), total: s?.total ?? 0 };
-      }).sort((a, b) => a.name.localeCompare(b.name));
-      const t = total.features[0].attributes;
-      return { sites, total: { n: t.n, first: iso(t.d0), last: iso(t.d1) } };
-    }
-
-    async function loadSeries(site) {
-      const json = await LTI.query(CONFIG.recordsTable, { where: `${CONFIG.recordSiteField} = '${sq(site.name)}'`, outFields: `${CONFIG.dateField},${CONFIG.valueField}`, orderByFields: CONFIG.dateField, returnGeometry: 'false' });
-      const months = new Map();
-      for (const f of json.features) {
-        const a = f.attributes; if (a[CONFIG.dateField] === null) continue;
-        const k = monthKey(a[CONFIG.dateField]); const m = months.get(k) || [0, 0];
-        m[0] += Number(a[CONFIG.valueField]) || 0; m[1] += 1; months.set(k, m);
-      }
-      return [...months.entries()].map(([k, [total, days]]) => [k, total, days]);
-    }
-
-    /* ───────────────────────── STATE AND RENDER ───────────────────────── */
-    let sites = [], total = null, live = false, selected = null, view = null, highlight = null;
-    const seriesCache = {};
-    const plotEl = document.getElementById('plot'), gridEl = document.getElementById('grid');
-
-    function renderTiles() {
-      const withData = sites.filter(s => s.n > 0).length;
-      const tiles = [
-        { v: `${fmt(sites.length)} <small>sites</small>`, l: `Counter locations, ${fmt(withData)} with data` },
-        { v: `${fmt(total?.n)} <small>site days</small>`, l: 'Daily records across all sites' },
-        { v: total ? String(total.first.slice(0, 4)) : '—', l: `Record begins (${dateLabel(total?.first)})` },
-        { v: total ? dateLabel(total.last) : '—', l: 'Most recent count' },
-      ];
-      document.getElementById('tiles').innerHTML = tiles.map(t => `<div class="tile"><div class="v">${t.v}</div><div class="l">${esc(t.l)}</div></div>`).join('');
-      document.getElementById('glance-source').textContent = `Site list and record summary ${live ? 'queried live' : `from a snapshot captured ${SNAPSHOT.captured}`} from the ${CONFIG.sourceName}.`;
-    }
-
-    function renderPicker() {
-      const sel = document.getElementById('site-select');
-      sel.innerHTML = sites.map(s => `<calcite-option value="${esc(s.id)}" ${s.n ? '' : 'disabled'}>${esc(s.name)}${s.n ? '' : ' (no records)'}</calcite-option>`).join('');
-      sel.addEventListener('calciteSelectChange', e => selectSite(e.target.selectedOption?.value || e.target.value, 'picker'));
-    }
-
-    function renderFacts(site) {
-      document.getElementById('site-facts').innerHTML = site ? `
-        <dt>Site</dt><dd>${esc(site.name)}</dd>
-        <dt>Records</dt><dd>${fmt(site.n)} daily counts</dd>
-        <dt>Period</dt><dd>${dateLabel(site.first)} to ${dateLabel(site.last)}</dd>
-        <dt>Total counted</dt><dd>${fmt(site.total)} ${esc(CONFIG.unitLabel)}</dd>` : '';
-    }
-
-    function renderSeries(site, months) {
-      document.getElementById('series-title').textContent = `Monthly counts: ${site.name}`;
-      document.getElementById('series-caption').textContent = CONFIG.seriesCaption;
-      gridEl.classList.add('hidden'); plotEl.classList.remove('hidden');
-      if (!months || !months.length) {
-        LTI.showEmpty(plotEl, `No records loaded for ${site.name}.`, live ? ['This site has no counts in the records table.'] : ['The live query is unavailable and the snapshot holds only the default site. Reload when the network allows.']);
-        document.getElementById('toggle').classList.add('hidden');
-        return;
-      }
-      document.getElementById('toggle').classList.remove('hidden');
-      plotEl.innerHTML = ''; plotEl.classList.add('plot');   // clear the loading note or an empty state before the chart draws
-      const rows = months.map(([k, totalV, days]) => ({ month: k, label: monthLabel(k), total: totalV, days, perDay: days ? totalV / days : null }));
-      const y = rows.map(r => CONFIG.aggregate === 'mean' ? r.perDay : r.total);
-      LTI.plot(plotEl, [{
-        type: 'bar', x: rows.map(r => r.month + '-01'), y, marker: { color: LTI.COLORS[0] },
-        customdata: rows.map(r => [r.label, r.days, r.perDay]),
-        hovertemplate: '<b>%{customdata[0]}</b><br>%{y:,.0f} counted over %{customdata[1]} days<br>%{customdata[2]:,.0f} per day<extra></extra>',
-      }], LTI.layout({
-        height: 320, bargap: 0.15,
-        xaxis: { type: 'date', tickformat: '%b<br>%Y', dtick: 'M12' },
-        yaxis: { title: { text: CONFIG.aggregate === 'mean' ? `${CONFIG.valueLabel} per day` : `${CONFIG.valueLabel} per month`, font: { size: 12 } }, rangemode: 'tozero' },
-      }), LTI.PLOT_CONFIG);
-      const control = document.getElementById('toggle');
-      control.selectedItem = control.querySelector('[value="chart"]');
-      if (!control.dataset.wired) {
-        control.dataset.wired = '1';
-        LTI.toggle(control, {
-          chart: () => LTI.showPlot(plotEl, gridEl),
-          table: () => {
-            const site = selected;
-            LTI.grid('grid', [
-              { field: 'label', headerName: 'Month', minWidth: 120 },
-              { field: 'days', headerName: 'Days counted', type: 'rightAligned' },
-              { field: 'total', headerName: 'Total ' + CONFIG.unitLabel, type: 'rightAligned', valueFormatter: p => fmt(p.value) },
-              { field: 'perDay', headerName: 'Per day', type: 'rightAligned', valueFormatter: p => fmt(p.value) },
-            ], seriesCache[site.id].rows, `${CONFIG.exportPrefix}-${site.id}`);
-            LTI.showGrid(plotEl, gridEl);
-          },
-        });
-      }
-      seriesCache[site.id].rows = rows;
-    }
-
-    async function selectSite(id, from) {
-      const site = sites.find(s => s.id === id);
-      if (!site || site === selected) return;
-      selected = site;
-      const sel = document.getElementById('site-select');
-      if (from !== 'picker' && sel.value !== id) sel.value = id;
-      renderFacts(site);
-      highlightSite(site);
-      if (!seriesCache[id]) {
-        plotEl.innerHTML = '<p class="small muted" style="padding:1rem 0">Loading counts…</p>';
-        let months = SNAPSHOT.series[id] || null;
-        if (live) { try { months = await loadSeries(site); } catch (err) { console.warn('Series query failed', err); } }
-        seriesCache[id] = { months };
-      }
-      if (selected !== site) return;
-      renderSeries(site, seriesCache[id].months);
-      document.getElementById('series-source').textContent = LTI.sourceText(live, SNAPSHOT.captured, CONFIG.sourceName);
-      if (window.parent !== window) window.parent.postMessage({ type: 'ltinfo-embed:params', params: { site: id } }, '*');
-      LTI.notifyHeight();
-    }
-
-    /* ───────────────────────── MAP ───────────────────────── */
-    function buildMap() {
-      const container = document.getElementById('map');
-      require(['esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer', 'esri/Graphic', 'esri/widgets/Home', 'esri/widgets/Fullscreen'],
-        function (Map, MapView, FeatureLayer, Graphic, Home, Fullscreen) {
-          const accent = LTI.accent();
-          const layer = new FeatureLayer({
-            url: CONFIG.sitesLayer, outFields: [CONFIG.siteIdField, CONFIG.siteNameField], popupEnabled: false,
-            renderer: { type: 'simple', symbol: { type: 'simple-marker', size: 9, color: accent, outline: { color: 'white', width: 1.2 } } },
-          });
-          const map = new Map({ basemap: 'topo-vector', layers: [layer] });
-          view = new MapView({ container, map, center: CONFIG.mapCenter, zoom: CONFIG.mapZoom, constraints: { snapToZoom: false } });
-          view.ui.move('zoom', 'top-left');
-          view.ui.add(new Home({ view }), 'top-left');
-          view.ui.add(new Fullscreen({ view }), 'top-left');
-          LTI.guardMap(view);
-          view.when(() => {
-            container.querySelector('.map-placeholder')?.remove();
-            if (selected) highlightSite(selected);
-            view.on('click', async evt => {
-              const hit = await view.hitTest(evt, { include: layer });
-              const g = hit.results[0]?.graphic;
-              if (g) selectSite(g.attributes[CONFIG.siteIdField], 'map');
-            });
-            view.on('pointer-move', async evt => {
-              const hit = await view.hitTest(evt, { include: layer });
-              view.container.style.cursor = hit.results.length ? 'pointer' : 'default';
-            });
-          }).catch(err => {
-            const ph = container.querySelector('.map-placeholder');
-            if (ph) ph.textContent = 'The map could not be loaded. Use the site list instead.';
-            console.error('Map failed to load', err);
-          });
-          highlight = (site) => {
-            view.graphics.removeAll();
-            if (!site) return;
-            view.graphics.add(new Graphic({
-              geometry: { type: 'point', longitude: site.lon, latitude: site.lat },
-              symbol: { type: 'simple-marker', size: 16, color: [0, 0, 0, 0], outline: { color: '#e49937', width: 3 } },
-            }));
-          };
-        });
-    }
-    function highlightSite(site) { if (highlight) highlight(site); }
-
-    /* ───────────────────────── INIT ───────────────────────── */
-    (async function init() {
-      buildMap();
-      const result = await LTI.load(loadSites, { sites: SNAPSHOT.sites, total: SNAPSHOT.total });
-      live = result.live; sites = result.data.sites; total = result.data.total;
-      renderTiles();
-      renderPicker();
-      document.getElementById('sites-source').textContent = LTI.sourceText(live, SNAPSHOT.captured, CONFIG.sourceName);
-      document.getElementById('footer-vintage').textContent = `Counts ${live ? 'queried live from maps.trpa.org' : `from a snapshot captured ${SNAPSHOT.captured}`}. Most recent record ${dateLabel(total?.last)}.`;
-      const wanted = LTI.params().site || CONFIG.defaultSiteId;
-      await selectSite(sites.some(s => s.id === wanted && s.n) ? wanted : (sites.find(s => s.n)?.id));
-      LTI.onParams(p => { if (p.site) selectSite(p.site, 'host'); });
-    })();
-  </script>
 </body>
 </html>

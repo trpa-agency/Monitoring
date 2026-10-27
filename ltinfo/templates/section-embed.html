@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" data-site="monitoring" data-slot="card" data-embed="section-embed">
+<html lang="en" data-embed="section-embed">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Section embed template</title>
-  <meta name="description" content="One chart with a table view and CSV download, built for an embed section on a Lake Tahoe Info monitoring program page." />
+  <meta name="description" content="One chart with a table view and CSV download, built as a section for a Lake Tahoe Info monitoring program page." />
 
   <!--
-    TEMPLATE: section embed. One chart (or table) per file with a title, a Chart/Table
-    toggle, a CSV download, a caption, and a source line. Built for an embed section on a
-    monitoring program page (requested framework change 1) and usable today in the
-    Dashboard card or any LT Info slot. See ../CONTRACT.md.
+    TEMPLATE: section. One chart (or table) with a title, a Chart/Table toggle, a CSV
+    download, a caption, and a source line. Built for a section on a monitoring program page
+    (requested framework change 1) and usable today in the Dashboard card. See ../CONTRACT.md.
 
-    To make a page from this file:
+    This file is a harness around a fragment. The fragment is everything between the
+    fragment:start and fragment:end markers: markup with data-ref hooks, a config JSON block,
+    and a snapshot JSON block. The harness is the document around it: the pinned libraries,
+    the kit, and the page background. In ESA's framework the harness is their layout and the
+    fragment is what staff place on a page. The kit mounts the fragment on DOMContentLoaded
+    with kit/fragments/section-embed.js.
+
+    To make a section from this file:
       1. Copy it next to your other pages. Keep the kit paths relative to ltinfo/kit/, or
          switch them to https://trpa-agency.github.io/Monitoring/ltinfo/kit/... when the
          page lives in another repo.
-      2. Set data-embed on <html> to a short name for the page (it rides along in the
-         height message) and data-site to the host dashboard.
-      3. Edit CONFIG: the service, the where clause, the field names, the labels, and the
-         copy. Everything the page shows comes from CONFIG and the data.
-      4. Replace SNAPSHOT with rows captured from the same query and set the date. The
-         snapshot renders when the live query fails and must have the same shape.
+      2. Set data-embed on <html> to a short name (it rides along in the interim height
+         message) and data-site on the fragment to the host dashboard.
+      3. Edit the config block: the service, the where clause, the field names, the labels,
+         and the copy. Field meanings are in kit/fragments/section-embed.js. Everything the
+         section shows comes from the config and the data.
+      4. Replace the snapshot block with rows captured from the same query and set the date.
+         The snapshot renders when the live query fails and must have the same shape.
       5. Check at 980 and 375 px, then run trpa-dashboard-qa.
 
     Default data: the Plan Area Noise Average table (LTInfo_Monitoring/74), four land use
@@ -39,137 +46,53 @@
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
 </head>
-<body>
+<body class="lti-harness" data-slot="card">
   <main class="wrap">
-    <div class="card">
-      <div class="card-head">
-        <h3 id="title"></h3>
-        <calcite-segmented-control scale="s" id="toggle">
-          <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
-          <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
-        </calcite-segmented-control>
+
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="section-embed" aria-label="Plan area noise by land use category">
+      <div class="card">
+        <div class="card-head">
+          <h3 data-ref="title"></h3>
+          <calcite-segmented-control scale="s" data-ref="toggle" aria-label="Chart or table">
+            <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+          </calcite-segmented-control>
+        </div>
+        <div class="plot" data-ref="plot"></div>
+        <div class="hidden" data-ref="grid"></div>
+        <div class="chart-legend" data-ref="legend"></div>
+        <p class="caption" data-ref="caption"></p>
+        <p class="source" data-ref="source"></p>
       </div>
-      <div class="plot" id="plot"></div>
-      <div class="hidden" id="grid"></div>
-      <div class="chart-legend" id="legend"></div>
-      <p class="caption" id="caption"></p>
-      <p class="source" id="source"></p>
-    </div>
-  </main>
 
-  <script>
-    'use strict';
-
-    /* ───────────────────────── CONFIG: edit this block ───────────────────────── */
-    const CONFIG = {
-      title: 'Plan area noise: average CNEL by land use category',
-      service: 'https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/74',
-      where: "Category IN ('Commercial Areas','High Density Residential','Low Density Residential','Wilderness and Roadless')",
-      orderBy: 'Category, OBJECTID',
-      xField: 'Year',               // the x value: a year, a date, or a period label
-      yField: 'Value',
-      seriesField: 'Category',      // null for a single series
-      targetField: 'Threshold_Value', // null when there is no standard to draw
-      chartType: 'line',            // 'line' or 'bar'
-      xCategorical: true,           // true for period labels like '2016-2019'
-      xLabel: 'Monitoring period',
-      yLabel: 'Average CNEL (dB)',
-      decimals: 1,
-      seriesLabels: {},             // optional display names keyed by series value
-      caption: 'Average community noise equivalent level (CNEL) across the monitoring sites in each land use category, by monitoring period. Dashed lines are the noise standard for each category.',
-      sourceName: 'TRPA LTInfo_Monitoring map service, Plan Area Noise Average table',
-      exportName: 'plan-area-noise-average',
-    };
-
-    /* SNAPSHOT: rows from the same query, same field names. Renders when the live query fails. */
-    const SNAPSHOT = {
-      captured: 'Oct. 26, 2026',
-      rows: [{"Category":"Commercial Areas","Year":"1987-1991","Value":55.5,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"1992-1996","Value":56.35,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"1997-2001","Value":57.9,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"2007-2011","Value":52.1,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"2012-2015","Value":55.0,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"2016-2019","Value":51.12,"Threshold_Value":60.0},{"Category":"Commercial Areas","Year":"2020-2023","Value":52.58,"Threshold_Value":60.0},{"Category":"High Density Residential","Year":"1987-1991","Value":51.2,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"1992-1996","Value":49.6,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"1997-2001","Value":50.2,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"2007-2011","Value":51.3,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"2012-2015","Value":51.7,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"2016-2019","Value":49.56,"Threshold_Value":55.0},{"Category":"High Density Residential","Year":"2020-2023","Value":47.74,"Threshold_Value":55.0},{"Category":"Low Density Residential","Year":"1987-1991","Value":48.5,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"1992-1996","Value":49.73,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"1997-2001","Value":50.26,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"2007-2011","Value":51.83,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"2012-2015","Value":46.68,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"2016-2019","Value":49.3,"Threshold_Value":50.0},{"Category":"Low Density Residential","Year":"2020-2023","Value":47.6,"Threshold_Value":50.0},{"Category":"Wilderness and Roadless","Year":"1987-1991","Value":46.0,"Threshold_Value":45.0},{"Category":"Wilderness and Roadless","Year":"2007-2011","Value":42.9,"Threshold_Value":45.0},{"Category":"Wilderness and Roadless","Year":"2012-2015","Value":38.6,"Threshold_Value":45.0},{"Category":"Wilderness and Roadless","Year":"2016-2019","Value":42.52,"Threshold_Value":45.0},{"Category":"Wilderness and Roadless","Year":"2020-2023","Value":44.49,"Threshold_Value":45.0}],
-    };
-
-    /* ───────────────────────── RENDER ───────────────────────── */
-    const { fmt, esc } = LTI;
-    const plotEl = document.getElementById('plot');
-    const gridEl = document.getElementById('grid');
-    document.getElementById('title').textContent = CONFIG.title;
-    document.getElementById('caption').textContent = CONFIG.caption;
-
-    function normalize(rows) {
-      return rows.map(r => ({
-        x: r[CONFIG.xField],
-        series: CONFIG.seriesField ? String(r[CONFIG.seriesField]) : CONFIG.title,
-        y: r[CONFIG.yField] === null ? null : Number(r[CONFIG.yField]),
-        target: CONFIG.targetField && r[CONFIG.targetField] !== null ? Number(r[CONFIG.targetField]) : null,
-      }));
-    }
-    function sortedX(rows) {
-      const xs = [...new Set(rows.map(r => r.x))];
-      return xs.sort((a, b) => (typeof a === 'number' && typeof b === 'number') ? a - b : String(a).localeCompare(String(b)));
-    }
-
-    function render(rows) {
-      const xs = sortedX(rows);
-      const seriesNames = [...new Set(rows.map(r => r.series))];
-      const traces = [];
-      const legend = [];
-      seriesNames.forEach((name, i) => {
-        const color = LTI.COLORS[i % LTI.COLORS.length];
-        const label = CONFIG.seriesLabels[name] ?? name;
-        const byX = new Map(rows.filter(r => r.series === name).map(r => [r.x, r]));
-        const ys = xs.map(x => byX.get(x)?.y ?? null);
-        traces.push({
-          type: CONFIG.chartType === 'bar' ? 'bar' : 'scatter', mode: 'lines+markers', name: label,
-          x: xs, y: ys, connectgaps: true,
-          line: { color, width: 2 }, marker: { color, size: 7 },
-          hovertemplate: `${esc(label)}: %{y:,.${CONFIG.decimals}f}<extra></extra>`,
-        });
-        const target = rows.find(r => r.series === name && r.target !== null)?.target;
-        if (target !== undefined && target !== null) {
-          traces.push({
-            type: 'scatter', mode: 'lines', name: `${label} standard`, x: xs, y: xs.map(() => target),
-            line: { color, width: 1.5, dash: 'dash' }, hoverinfo: 'skip', showlegend: false,
-          });
-        }
-        legend.push(`<span><i style="background:${color}"></i>${esc(label)}${target !== undefined && target !== null ? ` (standard ${fmt(target, CONFIG.decimals)})` : ''}</span>`);
-      });
-      const layout = LTI.layout({
-        height: 340, showlegend: false, hovermode: 'x unified',
-        barmode: 'group',
-        xaxis: { type: CONFIG.xCategorical ? 'category' : undefined, title: { text: CONFIG.xLabel, font: { size: 12 } }, tickangle: LTI.narrow() ? -45 : 0 },
-        yaxis: { title: { text: CONFIG.yLabel, font: { size: 12 } }, rangemode: 'tozero' },
-      });
-      LTI.plot(plotEl, traces, layout, LTI.PLOT_CONFIG);
-      document.getElementById('legend').innerHTML = seriesNames.length > 1 || CONFIG.targetField ? legend.join('') : '';
-      return rows;
-    }
-
-    function tableColumns() {
-      const cols = [{ field: 'x', headerName: CONFIG.xLabel, minWidth: 130 }];
-      if (CONFIG.seriesField) cols.push({ field: 'series', headerName: CONFIG.seriesField.replace(/_/g, ' '), flex: 2, minWidth: 180, valueFormatter: p => CONFIG.seriesLabels[p.value] ?? p.value });
-      cols.push({ field: 'y', headerName: CONFIG.yLabel, type: 'rightAligned', valueFormatter: p => fmt(p.value, CONFIG.decimals) });
-      if (CONFIG.targetField) cols.push({ field: 'target', headerName: 'Standard', type: 'rightAligned', valueFormatter: p => fmt(p.value, CONFIG.decimals) });
-      return cols;
-    }
-
-    (async function init() {
-      const { data, live } = await LTI.load(async () => {
-        const json = await LTI.query(CONFIG.service, { where: CONFIG.where, outFields: '*', orderByFields: CONFIG.orderBy });
-        if (!json.features?.length) throw new Error('No rows returned');
-        return { rows: json.features.map(f => f.attributes) };
-      }, SNAPSHOT);
-      const rows = normalize(data.rows);
-      if (!rows.length) {
-        LTI.showEmpty(plotEl, 'No data loaded yet.', ['This section will show ' + CONFIG.title.toLowerCase() + '.']);
-      } else {
-        render(rows);
-        LTI.toggle('#toggle', {
-          chart: () => LTI.showPlot(plotEl, gridEl),
-          table: () => { LTI.grid('grid', tableColumns(), rows, CONFIG.exportName); LTI.showGrid(plotEl, gridEl); },
-        });
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "title": "Plan area noise: average CNEL by land use category",
+        "service": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/74",
+        "where": "Category IN ('Commercial Areas','High Density Residential','Low Density Residential','Wilderness and Roadless')",
+        "orderBy": "Category, OBJECTID",
+        "xField": "Year",
+        "yField": "Value",
+        "seriesField": "Category",
+        "targetField": "Threshold_Value",
+        "chartType": "line",
+        "xCategorical": true,
+        "xLabel": "Monitoring period",
+        "yLabel": "Average CNEL (dB)",
+        "decimals": 1,
+        "seriesLabels": {},
+        "caption": "Average community noise equivalent level (CNEL) across the monitoring sites in each land use category, by monitoring period. Dashed lines are the noise standard for each category.",
+        "sourceName": "TRPA LTInfo_Monitoring map service, Plan Area Noise Average table",
+        "exportName": "plan-area-noise-average"
       }
-      document.getElementById('source').textContent = LTI.sourceText(live, SNAPSHOT.captured, CONFIG.sourceName);
-      LTI.notifyHeight();
-    })();
-  </script>
+      </script>
+      <!-- SNAPSHOT: rows from the same query, same field names. Renders when the live query fails. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","rows":[{"Category":"Commercial Areas","Year":"1987-1991","Value":55.5,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"1992-1996","Value":56.35,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"1997-2001","Value":57.9,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2007-2011","Value":52.1,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2012-2015","Value":55,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2016-2019","Value":51.12,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2020-2023","Value":52.58,"Threshold_Value":60},{"Category":"High Density Residential","Year":"1987-1991","Value":51.2,"Threshold_Value":55},{"Category":"High Density Residential","Year":"1992-1996","Value":49.6,"Threshold_Value":55},{"Category":"High Density Residential","Year":"1997-2001","Value":50.2,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2007-2011","Value":51.3,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2012-2015","Value":51.7,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2016-2019","Value":49.56,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2020-2023","Value":47.74,"Threshold_Value":55},{"Category":"Low Density Residential","Year":"1987-1991","Value":48.5,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"1992-1996","Value":49.73,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"1997-2001","Value":50.26,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2007-2011","Value":51.83,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2012-2015","Value":46.68,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2016-2019","Value":49.3,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2020-2023","Value":47.6,"Threshold_Value":50},{"Category":"Wilderness and Roadless","Year":"1987-1991","Value":46,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2007-2011","Value":42.9,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2012-2015","Value":38.6,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2016-2019","Value":42.52,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2020-2023","Value":44.49,"Threshold_Value":45}]}</script>
+    </section>
+    <!-- fragment:end -->
+
+  </main>
 </body>
 </html>

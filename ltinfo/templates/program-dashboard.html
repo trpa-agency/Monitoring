@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-site="monitoring" data-slot="card" data-embed="program-dashboard">
+<html lang="en" data-embed="program-dashboard">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,9 +7,9 @@
   <meta name="description" content="A complete monitoring program dashboard for the Dashboard card on a Lake Tahoe Info program page: at a glance, map, charts with tables, how it is measured, and sources." />
 
   <!--
-    TEMPLATE: program dashboard. One complete dashboard per program in one file, for the
-    Dashboard card on a monitoring program page (program type Program With Dashboard).
-    The section pattern is the one the Forest Health embeds settled on:
+    TEMPLATE: program dashboard. One complete dashboard per program, for the Dashboard card
+    on a monitoring program page (program type Program With Dashboard). The section pattern is
+    the one the Forest Health embeds settled on:
       1. At a glance: four to six stat tiles, pending tiles grayed for data not yet loaded
       2. Map of the program's extent or sites, with the same facts in text nearby
       3. Charts, each with a Chart/Table toggle and a CSV download
@@ -18,20 +18,28 @@
       6. Footer: about the program, links, data vintage
     See ../CONTRACT.md.
 
-    To make a page from this file:
-      1. Copy it next to your other pages and fix the kit paths (relative to ltinfo/kit/, or
-         https://trpa-agency.github.io/Monitoring/ltinfo/kit/... from another repo).
-      2. Set data-embed and data-site on <html>.
-      3. Edit CONFIG and the copy in each section. Keep the section order unless the
-         program has a reason not to.
-      4. Replace SNAPSHOT with rows captured from the same queries, and set the date.
+    This file is a harness around a fragment. The fragment is everything between the
+    fragment:start and fragment:end markers: markup with data-ref hooks, a config JSON block,
+    and a snapshot JSON block. A program dashboard's behavior is specific to the program, so
+    its module sits next to this file (program-dashboard.js) and the fragment names it with
+    data-module. A copy for another program gets its own kind name (program:<slug>), its own
+    module file, and its own data-module value.
+
+    To make a dashboard from this file:
+      1. Copy it and program-dashboard.js next to your other pages and fix the kit paths
+         (relative to ltinfo/kit/, or https://trpa-agency.github.io/Monitoring/ltinfo/kit/...
+         from another repo).
+      2. Set data-embed on <html>; set data-kind and data-module on the fragment.
+      3. Edit the config block and the copy in each section. Keep the section order unless
+         the program has a reason not to. Edit the module for the program's queries and charts.
+      4. Replace the snapshot block with rows captured from the same queries, and set the date.
       5. Check at 980 and 375 px, then run trpa-dashboard-qa, then send the URL to the
          LT Info admin for the program's Dashboard record.
 
     Default data: Tahoe Yellow Cress (LT Info program 39). Sites by year from
     LTInfo_Monitoring/9 and occupied sites by year with the standard from
-    LTInfo_Monitoring/86. A monitoring dashboard describes the record; the host page and
-    the Threshold Dashboard carry the evaluation.
+    LTInfo_Monitoring/86. A monitoring dashboard describes the record; the host page and the
+    Threshold Dashboard carry the evaluation.
   -->
 
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
@@ -45,303 +53,154 @@
   <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
   <script src="../kit/ltinfo-embed.js"></script>
 </head>
-<body>
+<body class="lti-harness" data-slot="card">
   <main class="wrap">
 
-    <!-- 1. AT A GLANCE -->
-    <section class="section" aria-labelledby="glance-h">
-      <div class="section-label">At a glance</div>
-      <div class="section-head">
-        <h2 id="glance-h">Tahoe yellow cress on the shores of Lake Tahoe</h2>
-        <p>Tahoe yellow cress (<em>Rorippa subumbellata</em>) grows only on the sandy beaches of Lake Tahoe. Surveys each year record which of the known sites hold plants. Lake level drives the count: high water covers beach habitat and fewer sites are occupied.</p>
-      </div>
-      <div class="tiles" id="glance-tiles"></div>
-      <p class="small muted" id="glance-source" style="margin-top:0.5rem"></p>
-    </section>
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="program-dashboard" data-module="program-dashboard.js" aria-label="Tahoe Yellow Cress monitoring dashboard">
 
-    <!-- 2. MAP -->
-    <section class="section" aria-labelledby="map-h">
-      <div class="section-label">Survey sites</div>
-      <div class="section-head">
-        <h2 id="map-h">Where the sites are</h2>
-        <p>Known Tahoe yellow cress sites around the lake, shown for the most recent survey year. Sites marked as surveyed were visited; the rest were not reached that year.</p>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <h3 id="map-title">Survey sites</h3>
-          <calcite-button id="map-service-link" href="https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9" target="_blank" rel="noopener noreferrer" appearance="transparent" scale="s" icon-end="launch">Map service</calcite-button>
+      <!-- 1. AT A GLANCE -->
+      <section class="section" aria-label="At a glance">
+        <div class="section-label">At a glance</div>
+        <div class="section-head">
+          <h2>Tahoe yellow cress on the shores of Lake Tahoe</h2>
+          <p>Tahoe yellow cress (<em>Rorippa subumbellata</em>) grows only on the sandy beaches of Lake Tahoe. Surveys each year record which of the known sites hold plants. Lake level drives the count: high water covers beach habitat and fewer sites are occupied.</p>
         </div>
-        <div class="map-view" id="map" role="region" aria-label="Map of survey sites">
-          <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
-        </div>
-        <p class="caption" id="map-caption"></p>
-        <p class="source" data-source-line></p>
-      </div>
-    </section>
+        <div class="tiles" data-ref="glance-tiles"></div>
+        <p class="small muted" data-ref="glance-source" style="margin-top:0.5rem"></p>
+      </section>
 
-    <!-- 3. CHARTS -->
-    <section class="section" aria-labelledby="charts-h">
-      <div class="section-label">The record</div>
-      <div class="section-head">
-        <h2 id="charts-h">Occupied sites over time</h2>
-        <p>The number of sites with plants each survey year, with the lake level that year. The dashed line is the standard the Threshold Dashboard evaluates against.</p>
-      </div>
-      <div class="grid-2">
-        <div class="card span-2">
-          <div class="card-head">
-            <h3>Occupied sites by year</h3>
-            <calcite-segmented-control scale="s" data-toggle="occupied">
-              <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
-              <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
-            </calcite-segmented-control>
-          </div>
-          <div class="plot" id="occupied-plot"></div>
-          <div class="hidden" id="occupied-grid"></div>
-          <div class="chart-legend" id="occupied-legend"></div>
-          <p class="caption">Bars are sites where plants were found. The line is the lake surface elevation in feet during the survey season, on the right axis.</p>
-          <p class="source" data-source-line></p>
+      <!-- 2. MAP -->
+      <section class="section" aria-label="Survey sites">
+        <div class="section-label">Survey sites</div>
+        <div class="section-head">
+          <h2>Where the sites are</h2>
+          <p>Known Tahoe yellow cress sites around the lake, shown for the most recent survey year. Sites marked as surveyed were visited; the rest were not reached that year.</p>
         </div>
         <div class="card">
           <div class="card-head">
-            <h3>Sites by land owner</h3>
-            <calcite-segmented-control scale="s" data-toggle="owner">
-              <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
-              <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
-            </calcite-segmented-control>
+            <h3 data-ref="map-title">Survey sites</h3>
+            <calcite-button href="https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9" target="_blank" rel="noopener noreferrer" appearance="transparent" scale="s" icon-end="launch">Map service</calcite-button>
           </div>
-          <div class="plot" id="owner-plot"></div>
-          <div class="hidden" id="owner-grid"></div>
-          <p class="caption" id="owner-caption"></p>
+          <div class="map-view" data-ref="map" role="region" aria-label="Map of survey sites">
+            <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
+          </div>
+          <p class="caption" data-ref="map-caption"></p>
           <p class="source" data-source-line></p>
         </div>
-        <div class="card">
-          <div class="card-head"><h3>Survey coverage by year</h3></div>
-          <div class="plot" id="coverage-plot"></div>
-          <p class="caption">Sites surveyed each year out of all sites tracked. Coverage varies with access, funding, and lake level.</p>
-          <p class="source" data-source-line></p>
+      </section>
+
+      <!-- 3. CHARTS -->
+      <section class="section" aria-label="The record">
+        <div class="section-label">The record</div>
+        <div class="section-head">
+          <h2>Occupied sites over time</h2>
+          <p>The number of sites with plants each survey year, with the lake level that year. The dashed line is the standard the Threshold Dashboard evaluates against.</p>
         </div>
-      </div>
-    </section>
+        <div class="grid-2">
+          <div class="card span-2">
+            <div class="card-head">
+              <h3>Occupied sites by year</h3>
+              <calcite-segmented-control scale="s" data-ref="occupied-toggle" aria-label="Chart or table">
+                <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+                <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+              </calcite-segmented-control>
+            </div>
+            <div class="plot" data-ref="occupied-plot"></div>
+            <div class="hidden" data-ref="occupied-grid"></div>
+            <div class="chart-legend" data-ref="occupied-legend"></div>
+            <p class="caption">Bars are sites where plants were found. The line is the lake surface elevation in feet during the survey season, on the right axis.</p>
+            <p class="source" data-source-line></p>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>Sites by land owner</h3>
+              <calcite-segmented-control scale="s" data-ref="owner-toggle" aria-label="Chart or table">
+                <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+                <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+              </calcite-segmented-control>
+            </div>
+            <div class="plot" data-ref="owner-plot"></div>
+            <div class="hidden" data-ref="owner-grid"></div>
+            <p class="caption" data-ref="owner-caption"></p>
+            <p class="source" data-source-line></p>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Survey coverage by year</h3></div>
+            <div class="plot" data-ref="coverage-plot"></div>
+            <p class="caption">Sites surveyed each year out of all sites tracked. Coverage varies with access, funding, and lake level.</p>
+            <p class="source" data-source-line></p>
+          </div>
+        </div>
+      </section>
 
-    <!-- 4. HOW IT IS MEASURED -->
-    <section class="section" aria-labelledby="method-h">
-      <div class="section-label">How it is measured</div>
-      <div class="section-head"><h2 id="method-h">Annual site surveys</h2></div>
-      <div class="grid-3">
-        <div class="def"><h3>Sites</h3><p>A fixed list of beach sites where the plant has been recorded since surveys began in 1978. New sites are added when plants are found elsewhere.</p></div>
-        <div class="def"><h3>Survey</h3><p>Each site is walked during the growing season and the number of plants is counted. A site is occupied when at least one plant is found.</p></div>
-        <div class="def"><h3>Lake level</h3><p>Lake Tahoe surface elevation from the Tahoe City gage, reported with each survey year because it sets how much beach is exposed.</p></div>
-      </div>
-    </section>
+      <!-- 4. HOW IT IS MEASURED -->
+      <section class="section" aria-label="How it is measured">
+        <div class="section-label">How it is measured</div>
+        <div class="section-head"><h2>Annual site surveys</h2></div>
+        <div class="grid-3">
+          <div class="def"><h3>Sites</h3><p>A fixed list of beach sites where the plant has been recorded since surveys began in 1978. New sites are added when plants are found elsewhere.</p></div>
+          <div class="def"><h3>Survey</h3><p>Each site is walked during the growing season and the number of plants is counted. A site is occupied when at least one plant is found.</p></div>
+          <div class="def"><h3>Lake level</h3><p>Lake Tahoe surface elevation from the Tahoe City gage, reported with each survey year because it sets how much beach is exposed.</p></div>
+        </div>
+      </section>
 
-    <!-- 5. PROGRAM-SPECIFIC SECTION, EMPTY UNTIL DATA EXISTS -->
-    <section class="section" aria-labelledby="counts-h">
-      <div class="section-label">Plant counts</div>
-      <div class="section-head">
-        <h2 id="counts-h">Plants counted at each site</h2>
-        <p>Per-site counts give a finer picture than occupancy alone. This section fills in when the count field is confirmed and documented.</p>
-      </div>
-      <div id="counts-body"></div>
-    </section>
+      <!-- 5. PROGRAM-SPECIFIC SECTION, EMPTY UNTIL DATA EXISTS -->
+      <section class="section" aria-label="Plant counts">
+        <div class="section-label">Plant counts</div>
+        <div class="section-head">
+          <h2>Plants counted at each site</h2>
+          <p>Per-site counts give a finer picture than occupancy alone. This section fills in when the count field is confirmed and documented.</p>
+        </div>
+        <div data-ref="counts-body"></div>
+      </section>
 
-    <!-- 6. FOOTER -->
-    <div class="footer">
-      <div><strong>About the program.</strong> The Tahoe Yellow Cress monitoring program tracks the number of occupied sites each year under the Vegetation Preservation threshold category, in partnership with the Tahoe Yellow Cress Adaptive Management Working Group.</div>
-      <div class="links">
-        <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/39" target="_blank" rel="noopener noreferrer">LT Info program page</a>
-        <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">Threshold Dashboard: Vegetation Preservation</a>
+      <!-- 6. FOOTER -->
+      <div class="footer">
+        <div><strong>About the program.</strong> The Tahoe Yellow Cress monitoring program tracks the number of occupied sites each year under the Vegetation Preservation threshold category, in partnership with the Tahoe Yellow Cress Adaptive Management Working Group.</div>
+        <div class="links">
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/39" target="_blank" rel="noopener noreferrer">LT Info program page</a>
+          <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">Threshold Dashboard: Vegetation Preservation</a>
+        </div>
+        <div style="margin-top:0.4rem" data-ref="footer-vintage"></div>
       </div>
-      <div style="margin-top:0.4rem" id="footer-vintage"></div>
-    </div>
+
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "sitesLayer": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9",
+        "siteNameField": "SITE_NAME",
+        "yearField": "YEAR_OF_COUNT",
+        "statusField": "STATUS",
+        "ownerField": "OWNER",
+        "surveyedValue": "Surveyed",
+        "summaryTable": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/86",
+        "summaryYear": "Year",
+        "summaryValue": "Occupied_Sites",
+        "summaryTarget": "Threshold",
+        "summaryAux": "Lake_Level",
+        "mapCenter": [
+          -120.03,
+          39.08
+        ],
+        "mapZoom": 10,
+        "sourceName": "TRPA LTInfo_Monitoring map service",
+        "exportPrefix": "tahoe-yellow-cress",
+        "ownerLabels": {
+          "USFS": "U.S. Forest Service",
+          "CSP": "California State Parks",
+          "CTC": "California Tahoe Conservancy",
+          "NVSP": "Nevada State Parks",
+          "IVGID": "Incline Village GID",
+          "City SLT": "City of South Lake Tahoe"
+        }
+      }
+      </script>
+      <!-- SNAPSHOT: same shape as loadLive() in program-dashboard.js returns, plus captured. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","summary":[{"Year":1978,"Occupied_Sites":3,"Lake_Level":6224,"Threshold":26},{"Year":1979,"Occupied_Sites":25,"Lake_Level":6224,"Threshold":26},{"Year":1980,"Occupied_Sites":16,"Lake_Level":6226,"Threshold":26},{"Year":1981,"Occupied_Sites":22,"Lake_Level":6225,"Threshold":26},{"Year":1982,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":1983,"Occupied_Sites":11,"Lake_Level":6228,"Threshold":26},{"Year":1986,"Occupied_Sites":14,"Lake_Level":6228,"Threshold":26},{"Year":1988,"Occupied_Sites":18,"Lake_Level":6224,"Threshold":26},{"Year":1989,"Occupied_Sites":2,"Lake_Level":6224,"Threshold":26},{"Year":1990,"Occupied_Sites":34,"Lake_Level":6223,"Threshold":26},{"Year":1991,"Occupied_Sites":20,"Lake_Level":6222,"Threshold":26},{"Year":1992,"Occupied_Sites":17,"Lake_Level":6223,"Threshold":26},{"Year":1993,"Occupied_Sites":37,"Lake_Level":6223,"Threshold":26},{"Year":1994,"Occupied_Sites":31,"Lake_Level":6222,"Threshold":26},{"Year":1995,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1996,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1997,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1998,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1999,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":2000,"Occupied_Sites":15,"Lake_Level":6228,"Threshold":26},{"Year":2001,"Occupied_Sites":25,"Lake_Level":6225,"Threshold":26},{"Year":2002,"Occupied_Sites":35,"Lake_Level":6224,"Threshold":26},{"Year":2003,"Occupied_Sites":41,"Lake_Level":6224,"Threshold":26},{"Year":2004,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2005,"Occupied_Sites":43,"Lake_Level":6225,"Threshold":26},{"Year":2006,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2007,"Occupied_Sites":27,"Lake_Level":6226,"Threshold":26},{"Year":2008,"Occupied_Sites":40,"Lake_Level":6224,"Threshold":26},{"Year":2009,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2011,"Occupied_Sites":23,"Lake_Level":6228,"Threshold":26},{"Year":2012,"Occupied_Sites":29,"Lake_Level":6226,"Threshold":26},{"Year":2014,"Occupied_Sites":39,"Lake_Level":6223,"Threshold":26},{"Year":2016,"Occupied_Sites":41,"Lake_Level":6223,"Threshold":26},{"Year":2017,"Occupied_Sites":21,"Lake_Level":6228,"Threshold":26},{"Year":2018,"Occupied_Sites":24,"Lake_Level":6228,"Threshold":26},{"Year":2019,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2020,"Occupied_Sites":17,"Lake_Level":6227,"Threshold":26},{"Year":2021,"Occupied_Sites":8,"Lake_Level":6224,"Threshold":26},{"Year":2022,"Occupied_Sites":30,"Lake_Level":6224,"Threshold":26},{"Year":2023,"Occupied_Sites":20,"Lake_Level":6228,"Threshold":26}],"latestYear":2025,"sitesTracked":65,"statusLatest":{"Surveyed":45,"No Survey":20},"ownerLatest":{"Private":26,"USFS":19,"CSP":7,"CTC":3,"NVSP":3,"City SLT":1,"IVGID":1,"Private/City SLT":1,"Private/Public":1,"Private/USFS":1,"Public":1,"UNR/City":1},"coverage":null}</script>
+    </section>
+    <!-- fragment:end -->
+
   </main>
-
-  <script>
-    'use strict';
-
-    /* ───────────────────────── CONFIG: edit this block ───────────────────────── */
-    const CONFIG = {
-      sitesLayer: 'https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9',
-      siteNameField: 'SITE_NAME', yearField: 'YEAR_OF_COUNT', statusField: 'STATUS', ownerField: 'OWNER',
-      surveyedValue: 'Surveyed',
-      summaryTable: 'https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/86',
-      summaryYear: 'Year', summaryValue: 'Occupied_Sites', summaryTarget: 'Threshold', summaryAux: 'Lake_Level',
-      mapCenter: [-120.03, 39.08], mapZoom: 10,
-      sourceName: 'TRPA LTInfo_Monitoring map service',
-      exportPrefix: 'tahoe-yellow-cress',
-      ownerLabels: { USFS: 'U.S. Forest Service', CSP: 'California State Parks', CTC: 'California Tahoe Conservancy', NVSP: 'Nevada State Parks', IVGID: 'Incline Village GID', 'City SLT': 'City of South Lake Tahoe' },
-    };
-
-    /* SNAPSHOT: same shape as loadLive() returns. */
-    const SNAPSHOT = {
-      captured: 'Oct. 26, 2026',
-      summary: [{"Year":1978,"Occupied_Sites":3,"Lake_Level":6224,"Threshold":26},{"Year":1979,"Occupied_Sites":25,"Lake_Level":6224,"Threshold":26},{"Year":1980,"Occupied_Sites":16,"Lake_Level":6226,"Threshold":26},{"Year":1981,"Occupied_Sites":22,"Lake_Level":6225,"Threshold":26},{"Year":1982,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":1983,"Occupied_Sites":11,"Lake_Level":6228,"Threshold":26},{"Year":1986,"Occupied_Sites":14,"Lake_Level":6228,"Threshold":26},{"Year":1988,"Occupied_Sites":18,"Lake_Level":6224,"Threshold":26},{"Year":1989,"Occupied_Sites":2,"Lake_Level":6224,"Threshold":26},{"Year":1990,"Occupied_Sites":34,"Lake_Level":6223,"Threshold":26},{"Year":1991,"Occupied_Sites":20,"Lake_Level":6222,"Threshold":26},{"Year":1992,"Occupied_Sites":17,"Lake_Level":6223,"Threshold":26},{"Year":1993,"Occupied_Sites":37,"Lake_Level":6223,"Threshold":26},{"Year":1994,"Occupied_Sites":31,"Lake_Level":6222,"Threshold":26},{"Year":1995,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1996,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1997,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1998,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1999,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":2000,"Occupied_Sites":15,"Lake_Level":6228,"Threshold":26},{"Year":2001,"Occupied_Sites":25,"Lake_Level":6225,"Threshold":26},{"Year":2002,"Occupied_Sites":35,"Lake_Level":6224,"Threshold":26},{"Year":2003,"Occupied_Sites":41,"Lake_Level":6224,"Threshold":26},{"Year":2004,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2005,"Occupied_Sites":43,"Lake_Level":6225,"Threshold":26},{"Year":2006,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2007,"Occupied_Sites":27,"Lake_Level":6226,"Threshold":26},{"Year":2008,"Occupied_Sites":40,"Lake_Level":6224,"Threshold":26},{"Year":2009,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2011,"Occupied_Sites":23,"Lake_Level":6228,"Threshold":26},{"Year":2012,"Occupied_Sites":29,"Lake_Level":6226,"Threshold":26},{"Year":2014,"Occupied_Sites":39,"Lake_Level":6223,"Threshold":26},{"Year":2016,"Occupied_Sites":41,"Lake_Level":6223,"Threshold":26},{"Year":2017,"Occupied_Sites":21,"Lake_Level":6228,"Threshold":26},{"Year":2018,"Occupied_Sites":24,"Lake_Level":6228,"Threshold":26},{"Year":2019,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2020,"Occupied_Sites":17,"Lake_Level":6227,"Threshold":26},{"Year":2021,"Occupied_Sites":8,"Lake_Level":6224,"Threshold":26},{"Year":2022,"Occupied_Sites":30,"Lake_Level":6224,"Threshold":26},{"Year":2023,"Occupied_Sites":20,"Lake_Level":6228,"Threshold":26}],
-      latestYear: 2025,
-      sitesTracked: 65,
-      statusLatest: { 'Surveyed': 45, 'No Survey': 20 },
-      ownerLatest: { 'Private': 26, 'USFS': 19, 'CSP': 7, 'CTC': 3, 'NVSP': 3, 'City SLT': 1, 'IVGID': 1, 'Private/City SLT': 1, 'Private/Public': 1, 'Private/USFS': 1, 'Public': 1, 'UNR/City': 1 },
-      coverage: null,   // filled live: [{ year, surveyed, tracked }]
-    };
-
-    /* ───────────────────────── DATA ───────────────────────── */
-    const { fmt, esc } = LTI;
-    const stat = (t, f, n) => ({ statisticType: t, onStatisticField: f, outStatisticFieldName: n });
-
-    async function loadLive() {
-      const [summary, byYear, bySite] = await Promise.all([
-        LTI.query(CONFIG.summaryTable, { where: '1=1', outFields: '*', orderByFields: CONFIG.summaryYear, returnGeometry: 'false' }),
-        LTI.query(CONFIG.sitesLayer, { where: '1=1', returnGeometry: 'false', groupByFieldsForStatistics: `${CONFIG.yearField},${CONFIG.statusField}`, outStatistics: [stat('count', 'OBJECTID', 'n')] }),
-        LTI.query(CONFIG.sitesLayer, { where: '1=1', returnGeometry: 'false', groupByFieldsForStatistics: CONFIG.siteNameField, outStatistics: [stat('count', 'OBJECTID', 'n')] }),
-      ]);
-      const years = {};
-      for (const f of byYear.features) {
-        const a = f.attributes; const y = a[CONFIG.yearField]; years[y] = years[y] || { year: y, surveyed: 0, tracked: 0 };
-        years[y].tracked += a.n; if (a[CONFIG.statusField] === CONFIG.surveyedValue) years[y].surveyed += a.n;
-      }
-      const coverage = Object.values(years).sort((a, b) => a.year - b.year);
-      const latestYear = coverage[coverage.length - 1].year;
-      const owners = await LTI.query(CONFIG.sitesLayer, { where: `${CONFIG.yearField} = ${latestYear}`, returnGeometry: 'false', groupByFieldsForStatistics: CONFIG.ownerField, outStatistics: [stat('count', 'OBJECTID', 'n')] });
-      const statusLatest = {}; const latest = coverage[coverage.length - 1];
-      statusLatest[CONFIG.surveyedValue] = latest.surveyed; statusLatest['No Survey'] = latest.tracked - latest.surveyed;
-      return {
-        summary: summary.features.map(f => f.attributes),
-        latestYear, sitesTracked: bySite.features.length, statusLatest,
-        ownerLatest: Object.fromEntries(owners.features.map(f => [f.attributes[CONFIG.ownerField] ?? 'Unknown', f.attributes.n])),
-        coverage,
-      };
-    }
-
-    /* ───────────────────────── RENDER ───────────────────────── */
-    let data = SNAPSHOT, live = false;
-    const S = () => data.summary.map(r => ({ year: r[CONFIG.summaryYear], occupied: r[CONFIG.summaryValue], target: r[CONFIG.summaryTarget], lake: r[CONFIG.summaryAux] }));
-
-    function renderGlance() {
-      const s = S(); const last = s[s.length - 1];
-      const surveyed = data.statusLatest[CONFIG.surveyedValue] ?? 0;
-      const tiles = [
-        { v: `${fmt(data.sitesTracked)} <small>sites</small>`, l: 'Known sites tracked around the lake' },
-        { v: `${fmt(surveyed)} <small>of ${fmt(data.sitesTracked)}</small>`, l: `Sites surveyed in ${data.latestYear}` },
-        { v: `${fmt(last.occupied)} <small>sites</small>`, l: `Occupied in ${last.year}, the latest summary year` },
-        { v: `${fmt(last.target)} <small>sites</small>`, l: 'Standard: occupied sites' },
-        { v: `${fmt(last.lake)} <small>ft</small>`, l: `Lake level in ${last.year}` },
-        { v: 'Not yet shown', l: 'Plants counted per site', pending: true },
-      ];
-      document.getElementById('glance-tiles').innerHTML = tiles.map(t => `<div class="tile${t.pending ? ' pending' : ''}"><div class="v">${t.v}</div><div class="l">${esc(t.l)}</div></div>`).join('');
-      document.getElementById('glance-source').textContent = `Figures ${live ? 'queried live' : `from a snapshot captured ${SNAPSHOT.captured}`} from the ${CONFIG.sourceName}. Occupied-site summaries run through ${last.year}; site surveys through ${data.latestYear}.`;
-    }
-
-    function renderOccupied() {
-      const s = S();
-      const target = s.find(r => r.target !== null)?.target;
-      const traces = [
-        { type: 'bar', name: 'Occupied sites', x: s.map(r => r.year), y: s.map(r => r.occupied), marker: { color: LTI.COLORS[0] }, hovertemplate: '%{x}: %{y} occupied sites<extra></extra>' },
-        { type: 'scatter', mode: 'lines+markers', name: 'Lake level (ft)', x: s.map(r => r.year), y: s.map(r => r.lake), yaxis: 'y2', line: { color: LTI.COLORS[3], width: 2 }, marker: { size: 5 }, hovertemplate: '%{x}: %{y:,.0f} ft<extra></extra>' },
-      ];
-      const layout = LTI.layout({
-        height: 340, showlegend: false, hovermode: 'x unified', margin: { r: 50 },
-        xaxis: { title: { text: 'Survey year', font: { size: 12 } }, tickformat: 'd', dtick: LTI.narrow() ? 10 : 5 },
-        yaxis: { title: { text: 'Occupied sites', font: { size: 12 } }, rangemode: 'tozero' },
-        yaxis2: { title: { text: 'Lake level (ft)', font: { size: 12 } }, overlaying: 'y', side: 'right', showgrid: false, range: [6218, 6232] },
-        ...(target !== undefined ? LTI.targetLine(target, `Standard: ${target} sites`) : {}),
-      });
-      LTI.plot('occupied-plot', traces, layout, LTI.PLOT_CONFIG);
-      document.getElementById('occupied-legend').innerHTML = `<span><i style="background:${LTI.COLORS[0]}"></i>Occupied sites</span><span><i style="background:${LTI.COLORS[3]}"></i>Lake level, right axis</span><span><i style="background:#4e4e4e;height:2px"></i>Standard</span>`;
-      LTI.toggle('[data-toggle="occupied"]', {
-        chart: () => LTI.showPlot(document.getElementById('occupied-plot'), document.getElementById('occupied-grid')),
-        table: () => {
-          LTI.grid('occupied-grid', [
-            { field: 'year', headerName: 'Year', minWidth: 90 },
-            { field: 'occupied', headerName: 'Occupied sites', type: 'rightAligned' },
-            { field: 'target', headerName: 'Standard', type: 'rightAligned' },
-            { field: 'lake', headerName: 'Lake level (ft)', type: 'rightAligned', valueFormatter: p => fmt(p.value) },
-          ], s, `${CONFIG.exportPrefix}-occupied-sites`);
-          LTI.showGrid(document.getElementById('occupied-plot'), document.getElementById('occupied-grid'));
-        },
-      });
-    }
-
-    function renderOwner() {
-      const rows = LTI.hbar('owner-plot', data.ownerLatest, { labels: CONFIG.ownerLabels, unit: 'sites', axisTitle: 'Sites', color: LTI.COLORS[0] });
-      document.getElementById('owner-caption').textContent = `Who manages the land at each of the ${fmt(rows.reduce((a, r) => a + r.value, 0))} sites tracked in ${data.latestYear}.`;
-      LTI.toggle('[data-toggle="owner"]', {
-        chart: () => LTI.showPlot(document.getElementById('owner-plot'), document.getElementById('owner-grid')),
-        table: () => {
-          LTI.grid('owner-grid', [
-            { field: 'label', headerName: 'Land owner', flex: 2, minWidth: 180 },
-            { field: 'value', headerName: 'Sites', type: 'rightAligned' },
-          ], rows, `${CONFIG.exportPrefix}-sites-by-owner`);
-          LTI.showGrid(document.getElementById('owner-plot'), document.getElementById('owner-grid'));
-        },
-      });
-    }
-
-    function renderCoverage() {
-      const el = document.getElementById('coverage-plot');
-      if (!data.coverage) {
-        LTI.showEmpty(el, 'Survey coverage by year needs the live site query.', ['The snapshot holds the latest year only. Reload when the network allows.']);
-        return;
-      }
-      const c = data.coverage;
-      LTI.plot(el, [
-        { type: 'bar', name: 'Surveyed', x: c.map(r => r.year), y: c.map(r => r.surveyed), marker: { color: LTI.COLORS[0] }, hovertemplate: '%{x}: %{y} surveyed<extra></extra>' },
-        { type: 'bar', name: 'Not surveyed', x: c.map(r => r.year), y: c.map(r => r.tracked - r.surveyed), marker: { color: '#dcdcdc' }, hovertemplate: '%{x}: %{y} not surveyed<extra></extra>' },
-      ], LTI.layout({ height: 300, barmode: 'stack', showlegend: false, hovermode: 'x unified', xaxis: { tickformat: 'd', dtick: LTI.narrow() ? 10 : 5 }, yaxis: { title: { text: 'Sites', font: { size: 12 } } } }), LTI.PLOT_CONFIG);
-    }
-
-    function renderCounts() {
-      document.getElementById('counts-body').innerHTML = LTI.emptyState('Per-site plant counts are not shown yet. When they are, this section will show:', [
-        'Plants counted at each site in the latest survey, as a table with CSV download.',
-        'The ten largest sites over time.',
-        'Sites that changed from occupied to unoccupied, and back, between years.',
-      ]);
-    }
-
-    /* ───────────────────────── MAP ───────────────────────── */
-    function buildMap() {
-      const container = document.getElementById('map');
-      require(['esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer', 'esri/widgets/Legend', 'esri/widgets/Home', 'esri/widgets/Expand', 'esri/widgets/Fullscreen'],
-        function (Map, MapView, FeatureLayer, Legend, Home, Expand, Fullscreen) {
-          const accent = LTI.accent();
-          const layer = new FeatureLayer({
-            url: CONFIG.sitesLayer, title: `Survey sites, ${data.latestYear}`,
-            definitionExpression: `${CONFIG.yearField} = ${data.latestYear}`, outFields: [CONFIG.siteNameField, CONFIG.statusField, CONFIG.ownerField],
-            renderer: { type: 'unique-value', field: CONFIG.statusField,
-              defaultSymbol: { type: 'simple-marker', size: 8, color: '#bdbdbd', outline: { color: 'white', width: 1 } }, defaultLabel: 'Not surveyed',
-              uniqueValueInfos: [{ value: CONFIG.surveyedValue, label: 'Surveyed', symbol: { type: 'simple-marker', size: 9, color: accent, outline: { color: 'white', width: 1.2 } } }] },
-            popupTemplate: { title: `{${CONFIG.siteNameField}}`, content: `{${CONFIG.statusField}} in ${data.latestYear}. Land owner: {${CONFIG.ownerField}}.` },
-          });
-          const map = new Map({ basemap: 'topo-vector', layers: [layer] });
-          const view = new MapView({ container, map, center: CONFIG.mapCenter, zoom: CONFIG.mapZoom, constraints: { snapToZoom: false }, popup: { dockEnabled: false, dockOptions: { buttonEnabled: false } } });
-          view.ui.move('zoom', 'top-left');
-          view.ui.add(new Home({ view }), 'top-left');
-          view.ui.add(new Fullscreen({ view }), 'top-left');
-          LTI.guardMap(view);
-          view.when(() => {
-            LTI.placeLegend(view, new Legend({ view, layerInfos: [{ layer }] }), Expand);
-            container.querySelector('.map-placeholder')?.remove();
-          }).catch(err => {
-            const ph = container.querySelector('.map-placeholder');
-            if (ph) ph.textContent = 'The map could not be loaded. The tiles and tables cover the same sites.';
-            console.error('Map failed to load', err);
-          });
-        });
-    }
-
-    /* ───────────────────────── INIT ───────────────────────── */
-    (async function init() {
-      renderCounts();
-      const result = await LTI.load(loadLive, SNAPSHOT);
-      data = result.data; live = result.live;
-      document.getElementById('map-title').textContent = `Survey sites, ${data.latestYear}`;
-      document.getElementById('map-caption').textContent = `${fmt(data.statusLatest[CONFIG.surveyedValue] ?? 0)} of ${fmt(data.sitesTracked)} sites were surveyed in ${data.latestYear}. The tables below give the same sites without the map.`;
-      buildMap();
-      renderGlance();
-      renderOccupied();
-      renderOwner();
-      renderCoverage();
-      document.querySelectorAll('[data-source-line]').forEach(p => { p.textContent = LTI.sourceText(live, SNAPSHOT.captured, CONFIG.sourceName); });
-      document.getElementById('footer-vintage').textContent = `Figures ${live ? 'queried live from maps.trpa.org' : `from a snapshot captured ${SNAPSHOT.captured}`}. Plant counts per site: not shown.`;
-      LTI.notifyHeight();
-    })();
-  </script>
 </body>
 </html>
