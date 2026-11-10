@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/amcclary/Documents/ArcGIS/Projects/MyProject/**)",
+      "Bash(python -c \"import arcpy; print\\(arcpy.GetInstallInfo\\(\\)\\)\")",
+      "Read(//c/Program Files/ArcGIS/Pro/bin/Python/envs/**)",
+      "Read(//f/GIS/DB_CONNECT/Collection.sde/SDE.Scenic/**)",
+      "Read(//f/GIS/DB_CONNECT/Collection.sde/**)",
+      "Read(//f/GIS/DB_CONNECT/**)",
+      "PowerShell(& \"C:\\\\Program Files\\\\ArcGIS\\\\Pro\\\\bin\\\\Python\\\\envs\\\\arcgispro-py3\\\\python.exe\" -c \"import arcpy; arcpy.env.workspace = r'F:\\\\GIS\\\\DB_CONNECT\\\\Collection.sde'; print\\(arcpy.ListFeatureClasses\\(\\)\\)\" 2>&1)",
+      "Read(//c/GIS/Scratch.gdb/**)",
+      "PowerShell(& \"C:\\\\Program Files\\\\ArcGIS\\\\Pro\\\\bin\\\\Python\\\\envs\\\\arcgispro-py3\\\\python.exe\" -m jupyter nbconvert --to notebook --execute --inplace \"c:\\\\Users\\\\amcclary\\\\Documents\\\\GitHub\\\\Monitoring\\\\Data_to_Databases\\\\Scenic.ipynb\" 2>&1)",
+      "PowerShell(grep -v \"DeprecationWarning\\\\|Proactor\\\\|add_reader\")",
+      "PowerShell(& \"C:\\\\Program Files\\\\ArcGIS\\\\Pro\\\\bin\\\\Python\\\\envs\\\\arcgispro-py3\\\\python.exe\" \"C:\\\\Users\\\\amcclary\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-amcclary-Documents-GitHub-Monitoring\\\\9254bc02-abf8-4309-a718-9c07e7209ea2\\\\scratchpad\\\\update_roadway.py\")",
+      "PowerShell(& \"C:\\\\Program Files\\\\ArcGIS\\\\Pro\\\\bin\\\\Python\\\\envs\\\\arcgispro-py3\\\\python.exe\" \"C:\\\\Users\\\\amcclary\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-amcclary-Documents-GitHub-Monitoring\\\\9254bc02-abf8-4309-a718-9c07e7209ea2\\\\scratchpad\\\\update_roadway_v2.py\")"
+    ]
+  }
+}
