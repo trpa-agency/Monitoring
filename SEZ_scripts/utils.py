@@ -134,10 +134,6 @@ sr = arcpy.SpatialReference(26910)
 # function to get sql connection for tabular TRPA data Collection.sde?
 # db options are 'tabular' or 'collect'??
 def get_conn(db):
-    # Get database user and password from environment variables on machine running script
-    db_user             = os.environ.get('DB_USER')
-    db_password         = os.environ.get('DB_PASSWORD')
-
     # driver is the ODBC driver for SQL Server
     driver              = 'ODBC Driver 17 for SQL Server'
     # server names are
@@ -145,17 +141,17 @@ def get_conn(db):
     sql_14              = 'sql14'
     # make it case insensitive
     db = db.lower()
-    # make sql database connection with pyodbc
+    # make sql database connection with pyodbc using Windows (OS) authentication
     # if db   == 'sde_tabular':
-    #     connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
+    #     connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};Trusted_Connection=yes"
     #     connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
     #     engine = create_engine(connection_url)
     if db == 'sde_collection':
-        connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
+        connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};Trusted_Connection=yes"
         connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
         engine = create_engine(connection_url)
     elif db == 'sde':
-        connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};UID={db_user};PWD={db_password}"
+        connection_string = f"DRIVER={driver};SERVER={sql_12};DATABASE={db};Trusted_Connection=yes"
         connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
         engine = create_engine(connection_url)
     # else return None
@@ -463,7 +459,7 @@ def categorize_phab(IPI):
 #Large Polygons or only polygon shapes lookup dictionary for Assessment Units with lerger values of acreage
 
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\Large_Polygon_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\emalamut\Documents\GitHub\Monitoring\SEZ_scripts\Large_Polygon_Lookup.csv")  
 
 #Define Empty look up dataframe
 lookup_dict = {}
@@ -476,7 +472,7 @@ print(lookup_dict)
 
 #Small Polygon if there are two acres for an SEZ
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\Small_Polygon_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\emalamut\Documents\GitHub\Monitoring\SEZ_scripts\Small_Polygon_Lookup.csv")  
 
 #Define Empty look up dataframe
 lookup_riverine = {}
@@ -489,7 +485,7 @@ print(lookup_riverine)
 
 #All Polygons
 # Step 1: Read the Excel file into a DataFrame
-excel_data = pd.read_csv(r"C:\Users\snewsome\Documents\GitHub\Monitoring\SEZ_scripts\All_SEZID_Lookup.csv")  
+excel_data = pd.read_csv(r"C:\Users\emalamut\Documents\GitHub\Monitoring\SEZ_scripts\All_SEZID_Lookup.csv")
 
 #Define Empty look up dataframe
 lookup_all = {}
