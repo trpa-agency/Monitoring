@@ -1,0 +1,35 @@
+// kit/popups/bike-ped-counter-chart.arcade
+// A column chart of the past 12 months at one bicycle and pedestrian counter. Returns a media
+// popup element. Stacks under bike-ped-counter.arcade in the same popup.
+//
+// Attributes on the client-side sites layer (set by the sites-timeseries fragment once the
+// site's record has loaded):
+//   l01 .. l12   month labels, oldest first ('Oct 2025'), empty until the record loads
+//   m01 .. m12   people counted in that month
+// The bar color is the Monitoring Dashboard green.
+
+var attrs = {};
+var fields = [];
+for (var i = 1; i <= 12; i++) {
+  var k = Text(i, '00');
+  var label = $feature['l' + k];
+  if (IsEmpty(label)) { continue; }
+  attrs[label] = DefaultValue($feature['m' + k], 0);
+  Push(fields, label);
+}
+
+if (Count(fields) == 0) {
+  return { type: 'text', text: 'The monthly chart appears once this site\'s record loads.' };
+}
+
+return {
+  type: 'media',
+  title: 'People counted per month, past 12 months',
+  attributes: attrs,
+  mediaInfos: [{
+    type: 'columnchart',
+    title: '',
+    caption: '',
+    value: { fields: fields, colors: ['#789440'] }
+  }]
+};

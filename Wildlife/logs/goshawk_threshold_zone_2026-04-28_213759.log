@@ -1,0 +1,34 @@
+2026-04-28 21:37:59 | INFO | goshawk_threshold_zone | Log file: C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\logs\goshawk_threshold_zone_2026-04-28_213759.log
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | TRPA Goshawk Threshold Zone
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Source GDB:   C:\GIS\Scratch.gdb (read-only)
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Output GDB:   C:\GIS\Goshawk_Threshold_Zone.gdb
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Nests FC:     nogo_nest_usfs
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | HIGH habitat: amgo_ecobject_cwhr_habmodel_high
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | MOD habitat:  amgo_ecobject_cwhr_habmodel_moderate
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Veg source:   C:\GIS\TahoeMaps\Tahoe_Data.gdb\Vegetation_Ecobject_2010 (LOW = veg - HIGH - MOD per-nest)
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Output FC:    C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone_TEST_FIXES
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | TEST mode:    OIDs=[6, 51, 75, 86, 99] (label=FIXES)
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Target ac:    500.0 | Buffer: 0.25 Miles | min_acres: 2.0 | search: 5 Miles
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Close dist:   200 Feet | probe every: 5 picks | homestretch: 50.0 ac
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Contiguity:   INTERSECT | fallback: WITHIN_A_DISTANCE 0.5 Miles
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Stagnation:   window=5 tol=0.5 ac slow_interval=10 picks
+2026-04-28 21:38:01 | INFO | goshawk_threshold_zone | Replacing existing C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone_TEST_FIXES
+2026-04-28 21:38:05 | INFO | goshawk_threshold_zone | TEST MODE: running 5 specific OID(s): [6, 51, 75, 86, 99]
+2026-04-28 21:38:05 | INFO | goshawk_threshold_zone | [1/5] Nest OID 6
+2026-04-28 21:38:06 | INFO | goshawk_threshold_zone |   [  0.7s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 21:38:08 | INFO | goshawk_threshold_zone |   [  2.7s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 21:38:11 | INFO | goshawk_threshold_zone |   [  6.1s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 21:38:19 | INFO | goshawk_threshold_zone |   [ 13.5s] source veg filtered to within 5 Miles of nest
+2026-04-28 21:38:35 | INFO | goshawk_threshold_zone |   [ 29.8s] LOW derived: 45935 polys kept (excluded 45919 HIGH+MOD UIDs)
+2026-04-28 21:38:54 | INFO | goshawk_threshold_zone |   [ 48.9s] erased buffer from HIGH habitat
+2026-04-28 21:39:42 | INFO | goshawk_threshold_zone |   [ 96.6s] erased buffer from MOD habitat
+2026-04-28 21:40:34 | INFO | goshawk_threshold_zone |   [148.5s] erased buffer from LOW habitat
+2026-04-28 21:40:57 | INFO | goshawk_threshold_zone |   [171.5s] acres calculated on habitat (planar)
+2026-04-28 21:41:13 | INFO | goshawk_threshold_zone |   [187.9s] near-distance computed
+2026-04-28 21:41:13 | INFO | goshawk_threshold_zone |   [188.2s] entering growth loop
+2026-04-28 21:41:14 | INFO | goshawk_threshold_zone |   [188.5s] ...[strict] MOD pick #1: oid=23753 +7.4 ac
+2026-04-28 21:41:14 | INFO | goshawk_threshold_zone |   [188.8s] ...[strict] MOD pick #2: oid=23869 +3.8 ac
+2026-04-28 21:41:14 | INFO | goshawk_threshold_zone |   [189.3s] sparse-habitat fallback: WITHIN_A_DISTANCE 0.5 Miles (target 500.0, projected 125.5)
+2026-04-28 21:53:58 | INFO | goshawk_threshold_zone |   [952.8s] ...probe: projected total = 142.3 ac (target 500.0)

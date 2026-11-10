@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LT Info review frame</title>
+  <meta name="robots" content="noindex" />
+
+  <!--
+    REVIEW FRAME, not a deliverable. A mock of a monitoring.laketahoeinfo.org page (header,
+    dashboard nav, breadcrumb, cards, footer) that loads one of the kit pages in the slot
+    where LT Info would show it, so ESA, Jeanne, and leadership can see the end state before
+    the framework exists. Only the framed content is TRPA's; the chrome imitates the host and
+    is never shipped. Values sampled from the live site on Oct. 13, 2026.
+
+    Query parameters
+      page   path to the page to frame, relative to this file (default program-dashboard.html)
+      mode   dashboard (Dashboard card on a program page, default)
+             section   (an embed section between the program's own cards)
+             topic     (a staff page at a vanity URL: title plus the page, no program cards)
+      title  the page or program title to show
+      vanity the vanity path to show in the breadcrumb for topic mode
+
+    The frame sizes the iframe from the page's ltinfo-embed:height messages, the interim
+    contract for today's Dashboard card. The end state renders fragments inline, with no
+    iframe at all; the topic page template shows that.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy: #2f3f56; --accent: #789440; --primary: #3e72b0; --link: #337ab7; --text: #4b4b4b; --card-body: #f7f7f7; --border: #efefef; --label: #3d3d3d; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; font-family: 'Lexend Deca', sans-serif; font-size: 16px; line-height: 1.4; color: var(--text); background: #fff; }
+    a { color: var(--link); }
+
+    /* Review toolbar: ours, not the host's */
+    .review { background: #fff7e6; border-bottom: 1px solid #f1d9a6; color: #5c4300; font-size: 0.8rem; padding: 0.4rem 1rem; display: flex; gap: 0.75rem 1.25rem; align-items: center; flex-wrap: wrap; }
+    .review strong { font-weight: 600; }
+    .review label { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .review select, .review input { font: inherit; font-size: 0.8rem; padding: 0.15rem 0.3rem; border: 1px solid #d9c38a; border-radius: 3px; background: #fff; color: #333; }
+    .review input { width: 260px; max-width: 50vw; }
+    .review button { font: inherit; font-size: 0.8rem; padding: 0.2rem 0.6rem; border: 1px solid #c9ad66; border-radius: 3px; background: #fff; cursor: pointer; }
+
+    /* Host header */
+    .hdr { background: var(--navy); color: #fff; }
+    .hdr .bar { max-width: 1140px; margin: 0 auto; padding: 0.6rem 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .hdr .logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; letter-spacing: 0.04em; font-size: 1.05rem; text-transform: uppercase; }
+    .hdr .logo i { display: inline-block; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #89bf40 0 30%, #3e72b0 31% 100%); }
+    .hdr .logo small { display: block; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.02em; text-transform: none; opacity: 0.85; }
+    .hdr nav { margin-left: auto; display: flex; gap: 1.2rem; font-size: 0.9rem; }
+    .hdr nav span { color: #fff; opacity: 0.9; }
+    .subnav { background: #fff; border-bottom: 1px solid #e3e3e3; }
+    .subnav .bar { max-width: 1140px; margin: 0 auto; padding: 0.5rem 1rem; display: flex; gap: 1.5rem; font-size: 0.9rem; }
+    .subnav .bar span { color: var(--primary); font-weight: 500; }
+    .crumb { background: var(--accent); color: #fff; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .crumb .bar { max-width: 1140px; margin: 0 auto; padding: 0.4rem 1rem; }
+    .crumb .bar b { font-weight: 600; }
+
+    /* Main column */
+    main { max-width: 1040px; margin: 0 auto; padding: 1rem 1rem 2rem; }
+    h1 { font-size: 1.35rem; font-weight: 600; text-transform: uppercase; color: var(--primary); margin: 0.5rem 0 0.4rem; }
+    .desc { color: #333; max-width: 860px; margin: 0 0 1rem; }
+    .card { border: 1px solid var(--border); border-radius: 4px; margin: 0 0 1.1rem; overflow: hidden; }
+    .card-h { background: var(--accent); color: #fff; font-weight: 700; font-size: 1.05rem; text-transform: uppercase; padding: 0.5rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+    .card-h .fs { font-size: 0.75rem; font-weight: 500; text-transform: none; opacity: 0.9; border: 1px solid rgba(255,255,255,0.6); border-radius: 3px; padding: 0.1rem 0.5rem; }
+    .card-b { background: var(--card-body); padding: 0.9rem 1rem; color: #333; }
+    .card-b.flush { padding: 0; }
+    .kv { display: grid; grid-template-columns: 220px 1fr; gap: 0.3rem 1rem; font-size: 0.95rem; }
+    .kv dt { color: var(--label); font-weight: 600; }
+    .kv dd { margin: 0; }
+    .ph { color: #8a8a8a; font-size: 0.9rem; }
+    .frame { display: block; width: 100%; border: 0; min-height: 300px; background: var(--card-body); transition: height 0.15s ease-out; }
+    .topic .frame { background: #fff; }
+    .status { font-size: 0.75rem; color: #8a8a8a; padding: 0.3rem 1rem 0.5rem; background: var(--card-body); border-top: 1px dashed #dcdcdc; }
+    .topic .status { background: #fff; }
+
+    footer { background: var(--navy); color: #fff; font-size: 0.8rem; margin-top: 2rem; }
+    footer .bar { max-width: 1140px; margin: 0 auto; padding: 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    footer a { color: #fff; }
+    @media (max-width: 599px) { .kv { grid-template-columns: 1fr; } .hdr nav { display: none; } .review input { width: 100%; max-width: none; } }
+  </style>
+</head>
+<body>
+  <div class="review" role="note">
+    <strong>Review mock.</strong> This imitates monitoring.laketahoeinfo.org around a TRPA page. Only the framed content ships.
+    <form id="controls" style="display:contents">
+      <label>Mode <select name="mode" id="mode"><option value="dashboard">Dashboard card</option><option value="section">Embed section</option><option value="topic">Staff topic page</option></select></label>
+      <label>Page <select id="pick"><option value="program-dashboard.html">program-dashboard.html</option><option value="section-embed.html">section-embed.html</option><option value="sites-timeseries.html">sites-timeseries.html</option><option value="topic-page.html">topic-page.html</option><option value="../pages/bike-ped/index.html">pages/bike-ped</option><option value="../pages/noise/index.html">pages/noise</option><option value="../pages/forest-health/index.html">pages/forest-health</option><option value="">other</option></select></label>
+      <label>URL <input name="page" id="page" placeholder="relative path or https://..." /></label>
+      <button type="submit">Load</button>
+    </form>
+  </div>
+
+  <header class="hdr">
+    <div class="bar">
+      <div class="logo"><i aria-hidden="true"></i><div>Lake Tahoe Info<small>Monitoring Dashboard</small></div></div>
+      <nav aria-label="Host navigation (inert)"><span>Explore</span><span>Log In</span><span>Request Support</span><span>About</span></nav>
+    </div>
+  </header>
+  <div class="subnav"><div class="bar"><span>Monitoring Programs</span><span>Data Center</span><span>Documents</span></div></div>
+  <div class="crumb"><div class="bar" id="crumb"><span>Monitoring Programs</span> &nbsp;/&nbsp; <b id="crumb-title"></b></div></div>
+
+  <main id="main">
+    <h1 id="title"></h1>
+    <p class="desc" id="desc"></p>
+
+    <!-- Program cards (dashboard and section modes) -->
+    <div class="card program-only">
+      <div class="card-h">Program Overview</div>
+      <div class="card-b"><dl class="kv"><dt>Program Name</dt><dd id="kv-name"></dd><dt>Monitoring Program Category</dt><dd id="kv-cat"></dd><dt>Monitoring Approach</dt><dd class="ph">Written in the CMS by TRPA staff. Not part of the embed.</dd></dl></div>
+    </div>
+
+    <div class="card section-only">
+      <div class="card-h">Monitoring Sites</div>
+      <div class="card-b ph">The program's own LT Info site grid and Leaflet map stay here. An embed section sits beside them, below.</div>
+    </div>
+
+    <!-- The slot -->
+    <div class="card slot" id="slot">
+      <div class="card-h"><span id="slot-title">Dashboard</span><span class="fs" aria-hidden="true">Fullscreen</span></div>
+      <div class="card-b flush">
+        <iframe class="frame" id="frame" title="Embedded TRPA page" allow="fullscreen"></iframe>
+        <div class="status" id="status">Waiting for the page's height message.</div>
+      </div>
+    </div>
+
+    <div class="card program-only">
+      <div class="card-h">Partners</div>
+      <div class="card-b ph">Partner organizations from the CMS.</div>
+    </div>
+    <div class="card program-only">
+      <div class="card-h">Documents</div>
+      <div class="card-b ph">Uploaded files with date, type, and description.</div>
+    </div>
+    <div class="card program-only">
+      <div class="card-h">Associated Indicators</div>
+      <div class="card-b ph">Links to the threshold indicators this program informs.</div>
+    </div>
+  </main>
+
+  <footer><div class="bar"><span>Implementation &amp; Hosting by Environmental Science Associates. Mock for review only.</span><span>&copy; Tahoe Regional Planning Agency</span></div></footer>
+
+  <script>
+    'use strict';
+    const q = new URLSearchParams(location.search);
+    const mode = ['dashboard', 'section', 'topic'].includes(q.get('mode')) ? q.get('mode') : 'dashboard';
+    const page = q.get('page') || 'program-dashboard.html';
+    const defaults = {
+      'program-dashboard.html': { title: 'Tahoe Yellow Cress', cat: 'Vegetation Preservation', desc: 'Annual surveys of the beach sites where Tahoe yellow cress grows, tracking how many are occupied against the standard of 26 sites.' },
+      'sites-timeseries.html': { title: 'Bicycle and Pedestrian', cat: 'Transportation', desc: 'Automated counters on shared-use paths and roadways record daily bicycle and pedestrian traffic across the Basin.' },
+      'section-embed.html': { title: 'Noise - Plan Areas', cat: 'Noise', desc: 'Community noise levels measured at sites grouped by land use, compared with the standard for each category.' },
+      'topic-page.html': { title: 'Noise in the Tahoe Basin', cat: 'Noise', desc: '', vanity: 'noise' },
+      'pages/bike-ped': { title: 'Bicycle and Pedestrian', cat: 'Transportation', desc: 'Automated counters on shared-use paths and roadways record daily bicycle and pedestrian traffic across the Basin.' },
+      'pages/noise': { title: 'Noise in the Tahoe Basin', cat: 'Noise', desc: '', vanity: 'noise' },
+      'pages/forest-health': { title: 'Forest Health Monitoring', cat: 'Forest Health', desc: '', vanity: 'forest-health' },
+    };
+    const d = defaults[page.split('/').pop()] || (Object.entries(defaults).find(([k]) => k.startsWith('pages/') && page.includes(k)) || [])[1] || { title: 'Monitoring Program', cat: 'Category', desc: '' };
+    const title = q.get('title') || d.title;
+    const vanity = q.get('vanity') || d.vanity || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+    document.body.classList.add(mode);
+    document.getElementById('title').textContent = title;
+    document.getElementById('desc').textContent = mode === 'topic' ? '' : d.desc;
+    document.getElementById('kv-name').textContent = title;
+    document.getElementById('kv-cat').textContent = d.cat;
+    document.getElementById('crumb-title').textContent = mode === 'topic' ? `/${vanity}` : title;
+    document.getElementById('slot-title').textContent = mode === 'section' ? 'Embed section: ' + title : mode === 'topic' ? 'Staff page' : 'Dashboard';
+    document.querySelectorAll('.program-only').forEach(el => { el.style.display = mode === 'topic' ? 'none' : ''; });
+    document.querySelectorAll('.section-only').forEach(el => { el.style.display = mode === 'section' ? '' : 'none'; });
+    if (mode === 'topic') { const slot = document.getElementById('slot'); slot.style.border = '0'; slot.querySelector('.card-h').style.display = 'none'; }
+
+    const frame = document.getElementById('frame');
+    const status = document.getElementById('status');
+    frame.src = page;
+    frame.title = title;
+    const t0 = performance.now();
+    let messages = 0;
+    window.addEventListener('message', (e) => {
+      const m = e.data;
+      if (!m || e.source !== frame.contentWindow) return;
+      if (m.type === 'ltinfo-embed:height') {
+        messages += 1;
+        frame.style.height = Math.ceil(m.height) + 'px';
+        status.textContent = `Height message ${messages}: ${Math.ceil(m.height)} px from "${m.source}" at ${((performance.now() - t0) / 1000).toFixed(1)} s. Mode: ${mode}.`;
+      } else if (m.type === 'ltinfo-embed:params') {
+        status.textContent += ` Params from the page: ${JSON.stringify(m.params)}.`;
+      }
+    });
+    setTimeout(() => { if (!messages) status.textContent = 'No height message after 15 s. The frame shows the host default height.'; if (!messages) frame.style.height = '765px'; }, 15000);
+
+    // Toolbar
+    document.getElementById('mode').value = mode;
+    const pick = document.getElementById('pick'), input = document.getElementById('page');
+    pick.value = [...pick.options].some(o => o.value === page) ? page : ''; input.value = page;
+    pick.addEventListener('change', () => { if (pick.value) input.value = pick.value; });
+    document.getElementById('controls').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const p = new URLSearchParams({ mode: document.getElementById('mode').value, page: input.value });
+      location.search = p.toString();
+    });
+  </script>
+</body>
+</html>

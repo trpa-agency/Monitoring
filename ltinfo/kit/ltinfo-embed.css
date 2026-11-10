@@ -1,0 +1,274 @@
+/* ltinfo-embed.css  v1.1.0  (Oct. 26, 2026)
+   Shared styles for TRPA fragments that render inside laketahoeinfo.org pages: monitoring
+   dashboards, sections, and the charts and maps on staff topic pages. Values are the
+   platform's own tokens, sampled from the live site (ltinfo-platform skill, Oct. 13, 2026)
+   and the Forest Health embeds (Oct. 4, 2026). Not a TRPA brand: the fragment matches its host.
+
+   Everything is scoped under .lti, the fragment root, so the stylesheet can sit in the host's
+   cascade without touching the host. Tokens are declared on .lti, not :root; when ESA
+   publishes its own variables the values here become a mapping to theirs.
+
+   Fragment
+     <section class="lti" data-site="monitoring" data-kind="section-embed"> ... </section>
+     data-site  monitoring (default) | thresholds | transportation | climate
+                sets --lti-accent, the host's card header color, used for section labels,
+                tile bars, and Calcite controls.
+     data-kind  the fragment type; ltinfo-embed.js mounts it (see LTI.mount).
+
+   Harness (the standalone page that wraps a fragment for review on GitHub Pages)
+     <body class="lti-harness" data-slot="card">
+     data-slot  card (default, #f7f7f7, a Dashboard card body) | white (a section on a
+                white card body, a threshold or climate panel, a topic page).
+
+   Load after the Calcite and ArcGIS SDK stylesheets so the Calcite variables here win.
+   Pair with ltinfo-embed.js. Breaking changes go to kit/v2/, never to this file. */
+
+.lti {
+  /* Platform */
+  --lti-primary:   #3e72b0;   /* page titles, primary series */
+  --lti-link:      #337ab7;   /* links in content */
+  --lti-navy:      #2f3f56;   /* header and footer, not used inside a fragment */
+  --lti-green:     #89bf40;   /* platform green */
+  --lti-orange:    #e49937;
+  --lti-teal:      #5a9cb0;
+  --lti-olive:     #646820;
+  --lti-danger:    #be4c4c;
+
+  /* Site accents (card header color on each dashboard) */
+  --lti-accent-monitoring:     #789440;
+  --lti-accent-thresholds:     #6c91a4;
+  --lti-accent-transportation: #2c5282;
+  --lti-accent:       var(--lti-accent-monitoring);
+  --lti-accent-dark:  #61783a;
+  --lti-accent-press: #4e6230;
+
+  /* Grays, the host's 50 to 900 scale */
+  --gray-50:  #fafafa;
+  --gray-100: #efefef;
+  --gray-200: #dcdcdc;
+  --gray-300: #bdbdbd;
+  --gray-400: #989898;
+  --gray-500: #7c7c7c;
+  --gray-600: #656565;
+  --gray-700: #525252;
+  --gray-900: #3d3d3d;
+
+  /* Semantic */
+  --ink:       #333333;   /* card text */
+  --ink-2:     #3d3d3d;   /* label bars, headings */
+  --ink-muted: #8a8a8a;
+  --line:      #efefef;   /* card border */
+  --line-2:    rgba(0, 0, 0, 0.15);   /* row borders, section rules */
+  --surface:   #ffffff;
+  --surface-2: #f7f7f7;   /* card body on the host */
+  --radius:    4px;
+  --font:      'Lexend Deca', sans-serif;
+  --gutter:    16px;
+
+  /* Status, the platform scale */
+  --status-on-track:  #188c16;
+  --status-caution:   #efd13d;
+  --status-off-track: #be4c4c;
+  --status-no-target: #3e72b0;
+
+  /* Data colors. Validate any new categorical set with the dataviz skill. */
+  --chart-1: #3e72b0; --chart-2: #e49937; --chart-3: #89bf40; --chart-4: #5a9cb0;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+  --hazard-1: #3e72b0; --hazard-2: #e49937; --hazard-3: #be4c4c;   /* ordered hazard, low to high */
+  --seq-1: #daf0f3; --seq-2: #b9e1e8; --seq-3: #89cad7; --seq-4: #52aabe;
+  --seq-5: #368ea4; --seq-6: #30748a; --seq-7: #2c5f72;              /* sequential blue */
+
+  /* Calcite components inside the fragment take the site accent. */
+  --calcite-ui-brand: var(--lti-accent); --calcite-ui-brand-hover: var(--lti-accent-dark); --calcite-ui-brand-press: var(--lti-accent-press);
+  --calcite-color-brand: var(--lti-accent); --calcite-color-brand-hover: var(--lti-accent-dark); --calcite-color-brand-press: var(--lti-accent-press);
+  --calcite-sans-family: var(--font); --calcite-font-family: var(--font);
+  --calcite-ui-text-1: var(--ink); --calcite-ui-text-2: var(--ink-2); --calcite-ui-text-3: var(--gray-600);
+  --calcite-color-text-1: var(--ink); --calcite-color-text-2: var(--ink-2); --calcite-color-text-3: var(--gray-600);
+  --calcite-button-corner-radius: var(--radius);
+
+  display: block;
+  font-family: var(--font); font-size: 16px; line-height: 1.4;
+  color: var(--ink); background: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+/* Per-site series palettes. The first color is the dashboard's own accent, so every chart on a
+   Monitoring Dashboard page leads with the monitoring green; the rest are drawn from the host
+   palette for contrast against it. LTI.colors(root) reads these. */
+.lti[data-site="monitoring"] {
+  --chart-1: #789440; --chart-2: #2f3f56; --chart-3: #b5a64c; --chart-4: #5a9cb0;
+  --chart-5: #e49937; --chart-6: #4e6230; --chart-7: #89cad7; --chart-8: #9c3e27;
+}
+.lti[data-site="thresholds"] {
+  --lti-accent: var(--lti-accent-thresholds); --lti-accent-dark: #567a8c; --lti-accent-press: #466676;
+  --chart-1: #6c91a4; --chart-2: #2f3f56; --chart-3: #e49937; --chart-4: #89bf40;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+}
+.lti[data-site="transportation"] {
+  --lti-accent: var(--lti-accent-transportation); --lti-accent-dark: #1f3a5e; --lti-accent-press: #172c48;
+  --chart-1: #2c5282; --chart-2: #e49937; --chart-3: #89bf40; --chart-4: #5a9cb0;
+  --chart-5: #be4c4c; --chart-6: #646820; --chart-7: #89cad7; --chart-8: #2c5f72;
+}
+.lti[data-site="climate"]        { --lti-accent: var(--lti-primary);               --lti-accent-dark: #2f3f56; --lti-accent-press: #243043; }
+
+/* Harness page: the document around a fragment on GitHub Pages. Not part of the fragment. */
+body.lti-harness { margin: 0; padding: 0; font-family: 'Lexend Deca', sans-serif; background: #f7f7f7; }
+body.lti-harness[data-slot="white"] { background: #ffffff; }
+.lti-harness .wrap { max-width: 1100px; margin: 0 auto; padding: 0.25rem 16px 1rem; }
+.lti-harness .wrap.wide { max-width: 1040px; }
+
+/* Base */
+.lti *, .lti *::before, .lti *::after { box-sizing: border-box; }
+.lti a { color: var(--lti-link); }
+.lti h2, .lti h3 { margin: 0; line-height: 1.3; color: var(--gray-900); }
+.lti h2 { font-size: 1.125rem; font-weight: 600; }
+.lti h3 { font-size: 1rem; font-weight: 600; }
+.lti p { margin: 0 0 0.6rem; }
+.lti .muted { color: var(--ink-muted); }
+.lti .small { font-size: 0.875rem; }
+.lti .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.lti .hidden { display: none !important; }
+
+/* Sections: an uppercase accent label, a heading, and one lead paragraph */
+.lti .section { padding: 1rem 0 0.5rem; }
+.lti .section + .section { border-top: 1px solid var(--line-2); }
+.lti .section-label {
+  font-size: 0.875rem; font-weight: 700; text-transform: uppercase;
+  color: var(--lti-accent); margin-bottom: 0.15rem;
+}
+.lti .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.lti .section-head p { color: var(--ink); margin: 0.25rem 0 0; max-width: 780px; }
+
+/* Stat tiles */
+.lti .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin: 0.5rem 0 0.25rem; }
+.lti .tile { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--tile-accent, var(--lti-accent)); border-radius: var(--radius); padding: 0.7rem 0.85rem; min-width: 0; }
+.lti .tile .v { font-size: 1.4rem; font-weight: 700; line-height: 1.15; color: var(--gray-900); }
+.lti .tile .v small { font-size: 0.8rem; font-weight: 500; color: var(--gray-600); }
+.lti .tile .l { font-size: 0.8rem; color: var(--gray-600); margin-top: 0.15rem; }
+.lti .tile.pending { --tile-accent: var(--gray-300); }
+.lti .tile.pending .v { color: var(--ink-muted); font-weight: 500; font-size: 1.05rem; }
+
+/* Layout grids */
+.lti .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+.lti .grid-3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+@media (min-width: 820px) {
+  .lti .grid-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .lti .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lti .span-2 { grid-column: 1 / -1; }
+}
+
+/* Cards follow the host: #efefef label bar (its h3.popover-header) over a white body */
+.lti .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 0 0.75rem; min-width: 0; }
+.lti .card + .card { margin-top: 0.9rem; }
+.lti .card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; background: var(--gray-100); color: var(--gray-900); padding: 0.5rem 1rem; border-radius: var(--radius) var(--radius) 0 0; margin: 0 0 0.6rem; }
+.lti .card-head h3 { flex: 1 1 auto; font-size: 1rem; font-weight: 600; color: var(--gray-900); }
+.lti .card > :not(.card-head) { margin-left: 1rem; margin-right: 1rem; }
+.lti .card .caption { font-size: 0.85rem; color: var(--gray-600); margin: 0.5rem 1rem 0; }
+.lti .card .source { font-size: 0.8rem; color: var(--ink-muted); margin: 0.3rem 1rem 0; }
+.lti .plot { width: auto; min-height: 240px; }   /* auto, not 100%: the card gives it side margins */
+.lti .chart-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.85rem; color: var(--ink); margin: 0 1rem 0.25rem; }
+.lti .chart-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.lti .chart-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: 0 0 auto; }
+.lti .grid-toolbar { display: flex; justify-content: flex-end; margin-bottom: 0.4rem; }
+.lti .loading-note { font-size: 0.875rem; color: var(--ink-muted); padding: 1rem 0; margin: 0; }
+
+/* Definition cards ("How it is measured") */
+.lti .def { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 0 0.75rem; font-size: 0.9rem; }
+.lti .def h3 { background: var(--gray-100); color: var(--gray-900); font-size: 0.95rem; padding: 0.5rem 1rem; margin: 0 0 0.5rem; border-radius: var(--radius) var(--radius) 0 0; }
+.lti .def p { margin: 0 1rem 0.35rem; color: var(--ink); }
+.lti .def p:last-child { margin-bottom: 0; }
+.lti .def table { width: calc(100% - 2rem); margin: 0.3rem 1rem 0; border-collapse: collapse; font-size: 0.82rem; }
+.lti .def th, .lti .def td { text-align: left; padding: 0.25rem 0.35rem 0.25rem 0; border-bottom: 1px solid var(--line-2); color: var(--ink); }
+.lti .def th { font-weight: 600; color: var(--gray-900); }
+.lti .def td.num, .lti .def th.num { text-align: right; padding-right: 0; }
+.lti .def .small { margin-top: 0.3rem; }
+
+/* Skeletons: the shape of what is coming, in gray, while queries run */
+@keyframes lti-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.lti .skeleton { position: relative; overflow: hidden; color: transparent !important; }
+.lti .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-50) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: lti-shimmer 1.6s linear infinite; border-radius: var(--radius); }
+.lti .tile.skeleton { --tile-accent: var(--gray-200); }
+.lti .tile.skeleton::after { inset: 0.5rem 0.75rem; }
+.lti .plot.skeleton { min-height: 240px; }
+@media (prefers-reduced-motion: reduce) { .lti .skeleton::after { animation: none; } }
+
+/* Tiles: an optional direction line under the label */
+.lti .tile .d { font-size: 0.78rem; color: var(--gray-600); margin-top: 0.2rem; }
+
+/* Maps */
+.lti .map-view { width: auto; height: 460px; border-radius: var(--radius); overflow: hidden; background: var(--gray-50); position: relative; border: 1px solid var(--line-2); }
+.lti .map-view .map-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); font-size: 0.875rem; gap: 0.5rem; }
+.lti .map-view .lti-map-ctl { padding: 3px 8px 3px 10px; font-family: var(--font); font-size: 0.8rem; --calcite-label-margin-bottom: 0; }
+.lti .map-view .lti-map-ctl calcite-label { --calcite-label-margin-bottom: 0; margin: 0; color: var(--ink); }
+.lti .map-view .esri-popup__main-container { font-family: var(--font); max-width: 340px; }
+.lti .map-view .esri-popup--is-docked .esri-popup__main-container { width: 320px; max-height: calc(100% - 16px); }
+.lti .map-view .esri-popup__content { margin: 0 15px 10px; }
+.lti .map-view .esri-popup__media-chart { min-height: 150px; }
+.lti .map-view .esri-popup__media-item { max-width: 100%; }
+@media (max-width: 599px) { .lti .map-view .esri-popup--is-docked .esri-popup__main-container { width: calc(100% - 60px); } }
+.lti .map-view .esri-feature__text, .lti .map-view .esri-feature__content-element { font-family: var(--font); font-size: 0.875rem; line-height: 1.45; color: var(--ink); }
+.lti .map-view .esri-popup__header-title { font-family: var(--font); font-weight: 600; font-size: 0.95rem; }
+
+/* Sites fragment: the picker in the card head and the facts list under the map */
+.lti .site-picker { min-width: 260px; max-width: 100%; }
+.lti .site-facts { display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.8rem; font-size: 0.875rem; margin: 0.6rem 1rem 0.5rem; }
+.lti .site-facts dt { color: var(--gray-600); }
+.lti .site-facts dd { margin: 0; color: var(--ink); }
+
+/* Empty state: say what will show here, never a chart from placeholder numbers */
+.lti .empty {
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius);
+  padding: 0.9rem 1rem; color: var(--ink); font-size: 0.9rem;
+}
+.lti .empty calcite-icon { flex: 0 0 auto; color: var(--ink-muted); margin-top: 2px; }
+.lti .empty ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+.lti .empty li { margin-bottom: 0.2rem; }
+
+/* Status badge, only where the host does not already show one */
+.lti .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 999px; color: #fff; background: var(--gray-500); }
+.lti .badge.on-track { background: var(--status-on-track); }
+.lti .badge.caution { background: var(--status-caution); color: var(--ink-2); }
+.lti .badge.off-track { background: var(--status-off-track); }
+
+/* Narrative blocks and page furniture for topic pages (CMS content in ESA's framework) */
+.lti .prose { max-width: 780px; }
+.lti .prose p { margin: 0 0 0.8rem; }
+.lti .prose ul, .lti .prose ol { margin: 0 0 0.8rem; padding-left: 1.3rem; }
+.lti .prose li { margin-bottom: 0.25rem; }
+.lti .lead { font-size: 1.05rem; color: var(--ink); max-width: 780px; margin: 0.25rem 0 0.75rem; }
+.lti .jump { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.875rem; margin: 0 0 0.5rem; padding: 0; list-style: none; }
+.lti .jump a { text-decoration: none; }
+.lti .jump a:hover { text-decoration: underline; }
+.lti .related { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem; }
+.lti .related a { display: block; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--lti-accent); border-radius: var(--radius); padding: 0.6rem 0.8rem; text-decoration: none; color: var(--ink); font-size: 0.9rem; }
+.lti .related a strong { display: block; color: var(--lti-link); margin-bottom: 0.15rem; }
+
+/* Included fragments on a topic page: the placeholder, then the fragment, or a link if it failed */
+.lti .include { margin: 0.75rem 0 0.25rem; }
+.lti .include > .lti { padding: 0; }
+.lti .include .include-fallback { display: none; }
+.lti .include.failed .include-fallback { display: block; }
+
+/* AG Grid: 14px cells like the host, the #efefef label-bar header, #fafafa striping.
+   Legacy CSS-theme variables for ag-grid-community 32 and earlier. ltinfo-embed.js sets the
+   same values through the Theming API on 33 and later, so either version matches. */
+.lti .ag-theme-quartz {
+  --ag-font-family: var(--font); --ag-font-size: 14px;
+  --ag-header-background-color: #efefef; --ag-header-foreground-color: #3d3d3d;
+  --ag-foreground-color: #181d1f; --ag-background-color: #ffffff; --ag-odd-row-background-color: #fafafa;
+  --ag-border-color: rgba(0, 0, 0, 0.1); --ag-row-border-color: rgba(0, 0, 0, 0.15);
+  --ag-wrapper-border-radius: 4px; --ag-header-height: 40px; --ag-row-height: 40px;
+  --ag-header-column-resize-handle-color: rgba(0, 0, 0, 0.15);
+  --ag-icon-font-color-header: #656565; --ag-header-cell-hover-background-color: #e3e3e3; --ag-header-font-weight: 600;
+}
+
+/* Footer: about the program, links, data vintage */
+.lti .footer { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--line-2); font-size: 0.875rem; color: var(--gray-600); }
+.lti .footer .links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem; }
+
+@media (max-width: 599px) {
+  .lti { font-size: 15px; }
+  .lti .map-view { height: 360px; }
+  .lti .tile .v { font-size: 1.25rem; }
+  .lti .site-picker { min-width: 0; width: 100%; }
+}

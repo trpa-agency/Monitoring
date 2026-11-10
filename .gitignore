@@ -1,3 +1,7 @@
+#
+.env
+
+# Ignore R environment files
 .Rproj.user
 .Rhistory
 .RData

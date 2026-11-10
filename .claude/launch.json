@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "currents",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "Currents"],
+      "port": 8765
+    },
+    {
+      "name": "monitoring",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "."],
+      "port": 8766
+    },
+    {
+      "name": "tools-site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "../tools"],
+      "port": 8123
+    }
+  ]
+}

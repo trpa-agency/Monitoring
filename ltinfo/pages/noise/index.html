@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-embed="noise">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noise in the Tahoe Basin</title>
+  <meta name="description" content="How TRPA monitors noise in the Lake Tahoe Basin, in plan areas, along the shoreline, and beside the highways, and what each record shows against its standard." />
+
+  <!--
+    Noise topic page, Tahoe Regional Planning Agency. A staff page for a vanity URL under
+    monitoring.laketahoeinfo.org (requested framework change 2), spanning the three noise
+    monitoring programs: Plan Areas (61), Shorezone (62), and Highways (65). Built on the
+    topic-page template: narrative blocks with two section fragments rendered inline through
+    data-lti-include. See ../../CONTRACT.md and ../../PLAN.md.
+
+    Sections
+      plan-area-noise.html          average CNEL by land use category against each standard (table 74)
+      shoreline-exceedances.html    average exceedances per day across shoreline sites (table 78)
+    The highway record (layer 11, per-site CNEL against each highway's limit) gets its own
+    section when its summary table exists; until then the narrative links the program page.
+  -->
+
+  <!-- The page loads every library its fragments need, once. In ESA's framework the layout does this. -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../kit/ltinfo-embed.css" />
+  <script src="../../kit/ltinfo-embed.js"></script>
+</head>
+<body class="lti-harness" data-slot="white">
+  <main class="wrap wide">
+    <div class="lti" data-site="monitoring">
+
+      <!-- LEAD -->
+      <section class="section" id="overview" aria-label="Overview">
+        <div class="section-label">Overview</div>
+        <h2>Noise in the Tahoe Basin: what is measured and what the record shows</h2>
+        <p class="lead">TRPA monitors noise in three settings: plan areas across the Basin, the shoreline, and the highway corridors. Each has its own standard, its own sites, and its own cycle. This page gathers the three records in one place.</p>
+        <ul class="jump" aria-label="On this page">
+          <li><a href="#plan-areas">Plan area noise</a></li>
+          <li><a href="#shoreline">Shoreline</a></li>
+          <li><a href="#highways">Highways</a></li>
+          <li><a href="#how">How noise is measured</a></li>
+          <li><a href="#related">Related</a></li>
+        </ul>
+      </section>
+
+      <!-- PLAN AREAS -->
+      <section class="section" id="plan-areas" aria-label="Plan area noise">
+        <div class="section-label">Plan area noise</div>
+        <div class="section-head"><h2>Community noise by land use</h2></div>
+        <div class="prose">
+          <p>Plan area monitoring measures the community noise equivalent level (CNEL), a 24-hour average that weights evening and night noise more heavily, at sites grouped by the land use around them. Each land use category has its own standard, from 45 decibels in wilderness and critical wildlife habitat to 65 in industrial areas, and the standards are set as CNEL so that a loud evening counts for more than a loud noon.</p>
+          <p>Sites are monitored on a rotating schedule, so the record is summarized by monitoring period rather than by year. The chart shows the average CNEL across the sites in four categories for each period since 1987, against each category's standard. Low density residential sites have run at or just under their 50 decibel standard for most of the record; wilderness and roadless sites, held to 45, were above it in the first period and under it since.</p>
+        </div>
+        <div data-lti-include="plan-area-noise.html">
+          <div class="include-fallback">
+            <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This chart did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="plan-area-noise.html" target="_blank" rel="noopener noreferrer">Plan area noise by land use category</a>.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHORELINE -->
+      <section class="section" id="shoreline" aria-label="Shoreline">
+        <div class="section-label">Shoreline</div>
+        <div class="section-head"><h2>Single-event noise on the water</h2></div>
+        <div class="prose">
+          <p>Shoreline monitoring listens for single noise events, mostly from watercraft, at sites around the lake during the peak boating season from July through Labor Day. The standard is a limit on single events, so the measure is how many events per day exceed it rather than an average level. A season with no exceedances meets the standard.</p>
+          <p>The chart shows the average number of exceedances per day across all shoreline sites for each monitored year since 2009. The record runs between a tenth and a half of an exceedance per day; 2017 was the loudest year monitored, and the two years that followed the pandemic season were among the quietest.</p>
+        </div>
+        <div data-lti-include="shoreline-exceedances.html">
+          <div class="include-fallback">
+            <div class="empty"><calcite-icon icon="exclamation-mark-triangle" scale="m" aria-hidden="true"></calcite-icon><div><strong>This chart did not load.</strong><p style="margin:0.3rem 0 0">Open it directly: <a href="shoreline-exceedances.html" target="_blank" rel="noopener noreferrer">Shoreline noise exceedances per day</a>.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HIGHWAYS -->
+      <section class="section" id="highways" aria-label="Highways">
+        <div class="section-label">Highways</div>
+        <div class="section-head"><h2>Traffic noise beside the state routes</h2></div>
+        <div class="prose">
+          <p>Highway monitoring measures CNEL at fixed distances from the edge of each state route, and compares it with a limit set for that highway, 55 decibels on most routes. Sites sit beside U.S. 50, State Routes 28, 89, 207, and 267, and the record notes the distance from the road edge so that readings taken at 100 and 300 feet are not mixed.</p>
+          <p>The highway record is kept site by site and does not yet have a summary table like the two above. Until it does, the sites and their readings are on the <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/65" target="_blank" rel="noopener noreferrer">Noise: Highways program page</a>, and the evaluation against the standards is on the Threshold Dashboard.</p>
+        </div>
+        <div class="empty"><calcite-icon icon="information" scale="m" aria-hidden="true"></calcite-icon><div><strong>A highway section will appear here.</strong><ul><li>Average and maximum CNEL by highway and year against each highway's limit, as a chart with a table and CSV.</li><li>A map of the highway sites with the latest reading in each popup.</li></ul></div></div>
+      </section>
+
+      <!-- HOW -->
+      <section class="section" id="how" aria-label="How noise is measured">
+        <div class="section-label">How noise is measured</div>
+        <div class="section-head"><h2>Three measures, one unit</h2></div>
+        <div class="grid-3">
+          <div class="def"><h3>CNEL</h3><p>Community noise equivalent level: a 24-hour average sound level in decibels that adds a penalty of 5 decibels to evening hours and 10 to night hours, because the same sound disturbs more when it is dark and quiet.</p></div>
+          <div class="def"><h3>Single events</h3><p>A single noise event is one passing source, a boat or a vehicle, measured at its loudest. Shoreline standards limit single events; an exceedance is one event above the limit.</p></div>
+          <div class="def"><h3>Standards</h3><p>TRPA's noise thresholds set a CNEL for each plan area land use category, a single-event limit for the shoreline, and a CNEL limit for each highway. The Threshold Dashboard reports status and trend against them every four years.</p></div>
+        </div>
+      </section>
+
+      <!-- RELATED -->
+      <section class="section" id="related" aria-label="Related">
+        <div class="section-label">Related</div>
+        <div class="section-head"><h2>Where to go next</h2></div>
+        <div class="related">
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/61" target="_blank" rel="noopener noreferrer"><strong>Noise: Plan Areas</strong>Program record, sites, partners, and documents</a>
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/62" target="_blank" rel="noopener noreferrer"><strong>Noise: Shorezone</strong>Program record, sites, partners, and documents</a>
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/65" target="_blank" rel="noopener noreferrer"><strong>Noise: Highways</strong>Program record, sites, partners, and documents</a>
+          <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer"><strong>Threshold Dashboard: Noise</strong>Status and trend against the standards</a>
+        </div>
+      </section>
+
+      <div class="footer">
+        <div>Narrative by TRPA staff. Charts are TRPA fragments rendered inline from the LTInfo_Monitoring map service; each states its own source and data vintage.</div>
+        <div style="margin-top:0.4rem">Page updated Oct. 26, 2026.</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-embed="noise-plan-area">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan area noise by land use</title>
+  <meta name="description" content="Average community noise equivalent level (CNEL) at plan area noise monitoring sites in the Lake Tahoe Basin by land use category and monitoring period, against the standard for each category." />
+
+  <!--
+    Plan area noise section, Tahoe Regional Planning Agency. The section-embed fragment
+    (kit/fragments/section-embed.js) on the Plan Area Noise Average table
+    (LTInfo_Monitoring/74): average CNEL per monitoring period for four land use categories
+    against each category's standard. Included inline by ./index.html and usable on its own
+    in a section on https://monitoring.laketahoeinfo.org/monitoring-programs/61.
+    See ../../CONTRACT.md.
+  -->
+
+  <!-- Plotly and AG Grid are UMD bundles: load them before any AMD loader (the ArcGIS SDK). -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
+  <!-- Calcite 2.13.2 matches the ArcGIS SDK 4.31 build used by the other templates. -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../kit/ltinfo-embed.css" />
+  <script src="../../kit/ltinfo-embed.js"></script>
+</head>
+<body class="lti-harness" data-slot="card">
+  <main class="wrap">
+
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="section-embed" aria-label="Plan area noise by land use category">
+      <div class="card">
+        <div class="card-head">
+          <h3 data-ref="title"></h3>
+          <calcite-segmented-control scale="s" data-ref="toggle" aria-label="Chart or table">
+            <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+          </calcite-segmented-control>
+        </div>
+        <div class="plot" data-ref="plot"></div>
+        <div class="hidden" data-ref="grid"></div>
+        <div class="chart-legend" data-ref="legend"></div>
+        <p class="caption" data-ref="caption"></p>
+        <p class="source" data-ref="source"></p>
+      </div>
+
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "title": "Plan area noise: average CNEL by land use category",
+        "service": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/74",
+        "where": "Category IN ('Commercial Areas','High Density Residential','Low Density Residential','Wilderness and Roadless')",
+        "orderBy": "Category, OBJECTID",
+        "xField": "Year",
+        "yField": "Value",
+        "seriesField": "Category",
+        "targetField": "Threshold_Value",
+        "chartType": "line",
+        "xCategorical": true,
+        "xLabel": "Monitoring period",
+        "yLabel": "Average CNEL (dB)",
+        "decimals": 1,
+        "seriesLabels": {},
+        "caption": "Average community noise equivalent level (CNEL) across the monitoring sites in each land use category, by monitoring period. Dashed lines are the noise standard for each category.",
+        "sourceName": "TRPA LTInfo_Monitoring map service, Plan Area Noise Average table",
+        "exportName": "plan-area-noise-average"
+      }
+      </script>
+      <!-- SNAPSHOT: rows from the same query, same field names. Renders when the live query fails. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","rows":[{"Category":"Commercial Areas","Year":"1987-1991","Value":55.5,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"1992-1996","Value":56.35,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"1997-2001","Value":57.9,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2007-2011","Value":52.1,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2012-2015","Value":55,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2016-2019","Value":51.12,"Threshold_Value":60},{"Category":"Commercial Areas","Year":"2020-2023","Value":52.58,"Threshold_Value":60},{"Category":"High Density Residential","Year":"1987-1991","Value":51.2,"Threshold_Value":55},{"Category":"High Density Residential","Year":"1992-1996","Value":49.6,"Threshold_Value":55},{"Category":"High Density Residential","Year":"1997-2001","Value":50.2,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2007-2011","Value":51.3,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2012-2015","Value":51.7,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2016-2019","Value":49.56,"Threshold_Value":55},{"Category":"High Density Residential","Year":"2020-2023","Value":47.74,"Threshold_Value":55},{"Category":"Low Density Residential","Year":"1987-1991","Value":48.5,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"1992-1996","Value":49.73,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"1997-2001","Value":50.26,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2007-2011","Value":51.83,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2012-2015","Value":46.68,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2016-2019","Value":49.3,"Threshold_Value":50},{"Category":"Low Density Residential","Year":"2020-2023","Value":47.6,"Threshold_Value":50},{"Category":"Wilderness and Roadless","Year":"1987-1991","Value":46,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2007-2011","Value":42.9,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2012-2015","Value":38.6,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2016-2019","Value":42.52,"Threshold_Value":45},{"Category":"Wilderness and Roadless","Year":"2020-2023","Value":44.49,"Threshold_Value":45}]}</script>
+    </section>
+    <!-- fragment:end -->
+
+  </main>
+</body>
+</html>
