@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-embed="forest-health">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forest Health Monitoring</title>
+  <meta name="description" content="The three Forest Health monitoring programs for the Lake Tahoe Basin, Forest Structure, Fire Dynamics, and Subalpine Conifer: what each one measures, where its dashboard is, and how they fit together." />
+
+  <!--
+    Forest Health hub, Tahoe Regional Planning Agency. A staff page for a vanity URL under
+    monitoring.laketahoeinfo.org gathering the three Forest Health monitoring programs. Built
+    on the topic-page template; narrative and cards only, no fragments yet. See
+    ../../CONTRACT.md and ../../PLAN.md.
+
+    The three dashboards live in the ForestHealth repo and run in today's Dashboard card:
+      https://trpa-agency.github.io/ForestHealth/monitoring/forest-structure.html
+      https://trpa-agency.github.io/ForestHealth/monitoring/fire-dynamics.html
+      https://trpa-agency.github.io/ForestHealth/monitoring/subalpine-conifer.html
+    When they move onto the kit as fragments (PLAN.md, open items), their at-a-glance tiles can
+    be included here inline with data-lti-include. Program 83 is Subalpine Conifer; the host has
+    no program pages for Forest Structure or Fire Dynamics yet (ask the LT Info admin).
+  -->
+
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../kit/ltinfo-embed.css" />
+  <script src="../../kit/ltinfo-embed.js"></script>
+  <style>
+    .lti .programs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.9rem; }
+    .lti .program { display: flex; flex-direction: column; }
+    .lti .program .body { padding: 0 1rem; flex: 1 1 auto; }
+    .lti .program .body p { font-size: 0.925rem; }
+    .lti .program .measures { margin: 0.4rem 0 0.6rem; padding-left: 1.1rem; font-size: 0.875rem; color: var(--ink); }
+    .lti .program .measures li { margin-bottom: 0.2rem; }
+    .lti .program .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.25rem 1rem 0; }
+  </style>
+</head>
+<body class="lti-harness" data-slot="white">
+  <main class="wrap wide">
+    <div class="lti" data-site="monitoring">
+
+      <!-- LEAD -->
+      <section class="section" id="overview" aria-label="Overview">
+        <div class="section-label">Forest Health</div>
+        <h2>Three programs, one forest</h2>
+        <p class="lead">TRPA tracks the condition of the Basin's forests through three monitoring programs. Forest Structure describes what the conifer forest is made of and how dense it stands. Fire Dynamics follows the fire the forest would carry and the work done to change that. Subalpine Conifer watches the highest stands, which were never logged and are held to a standard of no degradation. Together they inform the Forest Health threshold standards and the Environmental Improvement Program's forest work.</p>
+        <ul class="jump" aria-label="On this page">
+          <li><a href="#programs">The programs</a></li>
+          <li><a href="#together">How they fit together</a></li>
+          <li><a href="#related">Related</a></li>
+        </ul>
+      </section>
+
+      <!-- PROGRAMS -->
+      <section class="section" id="programs" aria-label="The programs">
+        <div class="section-label">The programs</div>
+        <div class="section-head"><h2>What each program measures</h2><p>Each dashboard opens in the program's Dashboard card on Lake Tahoe Info, or on its own from the link.</p></div>
+        <div class="programs">
+          <div class="card program">
+            <div class="card-head"><h3>Forest Structure</h3></div>
+            <div class="body">
+              <p>Seral stage, canopy cover, and stand density of conifer forest by forest type, from the Sierra Nevada Regional Resource Kit remote sensing products, compared with the desired ranges in the Forest Health threshold standards.</p>
+              <ul class="measures">
+                <li>Acres by seral stage and forest type</li>
+                <li>Canopy cover and stand density classes</li>
+                <li>Change between Resource Kit vintages</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <calcite-button href="https://trpa-agency.github.io/ForestHealth/monitoring/forest-structure.html" target="_blank" rel="noopener noreferrer" scale="s" icon-end="launch">Dashboard</calcite-button>
+              <calcite-button href="https://monitoring.laketahoeinfo.org/monitoring-programs" target="_blank" rel="noopener noreferrer" appearance="outline" scale="s" icon-end="launch">Program page</calcite-button>
+            </div>
+          </div>
+          <div class="card program">
+            <div class="card-head"><h3>Fire Dynamics</h3></div>
+            <div class="body">
+              <p>Modeled fire severity by management zone, the wildland urban interface defense zone, fuel reduction treatments completed through the Environmental Improvement Program, and the Basin's wildfire history.</p>
+              <ul class="measures">
+                <li>Acres by modeled fire severity and zone</li>
+                <li>Treated acres by year and treatment type</li>
+                <li>Wildfire perimeters and acres burned</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <calcite-button href="https://trpa-agency.github.io/ForestHealth/monitoring/fire-dynamics.html" target="_blank" rel="noopener noreferrer" scale="s" icon-end="launch">Dashboard</calcite-button>
+              <calcite-button href="https://monitoring.laketahoeinfo.org/monitoring-programs" target="_blank" rel="noopener noreferrer" appearance="outline" scale="s" icon-end="launch">Program page</calcite-button>
+            </div>
+          </div>
+          <div class="card program">
+            <div class="card-head"><h3>Subalpine Conifer</h3></div>
+            <div class="body">
+              <p>Mapped extent of subalpine forest above roughly 8,500 feet, its dominant species and stand structure, who manages the land, and the ground plot network that will inform remote sensing of change over time.</p>
+              <ul class="measures">
+                <li>Mapped acres and dominant species</li>
+                <li>Tree size class and ownership</li>
+                <li>Whitebark pine condition from plots, as surveys load</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <calcite-button href="https://trpa-agency.github.io/ForestHealth/monitoring/subalpine-conifer.html" target="_blank" rel="noopener noreferrer" scale="s" icon-end="launch">Dashboard</calcite-button>
+              <calcite-button href="https://monitoring.laketahoeinfo.org/monitoring-programs/83" target="_blank" rel="noopener noreferrer" appearance="outline" scale="s" icon-end="launch">Program page</calcite-button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOGETHER -->
+      <section class="section" id="together" aria-label="How they fit together">
+        <div class="section-label">How they fit together</div>
+        <div class="section-head"><h2>From remote sensing to the threshold standards</h2></div>
+        <div class="prose">
+          <p>Forest Structure and Fire Dynamics are built on the same Sierra Nevada Regional Resource Kit rasters, so a change in one can be read against the other: a treated stand should show lower modeled severity in the next vintage, and a denser stand should show higher. Subalpine Conifer uses TRPA's vegetation mapping instead, because the Resource Kit was not built for the highest elevations, and it adds ground plots so the mapped extent can be checked against what is standing.</p>
+          <p>All three describe the record. The evaluation of that record against the standards happens on the Threshold Dashboard every four years, and the work that responds to it is tracked in the Environmental Improvement Program.</p>
+        </div>
+        <div class="grid-3">
+          <div class="def"><h3>Resource Kit</h3><p>The Sierra Nevada Regional Resource Kit is a set of statewide 30 meter rasters for vegetation structure, fire, and carbon, produced for the Wildfire and Forest Resilience Task Force and updated every few years.</p></div>
+          <div class="def"><h3>Vegetation map</h3><p>TRPA's vegetation type layer, built on U.S. Forest Service existing vegetation mapping with Basin attributes, classifies every mapped stand by California Wildlife Habitat Relationships type and size.</p></div>
+          <div class="def"><h3>Ground plots</h3><p>Fixed plots in the subalpine zone where crews record species, size, and condition, including white pine blister rust, to calibrate what the imagery shows.</p></div>
+        </div>
+      </section>
+
+      <!-- RELATED -->
+      <section class="section" id="related" aria-label="Related">
+        <div class="section-label">Related</div>
+        <div class="section-head"><h2>Where to go next</h2></div>
+        <div class="related">
+          <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer"><strong>Threshold Dashboard: Forest Health</strong>Status and trend against the standards</a>
+          <a href="https://eip.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer"><strong>EIP Project Tracker</strong>Forest health and fuel reduction projects</a>
+          <a href="https://storymaps.arcgis.com/collections/d89adce0aa9047efb018e49a6f8eff87" target="_blank" rel="noopener noreferrer"><strong>Forest Health story maps</strong>The programs told in pictures</a>
+          <a href="https://github.com/trpa-agency/ForestHealth" target="_blank" rel="noopener noreferrer"><strong>ForestHealth repository</strong>Dashboards, data, and methods</a>
+        </div>
+      </section>
+
+      <div class="footer">
+        <div>Narrative by TRPA staff. The dashboards state their own sources and data vintage.</div>
+        <div style="margin-top:0.4rem">Page updated Oct. 26, 2026.</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

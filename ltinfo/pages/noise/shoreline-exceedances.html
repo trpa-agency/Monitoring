@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-embed="noise-shoreline">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoreline noise exceedances</title>
+  <meta name="description" content="Average number of single noise events per day above the shoreline standard at Lake Tahoe shoreline noise monitoring sites, by year since 2009." />
+
+  <!--
+    Shoreline noise section, Tahoe Regional Planning Agency. The section-embed fragment
+    (kit/fragments/section-embed.js) on the Shoreline Noise Average Exceedances Per Day table
+    (LTInfo_Monitoring/78): one series, bars by year, the standard of zero exceedances as a
+    dashed line. Included inline by ./index.html and usable on its own in a section on
+    https://monitoring.laketahoeinfo.org/monitoring-programs/62. See ../../CONTRACT.md.
+  -->
+
+  <!-- Plotly and AG Grid are UMD bundles: load them before any AMD loader (the ArcGIS SDK). -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
+  <!-- Calcite 2.13.2 matches the ArcGIS SDK 4.31 build used by the other templates. -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../kit/ltinfo-embed.css" />
+  <script src="../../kit/ltinfo-embed.js"></script>
+</head>
+<body class="lti-harness" data-slot="card">
+  <main class="wrap">
+
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="section-embed" aria-label="Shoreline noise: average exceedances per day">
+      <div class="card">
+        <div class="card-head">
+          <h3 data-ref="title"></h3>
+          <calcite-segmented-control scale="s" data-ref="toggle" aria-label="Chart or table">
+            <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+          </calcite-segmented-control>
+        </div>
+        <div class="plot" data-ref="plot"></div>
+        <div class="hidden" data-ref="grid"></div>
+        <div class="chart-legend" data-ref="legend"></div>
+        <p class="caption" data-ref="caption"></p>
+        <p class="source" data-ref="source"></p>
+      </div>
+
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "title": "Shoreline noise: average exceedances per day",
+        "service": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/78",
+        "where": "1=1",
+        "orderBy": "Year",
+        "xField": "Year",
+        "yField": "Value",
+        "seriesField": null,
+        "targetField": "Threshold_Value",
+        "chartType": "bar",
+        "xCategorical": false,
+        "xLabel": "Year",
+        "yLabel": "Exceedances per day",
+        "decimals": 2,
+        "seriesLabels": {
+          "Shoreline noise: average exceedances per day": "Exceedances per day, all sites"
+        },
+        "caption": "Average number of single noise events per day above the shoreline standard, across all shoreline monitoring sites during the peak boating season from July through Labor Day. The standard allows no exceedances, so the dashed line sits at zero. Years without monitoring are blank.",
+        "sourceName": "TRPA LTInfo_Monitoring map service, Shoreline Noise Average Exceedances Per Day table",
+        "exportName": "shoreline-noise-exceedances"
+      }
+      </script>
+      <!-- SNAPSHOT: rows from the same query, same field names. Renders when the live query fails. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","rows":[{"Category":"Average Exceedances per Day across all sites","Year":2009,"Value":0.19,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2010,"Value":0.16,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2011,"Value":0.24,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2012,"Value":0.25,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2013,"Value":0.09,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2016,"Value":0.34,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2017,"Value":0.56,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2019,"Value":0.21,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2020,"Value":0.38,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2021,"Value":0.11,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2022,"Value":0.11,"Threshold_Value":0},{"Category":"Average Exceedances per Day across all sites","Year":2023,"Value":0.32,"Threshold_Value":0}]}</script>
+    </section>
+    <!-- fragment:end -->
+
+  </main>
+</body>
+</html>

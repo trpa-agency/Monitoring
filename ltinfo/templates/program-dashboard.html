@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-embed="program-dashboard">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Program dashboard template</title>
+  <meta name="description" content="A complete monitoring program dashboard for the Dashboard card on a Lake Tahoe Info program page: at a glance, map, charts with tables, how it is measured, and sources." />
+
+  <!--
+    TEMPLATE: program dashboard. One complete dashboard per program, for the Dashboard card
+    on a monitoring program page (program type Program With Dashboard). The section pattern is
+    the one the Forest Health embeds settled on:
+      1. At a glance: four to six stat tiles, pending tiles grayed for data not yet loaded
+      2. Map of the program's extent or sites, with the same facts in text nearby
+      3. Charts, each with a Chart/Table toggle and a CSV download
+      4. How it is measured: definition cards
+      5. Program-specific sections, with an explicit empty state until data exists
+      6. Footer: about the program, links, data vintage
+    See ../CONTRACT.md.
+
+    This file is a harness around a fragment. The fragment is everything between the
+    fragment:start and fragment:end markers: markup with data-ref hooks, a config JSON block,
+    and a snapshot JSON block. A program dashboard's behavior is specific to the program, so
+    its module sits next to this file (program-dashboard.js) and the fragment names it with
+    data-module. A copy for another program gets its own kind name (program:<slug>), its own
+    module file, and its own data-module value.
+
+    To make a dashboard from this file:
+      1. Copy it and program-dashboard.js next to your other pages and fix the kit paths
+         (relative to ltinfo/kit/, or https://trpa-agency.github.io/Monitoring/ltinfo/kit/...
+         from another repo).
+      2. Set data-embed on <html>; set data-kind and data-module on the fragment.
+      3. Edit the config block and the copy in each section. Keep the section order unless
+         the program has a reason not to. Edit the module for the program's queries and charts.
+      4. Replace the snapshot block with rows captured from the same queries, and set the date.
+      5. Check at 980 and 375 px, then run trpa-dashboard-qa, then send the URL to the
+         LT Info admin for the program's Dashboard record.
+
+    Default data: Tahoe Yellow Cress (LT Info program 39). Sites by year from
+    LTInfo_Monitoring/9 and occupied sites by year with the standard from
+    LTInfo_Monitoring/86. A monitoring dashboard describes the record; the host page and the
+    Threshold Dashboard carry the evaluation.
+  -->
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@36.2.0/dist/ag-grid-community.min.js"></script>
+  <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.31/"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../kit/ltinfo-embed.css" />
+  <script src="../kit/ltinfo-embed.js"></script>
+  <script src="../kit/ltinfo-map.js"></script>
+</head>
+<body class="lti-harness" data-slot="card">
+  <main class="wrap">
+
+    <!-- fragment:start -->
+    <section class="lti" data-site="monitoring" data-kind="program-dashboard" data-module="program-dashboard.js" aria-label="Tahoe Yellow Cress monitoring dashboard">
+
+      <!-- 1. AT A GLANCE -->
+      <section class="section" aria-label="At a glance">
+        <div class="section-label">At a glance</div>
+        <div class="section-head">
+          <h2>Tahoe yellow cress on the shores of Lake Tahoe</h2>
+          <p>Tahoe yellow cress (<em>Rorippa subumbellata</em>) grows only on the sandy beaches of Lake Tahoe. Surveys each year record which of the known sites hold plants. Lake level drives the count: high water covers beach habitat and fewer sites are occupied.</p>
+        </div>
+        <div class="tiles" data-ref="glance-tiles"></div>
+        <p class="small muted" data-ref="glance-source" style="margin-top:0.5rem"></p>
+      </section>
+
+      <!-- 2. MAP -->
+      <section class="section" aria-label="Survey sites">
+        <div class="section-label">Survey sites</div>
+        <div class="section-head">
+          <h2>Where the sites are</h2>
+          <p>Known Tahoe yellow cress sites around the lake, shown for the most recent survey year. Sites marked as surveyed were visited; the rest were not reached that year.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-ref="map-title">Survey sites</h3>
+            <calcite-button href="https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9" target="_blank" rel="noopener noreferrer" appearance="transparent" scale="s" icon-end="launch">Map service</calcite-button>
+          </div>
+          <div class="map-view" data-ref="map" role="region" aria-label="Map of survey sites">
+            <div class="map-placeholder"><calcite-loader inline label="Loading map"></calcite-loader> Loading map</div>
+          </div>
+          <p class="caption" data-ref="map-caption"></p>
+          <p class="source" data-source-line></p>
+        </div>
+      </section>
+
+      <!-- 3. CHARTS -->
+      <section class="section" aria-label="The record">
+        <div class="section-label">The record</div>
+        <div class="section-head">
+          <h2>Occupied sites over time</h2>
+          <p>The number of sites with plants each survey year, with the lake level that year. The dashed line is the standard the Threshold Dashboard evaluates against.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card span-2">
+            <div class="card-head">
+              <h3>Occupied sites by year</h3>
+              <calcite-segmented-control scale="s" data-ref="occupied-toggle" aria-label="Chart or table">
+                <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+                <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+              </calcite-segmented-control>
+            </div>
+            <div class="plot" data-ref="occupied-plot"></div>
+            <div class="hidden" data-ref="occupied-grid"></div>
+            <div class="chart-legend" data-ref="occupied-legend"></div>
+            <p class="caption">Bars are sites where plants were found. The line is the lake surface elevation in feet during the survey season, on the right axis.</p>
+            <p class="source" data-source-line></p>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>Sites by land owner</h3>
+              <calcite-segmented-control scale="s" data-ref="owner-toggle" aria-label="Chart or table">
+                <calcite-segmented-control-item value="chart" checked icon-start="graph-bar">Chart</calcite-segmented-control-item>
+                <calcite-segmented-control-item value="table" icon-start="table">Table</calcite-segmented-control-item>
+              </calcite-segmented-control>
+            </div>
+            <div class="plot" data-ref="owner-plot"></div>
+            <div class="hidden" data-ref="owner-grid"></div>
+            <p class="caption" data-ref="owner-caption"></p>
+            <p class="source" data-source-line></p>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Survey coverage by year</h3></div>
+            <div class="plot" data-ref="coverage-plot"></div>
+            <p class="caption">Sites surveyed each year out of all sites tracked. Coverage varies with access, funding, and lake level.</p>
+            <p class="source" data-source-line></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. HOW IT IS MEASURED -->
+      <section class="section" aria-label="How it is measured">
+        <div class="section-label">How it is measured</div>
+        <div class="section-head"><h2>Annual site surveys</h2></div>
+        <div class="grid-3">
+          <div class="def"><h3>Sites</h3><p>A fixed list of beach sites where the plant has been recorded since surveys began in 1978. New sites are added when plants are found elsewhere.</p></div>
+          <div class="def"><h3>Survey</h3><p>Each site is walked during the growing season and the number of plants is counted. A site is occupied when at least one plant is found.</p></div>
+          <div class="def"><h3>Lake level</h3><p>Lake Tahoe surface elevation from the Tahoe City gage, reported with each survey year because it sets how much beach is exposed.</p></div>
+        </div>
+      </section>
+
+      <!-- 5. PROGRAM-SPECIFIC SECTION, EMPTY UNTIL DATA EXISTS -->
+      <section class="section" aria-label="Plant counts">
+        <div class="section-label">Plant counts</div>
+        <div class="section-head">
+          <h2>Plants counted at each site</h2>
+          <p>Per-site counts give a finer picture than occupancy alone. This section fills in when the count field is confirmed and documented.</p>
+        </div>
+        <div data-ref="counts-body"></div>
+      </section>
+
+      <!-- 6. FOOTER -->
+      <div class="footer">
+        <div><strong>About the program.</strong> The Tahoe Yellow Cress monitoring program tracks the number of occupied sites each year under the Vegetation Preservation threshold category, in partnership with the Tahoe Yellow Cress Adaptive Management Working Group.</div>
+        <div class="links">
+          <a href="https://monitoring.laketahoeinfo.org/monitoring-programs/39" target="_blank" rel="noopener noreferrer">LT Info program page</a>
+          <a href="https://thresholds.laketahoeinfo.org/" target="_blank" rel="noopener noreferrer">Threshold Dashboard: Vegetation Preservation</a>
+        </div>
+        <div style="margin-top:0.4rem" data-ref="footer-vintage"></div>
+      </div>
+
+      <!-- CONFIG: edit this block. -->
+      <script type="application/json" data-lti="config">
+      {
+        "sitesLayer": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/9",
+        "siteNameField": "SITE_NAME",
+        "yearField": "YEAR_OF_COUNT",
+        "statusField": "STATUS",
+        "ownerField": "OWNER",
+        "surveyedValue": "Surveyed",
+        "summaryTable": "https://maps.trpa.org/server/rest/services/LTInfo_Monitoring/MapServer/86",
+        "summaryYear": "Year",
+        "summaryValue": "Occupied_Sites",
+        "summaryTarget": "Threshold",
+        "summaryAux": "Lake_Level",
+        "mapCenter": [
+          -120.03,
+          39.08
+        ],
+        "mapZoom": 10,
+        "sourceName": "TRPA LTInfo_Monitoring map service",
+        "exportPrefix": "tahoe-yellow-cress",
+        "ownerLabels": {
+          "USFS": "U.S. Forest Service",
+          "CSP": "California State Parks",
+          "CTC": "California Tahoe Conservancy",
+          "NVSP": "Nevada State Parks",
+          "IVGID": "Incline Village GID",
+          "City SLT": "City of South Lake Tahoe"
+        }
+      }
+      </script>
+      <!-- SNAPSHOT: same shape as loadLive() in program-dashboard.js returns, plus captured. -->
+      <script type="application/json" data-lti="snapshot">{"captured":"Oct. 26, 2026","summary":[{"Year":1978,"Occupied_Sites":3,"Lake_Level":6224,"Threshold":26},{"Year":1979,"Occupied_Sites":25,"Lake_Level":6224,"Threshold":26},{"Year":1980,"Occupied_Sites":16,"Lake_Level":6226,"Threshold":26},{"Year":1981,"Occupied_Sites":22,"Lake_Level":6225,"Threshold":26},{"Year":1982,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":1983,"Occupied_Sites":11,"Lake_Level":6228,"Threshold":26},{"Year":1986,"Occupied_Sites":14,"Lake_Level":6228,"Threshold":26},{"Year":1988,"Occupied_Sites":18,"Lake_Level":6224,"Threshold":26},{"Year":1989,"Occupied_Sites":2,"Lake_Level":6224,"Threshold":26},{"Year":1990,"Occupied_Sites":34,"Lake_Level":6223,"Threshold":26},{"Year":1991,"Occupied_Sites":20,"Lake_Level":6222,"Threshold":26},{"Year":1992,"Occupied_Sites":17,"Lake_Level":6223,"Threshold":26},{"Year":1993,"Occupied_Sites":37,"Lake_Level":6223,"Threshold":26},{"Year":1994,"Occupied_Sites":31,"Lake_Level":6222,"Threshold":26},{"Year":1995,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1996,"Occupied_Sites":8,"Lake_Level":6227,"Threshold":26},{"Year":1997,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1998,"Occupied_Sites":10,"Lake_Level":6228,"Threshold":26},{"Year":1999,"Occupied_Sites":13,"Lake_Level":6228,"Threshold":26},{"Year":2000,"Occupied_Sites":15,"Lake_Level":6228,"Threshold":26},{"Year":2001,"Occupied_Sites":25,"Lake_Level":6225,"Threshold":26},{"Year":2002,"Occupied_Sites":35,"Lake_Level":6224,"Threshold":26},{"Year":2003,"Occupied_Sites":41,"Lake_Level":6224,"Threshold":26},{"Year":2004,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2005,"Occupied_Sites":43,"Lake_Level":6225,"Threshold":26},{"Year":2006,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2007,"Occupied_Sites":27,"Lake_Level":6226,"Threshold":26},{"Year":2008,"Occupied_Sites":40,"Lake_Level":6224,"Threshold":26},{"Year":2009,"Occupied_Sites":44,"Lake_Level":6223,"Threshold":26},{"Year":2011,"Occupied_Sites":23,"Lake_Level":6228,"Threshold":26},{"Year":2012,"Occupied_Sites":29,"Lake_Level":6226,"Threshold":26},{"Year":2014,"Occupied_Sites":39,"Lake_Level":6223,"Threshold":26},{"Year":2016,"Occupied_Sites":41,"Lake_Level":6223,"Threshold":26},{"Year":2017,"Occupied_Sites":21,"Lake_Level":6228,"Threshold":26},{"Year":2018,"Occupied_Sites":24,"Lake_Level":6228,"Threshold":26},{"Year":2019,"Occupied_Sites":22,"Lake_Level":6228,"Threshold":26},{"Year":2020,"Occupied_Sites":17,"Lake_Level":6227,"Threshold":26},{"Year":2021,"Occupied_Sites":8,"Lake_Level":6224,"Threshold":26},{"Year":2022,"Occupied_Sites":30,"Lake_Level":6224,"Threshold":26},{"Year":2023,"Occupied_Sites":20,"Lake_Level":6228,"Threshold":26}],"latestYear":2025,"sitesTracked":65,"statusLatest":{"Surveyed":45,"No Survey":20},"ownerLatest":{"UNR/City":1,"U.S. Forest Service":19,"Public":1,"Private":26,"Incline Village GID":1,"Nevada State Parks":3,"California Tahoe Conservancy":3,"California State Parks":7,"City of South Lake Tahoe":1,"Private/Public":1,"Private/City SLT":1,"Private/USFS":1},"coverage":[{"year":1978,"surveyed":2,"tracked":61},{"year":1979,"surveyed":34,"tracked":61},{"year":1980,"surveyed":29,"tracked":61},{"year":1981,"surveyed":33,"tracked":61},{"year":1982,"surveyed":26,"tracked":61},{"year":1983,"surveyed":26,"tracked":61},{"year":1986,"surveyed":26,"tracked":61},{"year":1988,"surveyed":21,"tracked":61},{"year":1989,"surveyed":1,"tracked":61},{"year":1990,"surveyed":31,"tracked":61},{"year":1991,"surveyed":20,"tracked":61},{"year":1992,"surveyed":17,"tracked":61},{"year":1993,"surveyed":38,"tracked":61},{"year":1994,"surveyed":16,"tracked":61},{"year":1995,"surveyed":29,"tracked":61},{"year":1996,"surveyed":33,"tracked":61},{"year":1997,"surveyed":31,"tracked":61},{"year":1998,"surveyed":37,"tracked":61},{"year":1999,"surveyed":31,"tracked":61},{"year":2000,"surveyed":44,"tracked":61},{"year":2001,"surveyed":46,"tracked":61},{"year":2002,"surveyed":49,"tracked":61},{"year":2003,"surveyed":57,"tracked":61},{"year":2004,"surveyed":56,"tracked":61},{"year":2005,"surveyed":53,"tracked":61},{"year":2006,"surveyed":58,"tracked":61},{"year":2007,"surveyed":58,"tracked":61},{"year":2008,"surveyed":57,"tracked":61},{"year":2009,"surveyed":60,"tracked":61},{"year":2011,"surveyed":56,"tracked":61},{"year":2012,"surveyed":58,"tracked":61},{"year":2014,"surveyed":54,"tracked":61},{"year":2016,"surveyed":55,"tracked":61},{"year":2017,"surveyed":56,"tracked":61},{"year":2018,"surveyed":56,"tracked":61},{"year":2019,"surveyed":56,"tracked":61},{"year":2020,"surveyed":50,"tracked":63},{"year":2021,"surveyed":13,"tracked":63},{"year":2022,"surveyed":53,"tracked":63},{"year":2023,"surveyed":53,"tracked":63},{"year":2024,"surveyed":51,"tracked":63},{"year":2025,"surveyed":45,"tracked":65}],"sites":[{"name":"4-H Camp/City Pump House","lon":-119.951346,"lat":38.97500528,"year":2025,"status":"Surveyed","owner":"UNR/City","count":1003,"firstYear":1978,"surveyedYears":35,"occupiedYears":29,"lastOccupied":2025,"counts":[[2014,120],[2016,46],[2017,71],[2018,4],[2019,10],[2020,138],[2022,24],[2023,444],[2024,538],[2025,1003]]},{"name":"Baldwin Bch Enclosures","lon":-120.0689548,"lat":38.94355854,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":31,"firstYear":1978,"surveyedYears":18,"occupiedYears":18,"lastOccupied":2025,"counts":[[2012,64],[2014,100],[2017,127],[2018,312],[2019,184],[2020,130],[2022,27],[2023,11],[2024,79],[2025,31]]},{"name":"Baldwin Beach","lon":-120.0665461,"lat":38.94260631,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":42,"firstYear":1978,"surveyedYears":32,"occupiedYears":26,"lastOccupied":2025,"counts":[[2014,216],[2016,348],[2017,13],[2018,54],[2019,50],[2020,64],[2022,30],[2023,25],[2024,144],[2025,42]]},{"name":"Bijou (Timber Cove Lodge)","lon":-119.9684588,"lat":38.94705577,"year":2025,"status":"Surveyed","owner":"Public","count":197,"firstYear":1978,"surveyedYears":21,"occupiedYears":16,"lastOccupied":2025,"counts":[[2014,174],[2016,69],[2017,0],[2018,216],[2019,126],[2020,48],[2022,113],[2023,178],[2024,241],[2025,197]]},{"name":"Blackwood North","lon":-120.1584337,"lat":39.10825993,"year":2025,"status":"Surveyed","owner":"Private","count":36,"firstYear":1978,"surveyedYears":36,"occupiedYears":27,"lastOccupied":2025,"counts":[[2014,92],[2016,65],[2017,0],[2018,0],[2019,6],[2020,0],[2022,0],[2023,79],[2024,15],[2025,36]]},{"name":"Blackwood South","lon":-120.1588656,"lat":39.10580656,"year":2025,"status":"Surveyed","owner":"Private","count":720,"firstYear":1978,"surveyedYears":33,"occupiedYears":31,"lastOccupied":2025,"counts":[[2014,1869],[2016,422],[2017,2300],[2018,2085],[2019,650],[2020,127],[2022,206],[2023,206],[2024,1025],[2025,720]]},{"name":"Burnt Cedar Beach","lon":-119.9694734,"lat":39.24584163,"year":2025,"status":"Surveyed","owner":"Incline Village GID","count":0,"firstYear":1978,"surveyedYears":18,"occupiedYears":1,"lastOccupied":2002,"counts":[[2012,0],[2014,0],[2016,0],[2017,0],[2018,0],[2019,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Cascade Creek","lon":-120.0750499,"lat":38.94773557,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":29,"occupiedYears":17,"lastOccupied":2023,"counts":[[2014,456],[2016,530],[2017,0],[2018,10],[2019,0],[2020,0],[2022,177],[2023,8],[2024,0],[2025,0]]},{"name":"Cave Rock","lon":-119.9487285,"lat":39.04313709,"year":2025,"status":"Surveyed","owner":"Nevada State Parks","count":0,"firstYear":1978,"surveyedYears":29,"occupiedYears":15,"lastOccupied":2024,"counts":[[2016,64],[2017,18],[2018,22],[2019,50],[2020,48],[2021,6],[2022,0],[2023,0],[2024,4],[2025,0]]},{"name":"Cherry St/Tahoe Swiss Village","lon":-120.160455,"lat":39.0898876,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":28,"occupiedYears":9,"lastOccupied":2016,"counts":[[2014,12],[2016,51],[2017,0],[2018,0],[2019,0],[2020,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Chimney Rock","lon":-119.9330901,"lat":39.1646216,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":28,"occupiedYears":2,"lastOccupied":1992,"counts":[[2016,0],[2017,0],[2018,0],[2019,0],[2020,0],[2021,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Crystal Point","lon":-120.007144,"lat":39.22273611,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":19,"occupiedYears":2,"lastOccupied":2016,"counts":[[2007,0],[2008,0],[2009,0],[2011,0],[2012,0],[2014,0],[2016,36],[2017,0],[2018,0],[2020,0]]},{"name":"CTC Cascade Creek","lon":-120.0775635,"lat":38.95259115,"year":2025,"status":"Surveyed","owner":"California Tahoe Conservancy","count":0,"firstYear":1978,"surveyedYears":15,"occupiedYears":8,"lastOccupied":2022,"counts":[[2009,71],[2011,0],[2012,0],[2014,48],[2016,20],[2020,0],[2022,5],[2023,0],[2024,0],[2025,0]]},{"name":"DL Bliss State Park","lon":-120.0997097,"lat":38.99993029,"year":2025,"status":"No Survey","owner":"California State Parks","count":null,"firstYear":1978,"surveyedYears":27,"occupiedYears":13,"lastOccupied":2024,"counts":[[2011,0],[2012,0],[2014,0],[2016,5],[2017,0],[2018,0],[2019,0],[2022,21],[2023,0],[2024,4]]},{"name":"Dollar Point","lon":-120.1098921,"lat":39.1819045,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":26,"occupiedYears":10,"lastOccupied":2017,"counts":[[2012,0],[2014,213],[2016,244],[2017,8],[2018,0],[2019,0],[2020,0],[2022,0],[2023,0],[2025,0]]},{"name":"Eagle Creek/Avalanche","lon":-120.1050752,"lat":38.95152467,"year":2025,"status":"Surveyed","owner":"California State Parks","count":94,"firstYear":1978,"surveyedYears":28,"occupiedYears":23,"lastOccupied":2025,"counts":[[2011,83],[2012,180],[2014,234],[2016,474],[2017,13],[2018,35],[2019,36],[2022,752],[2023,0],[2025,94]]},{"name":"Eagle Point","lon":-120.0799947,"lat":38.96077212,"year":2025,"status":"Surveyed","owner":"California State Parks","count":0,"firstYear":1978,"surveyedYears":29,"occupiedYears":11,"lastOccupied":2023,"counts":[[2014,4],[2016,17],[2017,0],[2018,0],[2019,0],[2020,0],[2022,2],[2023,2],[2024,0],[2025,0]]},{"name":"Ebright Enclosure","lon":-120.072797,"lat":38.945551,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":2020,"surveyedYears":4,"occupiedYears":3,"lastOccupied":2024,"counts":[[2022,288],[2023,41],[2024,2],[2025,0]]},{"name":"Edgewood","lon":-119.9500619,"lat":38.96896994,"year":2025,"status":"Surveyed","owner":"Private","count":446,"firstYear":1978,"surveyedYears":34,"occupiedYears":32,"lastOccupied":2025,"counts":[[2014,642],[2016,1330],[2017,1185],[2018,854],[2019,491],[2020,247],[2022,254],[2023,708],[2024,690],[2025,446]]},{"name":"El Dorado Beach","lon":-119.9739943,"lat":38.94570305,"year":2025,"status":"No Survey","owner":"City of South Lake Tahoe","count":null,"firstYear":1978,"surveyedYears":34,"occupiedYears":2,"lastOccupied":2016,"counts":[[2009,0],[2011,0],[2012,0],[2014,0],[2016,14],[2017,0],[2018,0],[2019,0],[2023,0],[2024,0]]},{"name":"Elk Point","lon":-119.9568465,"lat":38.98586159,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":12,"occupiedYears":3,"lastOccupied":1993,"counts":[[1981,0],[1990,20],[1993,1097],[1998,0],[1999,0],[2000,0],[2011,0],[2017,0],[2019,0],[2021,0]]},{"name":"Emerald Bay Boat Camp","lon":-120.0962119,"lat":38.96006603,"year":2025,"status":"Surveyed","owner":"California State Parks","count":0,"firstYear":1978,"surveyedYears":32,"occupiedYears":6,"lastOccupied":2008,"counts":[[2012,0],[2014,0],[2016,0],[2017,0],[2018,0],[2019,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Emerald Bay SE","lon":-120.1033935,"lat":38.9491909,"year":2025,"status":"Surveyed","owner":"California State Parks","count":0,"firstYear":2025,"surveyedYears":1,"occupiedYears":0,"lastOccupied":null,"counts":[[2025,0]]},{"name":"Emerald Point","lon":-120.0857494,"lat":38.96688206,"year":2025,"status":"Surveyed","owner":"California State Parks","count":0,"firstYear":1978,"surveyedYears":33,"occupiedYears":13,"lastOccupied":2022,"counts":[[2014,0],[2016,0],[2017,0],[2018,1],[2019,0],[2020,0],[2022,101],[2023,0],[2024,0],[2025,0]]},{"name":"Glenbrook","lon":-119.943167,"lat":39.09413342,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":34,"occupiedYears":17,"lastOccupied":2023,"counts":[[2016,1112],[2017,0],[2018,0],[2019,0],[2020,0],[2021,128],[2022,1252],[2023,43],[2024,0],[2025,0]]},{"name":"Hidden Beach","lon":-119.9304141,"lat":39.2219602,"year":2025,"status":"Surveyed","owner":"Nevada State Parks","count":0,"firstYear":1978,"surveyedYears":20,"occupiedYears":7,"lastOccupied":2022,"counts":[[2014,0],[2016,33],[2017,0],[2018,0],[2019,0],[2020,0],[2022,7],[2023,0],[2024,0],[2025,0]]},{"name":"Jameson","lon":-120.0369215,"lat":38.93816395,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":15,"occupiedYears":2,"lastOccupied":2016,"counts":[[2007,0],[2008,0],[2009,0],[2011,0],[2014,0],[2016,24],[2020,0],[2022,0],[2024,0],[2025,0]]},{"name":"Kaspian Campground","lon":-120.1580115,"lat":39.11384871,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":24,"occupiedYears":9,"lastOccupied":2014,"counts":[[2012,0],[2014,3],[2016,0],[2017,0],[2018,0],[2019,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Kings Beach","lon":-120.0284408,"lat":39.23541556,"year":2025,"status":"No Survey","owner":"Private/Public","count":null,"firstYear":1978,"surveyedYears":24,"occupiedYears":1,"lastOccupied":2002,"counts":[[2006,0],[2007,0],[2008,0],[2009,0],[2011,0],[2012,0],[2016,0],[2017,0],[2018,0],[2022,0]]},{"name":"Kiva Beach/Valhalla","lon":-120.0485355,"lat":38.94037444,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":30,"occupiedYears":10,"lastOccupied":2022,"counts":[[2014,62],[2016,96],[2017,0],[2018,0],[2019,0],[2020,0],[2022,4],[2023,0],[2024,0],[2025,0]]},{"name":"Lighthouse","lon":-120.0163217,"lat":38.93671718,"year":2025,"status":"Surveyed","owner":"Private","count":89,"firstYear":1978,"surveyedYears":31,"occupiedYears":24,"lastOccupied":2025,"counts":[[2014,623],[2016,196],[2017,514],[2018,298],[2019,143],[2020,163],[2022,121],[2023,53],[2024,42],[2025,89]]},{"name":"Logan Shoals/Vista","lon":-119.9445149,"lat":39.06270103,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":28,"occupiedYears":17,"lastOccupied":2021,"counts":[[2009,1603],[2011,184],[2012,0],[2014,504],[2016,708],[2017,0],[2018,0],[2019,0],[2020,0],[2021,16]]},{"name":"Marla Bay","lon":-119.9556917,"lat":38.99569257,"year":2025,"status":"Surveyed","owner":"Private","count":105,"firstYear":1978,"surveyedYears":20,"occupiedYears":13,"lastOccupied":2025,"counts":[[2014,33],[2016,0],[2017,0],[2018,0],[2019,2],[2020,5],[2021,5],[2022,16],[2023,209],[2025,105]]},{"name":"McKinney Creek","lon":-120.14087,"lat":39.07324966,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":21,"occupiedYears":12,"lastOccupied":2022,"counts":[[2012,76],[2014,17],[2016,41],[2017,0],[2018,1],[2019,0],[2020,0],[2022,110],[2023,0],[2024,0]]},{"name":"McKinney North/Shores","lon":-120.1491619,"lat":39.07555999,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":28,"occupiedYears":9,"lastOccupied":2014,"counts":[[2012,0],[2014,433],[2017,0],[2018,0],[2019,0],[2020,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Meeks Bay","lon":-120.121494,"lat":39.03753135,"year":2025,"status":"No Survey","owner":"U.S. Forest Service","count":null,"firstYear":1978,"surveyedYears":33,"occupiedYears":20,"lastOccupied":2022,"counts":[[2012,3],[2014,0],[2016,0],[2017,0],[2018,0],[2019,0],[2020,18],[2022,72],[2023,0],[2024,0]]},{"name":"Meeks Bay Enclosures","lon":-120.1218126,"lat":39.03681481,"year":2025,"status":"No Survey","owner":"U.S. Forest Service","count":null,"firstYear":1978,"surveyedYears":17,"occupiedYears":4,"lastOccupied":2023,"counts":[[2012,0],[2014,0],[2016,8],[2017,0],[2018,0],[2019,0],[2020,0],[2022,0],[2023,1],[2024,0]]},{"name":"Meeks Bay Vista","lon":-120.116217,"lat":39.03391871,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":20,"occupiedYears":5,"lastOccupied":2008,"counts":[[2001,0],[2002,0],[2003,230],[2005,0],[2006,0],[2007,0],[2008,3],[2009,0],[2014,0],[2016,0]]},{"name":"Nevada Beach","lon":-119.9534605,"lat":38.97939944,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":1844,"firstYear":1978,"surveyedYears":40,"occupiedYears":35,"lastOccupied":2025,"counts":[[2014,62],[2016,63],[2017,60],[2018,393],[2019,136],[2020,560],[2022,58],[2023,640],[2024,1150],[2025,1844]]},{"name":"Nevada Beach Enclosure","lon":-119.9521234,"lat":38.977104,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":5,"firstYear":2025,"surveyedYears":1,"occupiedYears":1,"lastOccupied":2025,"counts":[[2025,5]]},{"name":"Pope Beach","lon":-120.0263511,"lat":38.93709289,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":34,"occupiedYears":16,"lastOccupied":2017,"counts":[[2014,12],[2016,12],[2017,1],[2018,0],[2019,0],[2020,0],[2022,0],[2023,0],[2024,0],[2025,0]]},{"name":"Regan/Al Tahoe","lon":-119.9847095,"lat":38.94467299,"year":2025,"status":"No Survey","owner":"Private/City SLT","count":null,"firstYear":1978,"surveyedYears":34,"occupiedYears":13,"lastOccupied":2016,"counts":[[2011,0],[2012,9],[2014,153],[2016,131],[2017,0],[2018,0],[2019,0],[2020,0],[2023,0],[2024,0]]},{"name":"Roundhill","lon":-119.9535521,"lat":38.98978886,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":23,"occupiedYears":9,"lastOccupied":2016,"counts":[[2014,12],[2016,36],[2017,0],[2018,0],[2019,0],[2020,0],[2021,0],[2022,0],[2024,0],[2025,0]]},{"name":"Rubicon Bay","lon":-120.1131243,"lat":39.01317978,"year":2025,"status":"Surveyed","owner":"Private","count":115,"firstYear":1978,"surveyedYears":32,"occupiedYears":29,"lastOccupied":2025,"counts":[[2014,202],[2016,3316],[2017,129],[2018,41],[2019,14],[2020,8],[2022,91],[2023,109],[2024,103],[2025,115]]},{"name":"Sand Harbor","lon":-119.9306954,"lat":39.1976604,"year":2025,"status":"Surveyed","owner":"Nevada State Parks","count":0,"firstYear":1978,"surveyedYears":33,"occupiedYears":9,"lastOccupied":2022,"counts":[[2014,10],[2016,11],[2017,0],[2018,0],[2019,0],[2020,0],[2022,2],[2023,0],[2024,0],[2025,0]]},{"name":"Secret Harbor","lon":-119.9360381,"lat":39.14614921,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":30,"occupiedYears":9,"lastOccupied":2022,"counts":[[2016,0],[2017,0],[2018,0],[2019,0],[2020,0],[2021,2],[2022,2],[2023,0],[2024,0],[2025,0]]},{"name":"Ski Beach Enclosure","lon":-120.071013,"lat":38.944762,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":2020,"surveyedYears":4,"occupiedYears":3,"lastOccupied":2024,"counts":[[2022,337],[2023,54],[2024,6],[2025,0]]},{"name":"Skunk Harbor","lon":-119.9434175,"lat":39.12973825,"year":2025,"status":"No Survey","owner":"U.S. Forest Service","count":null,"firstYear":1978,"surveyedYears":29,"occupiedYears":1,"lastOccupied":2024,"counts":[[2014,0],[2016,0],[2017,0],[2018,0],[2019,0],[2020,0],[2021,0],[2022,0],[2023,0],[2024,33]]},{"name":"Skyland","lon":-119.9514615,"lat":39.02240931,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":16,"occupiedYears":8,"lastOccupied":2012,"counts":[[2004,64],[2006,0],[2007,0],[2008,2],[2009,90],[2011,20],[2012,158],[2019,0],[2020,0],[2021,0]]},{"name":"South of Edgewood","lon":-119.9507166,"lat":38.96053256,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":9,"occupiedYears":5,"lastOccupied":2017,"counts":[[2009,58],[2011,28],[2012,40],[2014,151],[2017,19],[2018,0],[2019,0],[2023,0],[2024,0]]},{"name":"Sugar Pine Point State Park","lon":-120.1129721,"lat":39.04770756,"year":2025,"status":"No Survey","owner":"California State Parks","count":null,"firstYear":1978,"surveyedYears":18,"occupiedYears":15,"lastOccupied":2019,"counts":[[2009,56],[2011,25],[2012,26],[2014,44],[2016,46],[2017,0],[2018,5],[2019,4],[2022,0],[2023,0]]},{"name":"Sunnyside","lon":-120.1528961,"lat":39.13948864,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":27,"occupiedYears":1,"lastOccupied":2016,"counts":[[2009,0],[2011,0],[2012,0],[2016,4],[2018,0],[2019,0],[2020,0],[2022,0],[2023,0],[2024,0]]},{"name":"Tahoe Keys","lon":-120.0095543,"lat":38.93825403,"year":2025,"status":"Surveyed","owner":"Private","count":252,"firstYear":1978,"surveyedYears":27,"occupiedYears":20,"lastOccupied":2025,"counts":[[2012,576],[2016,1195],[2017,154],[2018,573],[2019,308],[2020,390],[2022,420],[2023,219],[2024,247],[2025,252]]},{"name":"Tahoe Meadows","lon":-119.9550724,"lat":38.954879,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":31,"occupiedYears":23,"lastOccupied":2022,"counts":[[2012,856],[2014,1031],[2016,850],[2017,195],[2018,425],[2019,19],[2020,0],[2022,2],[2023,0],[2025,0]]},{"name":"Tahoe Pines (Fleur Du Lac)","lon":-120.1607638,"lat":39.102998,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":23,"occupiedYears":10,"lastOccupied":2017,"counts":[[2011,0],[2012,360],[2014,400],[2016,104],[2017,583],[2018,0],[2019,0],[2020,0],[2022,0],[2024,0]]},{"name":"Tahoma","lon":-120.1235937,"lat":39.0664352,"year":2025,"status":"Surveyed","owner":"Private","count":0,"firstYear":1978,"surveyedYears":32,"occupiedYears":11,"lastOccupied":2024,"counts":[[2009,339],[2011,0],[2012,0],[2017,0],[2018,1],[2019,0],[2020,0],[2023,0],[2024,1],[2025,0]]},{"name":"Tallac Creek","lon":-120.0712313,"lat":38.94468516,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":4,"firstYear":1978,"surveyedYears":29,"occupiedYears":22,"lastOccupied":2025,"counts":[[2014,221],[2016,113],[2017,194],[2018,12],[2019,0],[2020,49],[2022,4],[2023,1],[2024,11],[2025,4]]},{"name":"Tallac Enclosure","lon":-120.071002,"lat":38.94454741,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":177,"firstYear":1978,"surveyedYears":27,"occupiedYears":22,"lastOccupied":2025,"counts":[[2014,247],[2016,71],[2017,300],[2018,371],[2019,510],[2020,35],[2022,17],[2023,4],[2024,250],[2025,177]]},{"name":"Taylor Creek","lon":-120.0587911,"lat":38.94090232,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":0,"firstYear":1978,"surveyedYears":39,"occupiedYears":20,"lastOccupied":2024,"counts":[[2014,1419],[2016,2818],[2017,89],[2018,464],[2019,103],[2020,169],[2022,108],[2023,32],[2024,60],[2025,0]]},{"name":"Taylor Creek Enclosure","lon":-120.0592478,"lat":38.94049538,"year":2025,"status":"Surveyed","owner":"U.S. Forest Service","count":208,"firstYear":1978,"surveyedYears":35,"occupiedYears":35,"lastOccupied":2025,"counts":[[2014,692],[2016,552],[2017,82],[2018,82],[2019,82],[2020,425],[2022,685],[2023,40],[2024,10],[2025,208]]},{"name":"Timber Cove","lon":-119.9627386,"lat":38.94923397,"year":2025,"status":"No Survey","owner":"Private","count":null,"firstYear":1978,"surveyedYears":32,"occupiedYears":18,"lastOccupied":2019,"counts":[[2008,23],[2009,72],[2011,21],[2012,160],[2014,161],[2016,53],[2017,0],[2018,164],[2019,65],[2020,0]]},{"name":"Upper Truckee East","lon":-119.9980224,"lat":38.94281246,"year":2025,"status":"No Survey","owner":"California Tahoe Conservancy","count":null,"firstYear":1978,"surveyedYears":30,"occupiedYears":30,"lastOccupied":2024,"counts":[[2012,2462],[2016,3212],[2017,343],[2018,555],[2019,231],[2020,658],[2021,2017],[2022,2651],[2023,198],[2024,368]]},{"name":"Upper Truckee West","lon":-120.0043692,"lat":38.941549,"year":2025,"status":"No Survey","owner":"California Tahoe Conservancy","count":null,"firstYear":1978,"surveyedYears":32,"occupiedYears":29,"lastOccupied":2024,"counts":[[2014,483],[2016,902],[2017,45],[2018,41],[2019,15],[2020,167],[2021,106],[2022,72],[2023,59],[2024,592]]},{"name":"Ward Creek","lon":-120.1570503,"lat":39.12889952,"year":2025,"status":"Surveyed","owner":"Private","count":175,"firstYear":1978,"surveyedYears":32,"occupiedYears":26,"lastOccupied":2025,"counts":[[2014,392],[2016,154],[2017,6],[2018,65],[2019,5],[2020,0],[2022,42],[2023,94],[2024,170],[2025,175]]},{"name":"Zephyr Cove","lon":-119.950688,"lat":39.01051688,"year":2025,"status":"Surveyed","owner":"Private/USFS","count":32,"firstYear":1978,"surveyedYears":30,"occupiedYears":20,"lastOccupied":2025,"counts":[[2016,281],[2017,4],[2018,2],[2019,1],[2020,22],[2021,82],[2022,364],[2023,109],[2024,0],[2025,32]]}]}</script>
+    </section>
+    <!-- fragment:end -->
+
+  </main>
+</body>
+</html>

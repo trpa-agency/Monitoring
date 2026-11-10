@@ -108,7 +108,7 @@ def post_conifer_data(readydf, draft= False):
     #Prep and post ending dataframe to invasives table in SEZ_Data.GDB
     #----------------------------------------------------------------#
     if draft == True:
-        readydf.to_csv(r"C:\Users\snewsome\Documents\SEZ\processedconiferdata.csv", index=False)
+        readydf.to_csv(r"F:\GIS\PROJECTS\Monitoring\SEZ\SurveyData\2024_SEZ\processedconiferdata.csv", index=False)
         # or post to SEZ.gdb?? staging table?
         # Convert DataFrame to a list of dictionaries
         #staging_table= stage_conifergdb

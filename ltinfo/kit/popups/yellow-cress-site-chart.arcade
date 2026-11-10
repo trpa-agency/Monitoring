@@ -1,0 +1,35 @@
+// kit/popups/yellow-cress-site-chart.arcade
+// A column chart of plants counted at one Tahoe yellow cress site over its last ten counted
+// survey years. Returns a media popup element. Stacks under yellow-cress-site.arcade.
+//
+// Attributes on the client-side sites layer the program dashboard builds:
+//   y01 .. y10   survey years as text, oldest first, empty where the site has fewer counted years
+//   c01 .. c10   plants counted in that year
+// The bar color is the Monitoring Dashboard green. The count field is still under review
+// (see PLAN.md), so the caption says so.
+
+var attrs = {};
+var fields = [];
+for (var i = 1; i <= 10; i++) {
+  var k = Text(i, '00');
+  var label = $feature['y' + k];
+  if (IsEmpty(label)) { continue; }
+  attrs[label] = DefaultValue($feature['c' + k], 0);
+  Push(fields, label);
+}
+
+if (Count(fields) == 0) {
+  return { type: 'text', text: 'No plant counts are recorded for this site.' };
+}
+
+return {
+  type: 'media',
+  title: 'Plants counted, last ' + Text(Count(fields)) + ' counted years',
+  attributes: attrs,
+  mediaInfos: [{
+    type: 'columnchart',
+    title: '',
+    caption: 'Count field under review.',
+    value: { fields: fields, colors: ['#789440'] }
+  }]
+};

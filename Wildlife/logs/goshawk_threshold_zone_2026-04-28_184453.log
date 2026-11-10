@@ -1,0 +1,1106 @@
+2026-04-28 18:44:53 | INFO | goshawk_threshold_zone | Log file: C:\Users\mbindl\Documents\GitHub\Monitoring\Wildlife\logs\goshawk_threshold_zone_2026-04-28_184453.log
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | TRPA Goshawk Threshold Zone
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | ============================================================
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Source GDB:   C:\GIS\Scratch.gdb (read-only)
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Output GDB:   C:\GIS\Goshawk_Threshold_Zone.gdb
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Nests FC:     nogo_nest_usfs
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | HIGH habitat: amgo_ecobject_cwhr_habmodel_high
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | MOD habitat:  amgo_ecobject_cwhr_habmodel_moderate
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Veg source:   C:\GIS\TahoeMaps\Tahoe_Data.gdb\Vegetation_Ecobject_2010 (LOW = veg - HIGH - MOD per-nest)
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Output FC:    C:\GIS\Goshawk_Threshold_Zone.gdb\TRPA_Goshawk_Threshold_Zone_TEST_SHORTS
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | TEST mode:    OIDs=[6, 51, 53, 58, 74, 75, 76, 86, 99, 121] (label=SHORTS)
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Target ac:    500.0 | Buffer: 0.25 Miles | min_acres: 0.5 | search: 5 Miles
+2026-04-28 18:44:54 | INFO | goshawk_threshold_zone | Close dist:   200 Feet | probe every: 5 picks | homestretch: 50.0 ac
+2026-04-28 18:44:58 | INFO | goshawk_threshold_zone | TEST MODE: running 10 specific OID(s): [6, 51, 53, 58, 74, 75, 76, 86, 99, 121]
+2026-04-28 18:44:58 | INFO | goshawk_threshold_zone | [1/10] Nest OID 6
+2026-04-28 18:44:58 | INFO | goshawk_threshold_zone |   [  0.5s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 18:45:01 | INFO | goshawk_threshold_zone |   [  2.7s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 18:45:05 | INFO | goshawk_threshold_zone |   [  6.9s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 18:45:14 | INFO | goshawk_threshold_zone |   [ 16.1s] source veg filtered to within 5 Miles of nest
+2026-04-28 18:45:35 | INFO | goshawk_threshold_zone |   [ 36.9s] LOW derived: 45935 polys kept (excluded 45919 HIGH+MOD UIDs)
+2026-04-28 18:45:58 | INFO | goshawk_threshold_zone |   [ 59.7s] erased buffer from HIGH habitat
+2026-04-28 18:47:00 | INFO | goshawk_threshold_zone |   [122.1s] erased buffer from MOD habitat
+2026-04-28 18:49:06 | INFO | goshawk_threshold_zone |   [248.5s] erased buffer from LOW habitat
+2026-04-28 18:50:04 | INFO | goshawk_threshold_zone |   [306.0s] acres calculated on habitat (planar)
+2026-04-28 18:50:34 | INFO | goshawk_threshold_zone |   [335.9s] near-distance computed
+2026-04-28 18:50:34 | INFO | goshawk_threshold_zone |   [336.4s] entering growth loop
+2026-04-28 18:50:35 | INFO | goshawk_threshold_zone |   [336.6s] ...1 picks | high=0.9 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 18:50:35 | INFO | goshawk_threshold_zone |   [337.5s] ...MOD pick #5: oid=12150 +1.1 ac
+2026-04-28 18:50:37 | INFO | goshawk_threshold_zone |   [339.3s] ...probe: projected total = 134.1 ac (target 500.0)
+2026-04-28 18:50:40 | INFO | goshawk_threshold_zone |   [342.2s] ...probe: projected total = 143.0 ac (target 500.0)
+2026-04-28 18:50:41 | INFO | goshawk_threshold_zone |   [342.8s] ...MOD pick #12: oid=23753 +7.4 ac
+2026-04-28 18:50:41 | INFO | goshawk_threshold_zone |   [343.2s] ...MOD pick #13: oid=34737 +0.9 ac
+2026-04-28 18:50:42 | INFO | goshawk_threshold_zone |   [343.7s] ...MOD pick #14: oid=12157 +1.5 ac
+2026-04-28 18:50:42 | INFO | goshawk_threshold_zone |   [344.2s] ...MOD pick #15: oid=22828 +0.7 ac
+2026-04-28 18:50:44 | INFO | goshawk_threshold_zone |   [346.2s] ...probe: projected total = 159.5 ac (target 500.0)
+2026-04-28 18:50:45 | INFO | goshawk_threshold_zone |   [346.7s] ...MOD pick #16: oid=12298 +4.8 ac
+2026-04-28 18:50:45 | INFO | goshawk_threshold_zone |   [347.4s] ...MOD pick #17: oid=12297 +0.6 ac
+2026-04-28 18:50:46 | INFO | goshawk_threshold_zone |   [348.2s] ...MOD pick #18: oid=12279 +1.6 ac
+2026-04-28 18:50:47 | INFO | goshawk_threshold_zone |   [348.7s] ...MOD pick #19: oid=12269 +1.8 ac
+2026-04-28 18:50:47 | INFO | goshawk_threshold_zone |   [349.2s] ...MOD pick #20: oid=12153 +2.7 ac
+2026-04-28 18:50:49 | INFO | goshawk_threshold_zone |   [351.3s] ...probe: projected total = 174.9 ac (target 500.0)
+2026-04-28 18:50:50 | INFO | goshawk_threshold_zone |   [351.9s] ...MOD pick #21: oid=12149 +0.6 ac
+2026-04-28 18:50:50 | INFO | goshawk_threshold_zone |   [352.4s] ...MOD pick #22: oid=23869 +3.8 ac
+2026-04-28 18:50:51 | INFO | goshawk_threshold_zone |   [352.9s] ...MOD pick #23: oid=12151 +2.4 ac
+2026-04-28 18:50:52 | INFO | goshawk_threshold_zone |   [353.8s] ...LOW pick #24: oid=38518 +1.4 ac
+2026-04-28 18:50:53 | INFO | goshawk_threshold_zone |   [354.6s] ...LOW pick #25: oid=17921 +1.6 ac
+2026-04-28 18:50:55 | INFO | goshawk_threshold_zone |   [356.6s] ...probe: projected total = 190.0 ac (target 500.0)
+2026-04-28 18:50:56 | INFO | goshawk_threshold_zone |   [358.2s] ...MOD pick #30: oid=12137 +0.9 ac
+2026-04-28 18:50:58 | INFO | goshawk_threshold_zone |   [360.2s] ...probe: projected total = 200.9 ac (target 500.0)
+2026-04-28 18:50:59 | INFO | goshawk_threshold_zone |   [361.1s] ...LOW pick #31: oid=18072 +1.4 ac
+2026-04-28 18:51:00 | INFO | goshawk_threshold_zone |   [362.1s] ...LOW pick #32: oid=38546 +1.3 ac
+2026-04-28 18:51:01 | INFO | goshawk_threshold_zone |   [363.1s] ...LOW pick #33: oid=38517 +0.6 ac
+2026-04-28 18:51:02 | INFO | goshawk_threshold_zone |   [364.0s] ...LOW pick #34: oid=36507 +1.6 ac
+2026-04-28 18:51:03 | INFO | goshawk_threshold_zone |   [365.0s] ...LOW pick #35: oid=19335 +0.6 ac
+2026-04-28 18:51:05 | INFO | goshawk_threshold_zone |   [367.2s] ...probe: projected total = 209.0 ac (target 500.0)
+2026-04-28 18:51:06 | INFO | goshawk_threshold_zone |   [368.2s] ...LOW pick #36: oid=18762 +1.1 ac
+2026-04-28 18:51:07 | INFO | goshawk_threshold_zone |   [369.2s] ...LOW pick #37: oid=36446 +0.5 ac
+2026-04-28 18:51:08 | INFO | goshawk_threshold_zone |   [370.2s] ...LOW pick #38: oid=45487 +1.0 ac
+2026-04-28 18:51:09 | INFO | goshawk_threshold_zone |   [371.2s] ...LOW pick #39: oid=38524 +0.7 ac
+2026-04-28 18:51:10 | INFO | goshawk_threshold_zone |   [372.2s] ...LOW pick #40: oid=38536 +0.7 ac
+2026-04-28 18:51:12 | INFO | goshawk_threshold_zone |   [374.3s] ...probe: projected total = 217.5 ac (target 500.0)
+2026-04-28 18:51:13 | INFO | goshawk_threshold_zone |   [375.5s] ...LOW pick #41: oid=19197 +1.0 ac
+2026-04-28 18:51:15 | INFO | goshawk_threshold_zone |   [376.7s] ...LOW pick #42: oid=19189 +0.5 ac
+2026-04-28 18:51:16 | INFO | goshawk_threshold_zone |   [377.8s] ...LOW pick #43: oid=18063 +0.8 ac
+2026-04-28 18:51:17 | INFO | goshawk_threshold_zone |   [379.0s] ...LOW pick #44: oid=17957 +1.0 ac
+2026-04-28 18:51:18 | INFO | goshawk_threshold_zone |   [380.1s] growth done: 44 picks, finalizing geometry
+2026-04-28 18:51:23 | INFO | goshawk_threshold_zone |   Buffer: 125.52 | High(add): 13.33 | Mod(add): 30.81 | Low(add): 15.88 | Filled: 35.47 | Total: 221.00 | 382.3s  WARNING: Could not reach target acres contiguously.
+2026-04-28 18:51:23 | INFO | goshawk_threshold_zone | [2/10] Nest OID 51
+2026-04-28 18:51:24 | INFO | goshawk_threshold_zone |   [  1.0s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 18:51:33 | INFO | goshawk_threshold_zone |   [  9.7s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 18:51:46 | INFO | goshawk_threshold_zone |   [ 23.1s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 18:52:23 | INFO | goshawk_threshold_zone |   [ 60.4s] source veg filtered to within 5 Miles of nest
+2026-04-28 18:53:27 | INFO | goshawk_threshold_zone |   [124.0s] LOW derived: 33841 polys kept (excluded 53942 HIGH+MOD UIDs)
+2026-04-28 18:54:36 | INFO | goshawk_threshold_zone |   [193.3s] erased buffer from HIGH habitat
+2026-04-28 18:56:35 | INFO | goshawk_threshold_zone |   [311.8s] erased buffer from MOD habitat
+2026-04-28 18:58:22 | INFO | goshawk_threshold_zone |   [419.3s] erased buffer from LOW habitat
+2026-04-28 18:59:35 | INFO | goshawk_threshold_zone |   [492.1s] acres calculated on habitat (planar)
+2026-04-28 19:00:14 | INFO | goshawk_threshold_zone |   [531.0s] near-distance computed
+2026-04-28 19:00:14 | INFO | goshawk_threshold_zone |   [531.4s] entering growth loop
+2026-04-28 19:00:15 | INFO | goshawk_threshold_zone |   [531.8s] ...MOD pick #1: oid=31775 +10.8 ac
+2026-04-28 19:00:15 | INFO | goshawk_threshold_zone |   [532.3s] ...MOD pick #2: oid=52657 +0.6 ac
+2026-04-28 19:00:16 | INFO | goshawk_threshold_zone |   [532.7s] ...MOD pick #3: oid=8146 +1.3 ac
+2026-04-28 19:00:16 | INFO | goshawk_threshold_zone |   [533.2s] ...MOD pick #4: oid=52631 +2.8 ac
+2026-04-28 19:00:17 | INFO | goshawk_threshold_zone |   [533.8s] ...MOD pick #5: oid=38897 +4.8 ac
+2026-04-28 19:00:19 | INFO | goshawk_threshold_zone |   [535.6s] ...probe: projected total = 157.4 ac (target 500.0)
+2026-04-28 19:00:19 | INFO | goshawk_threshold_zone |   [536.3s] ...MOD pick #6: oid=31720 +0.6 ac
+2026-04-28 19:00:20 | INFO | goshawk_threshold_zone |   [536.8s] ...MOD pick #7: oid=39383 +0.6 ac
+2026-04-28 19:00:21 | INFO | goshawk_threshold_zone |   [537.5s] ...MOD pick #8: oid=52658 +1.6 ac
+2026-04-28 19:00:21 | INFO | goshawk_threshold_zone |   [538.1s] ...MOD pick #9: oid=19591 +0.9 ac
+2026-04-28 19:00:22 | INFO | goshawk_threshold_zone |   [538.7s] ...MOD pick #10: oid=19473 +1.7 ac
+2026-04-28 19:00:24 | INFO | goshawk_threshold_zone |   [540.8s] ...probe: projected total = 165.5 ac (target 500.0)
+2026-04-28 19:00:24 | INFO | goshawk_threshold_zone |   [541.4s] ...MOD pick #11: oid=8150 +9.6 ac
+2026-04-28 19:00:25 | INFO | goshawk_threshold_zone |   [542.1s] ...MOD pick #12: oid=19940 +0.6 ac
+2026-04-28 19:00:26 | INFO | goshawk_threshold_zone |   [542.8s] ...MOD pick #13: oid=31539 +0.8 ac
+2026-04-28 19:00:27 | INFO | goshawk_threshold_zone |   [543.5s] ...MOD pick #14: oid=31379 +0.6 ac
+2026-04-28 19:00:27 | INFO | goshawk_threshold_zone |   [544.3s] ...MOD pick #15: oid=38908 +0.8 ac
+2026-04-28 19:00:30 | INFO | goshawk_threshold_zone |   [547.0s] ...probe: projected total = 169.4 ac (target 500.0)
+2026-04-28 19:00:31 | INFO | goshawk_threshold_zone |   [547.9s] ...MOD pick #16: oid=38925 +3.5 ac
+2026-04-28 19:00:32 | INFO | goshawk_threshold_zone |   [548.7s] ...MOD pick #17: oid=39394 +5.1 ac
+2026-04-28 19:00:32 | INFO | goshawk_threshold_zone |   [549.4s] ...MOD pick #18: oid=7924 +1.0 ac
+2026-04-28 19:00:33 | INFO | goshawk_threshold_zone |   [550.1s] ...MOD pick #19: oid=38895 +0.8 ac
+2026-04-28 19:00:34 | INFO | goshawk_threshold_zone |   [550.9s] ...MOD pick #20: oid=39392 +6.6 ac
+2026-04-28 19:00:37 | INFO | goshawk_threshold_zone |   [553.6s] ...probe: projected total = 192.5 ac (target 500.0)
+2026-04-28 19:00:37 | INFO | goshawk_threshold_zone |   [554.3s] ...MOD pick #21: oid=38881 +2.7 ac
+2026-04-28 19:00:38 | INFO | goshawk_threshold_zone |   [555.0s] ...MOD pick #22: oid=39374 +0.8 ac
+2026-04-28 19:00:39 | INFO | goshawk_threshold_zone |   [555.7s] ...MOD pick #23: oid=39031 +3.2 ac
+2026-04-28 19:00:39 | INFO | goshawk_threshold_zone |   [556.3s] ...MOD pick #24: oid=39379 +0.8 ac
+2026-04-28 19:00:40 | INFO | goshawk_threshold_zone |   [557.0s] ...MOD pick #25: oid=38903 +1.2 ac
+2026-04-28 19:00:43 | INFO | goshawk_threshold_zone |   [559.5s] ...probe: projected total = 203.6 ac (target 500.0)
+2026-04-28 19:00:43 | INFO | goshawk_threshold_zone |   [560.3s] ...MOD pick #26: oid=39402 +1.0 ac
+2026-04-28 19:00:44 | INFO | goshawk_threshold_zone |   [560.9s] ...MOD pick #27: oid=38922 +0.5 ac
+2026-04-28 19:00:45 | INFO | goshawk_threshold_zone |   [561.7s] ...MOD pick #28: oid=39015 +3.2 ac
+2026-04-28 19:00:46 | INFO | goshawk_threshold_zone |   [562.5s] ...MOD pick #29: oid=39407 +1.1 ac
+2026-04-28 19:00:46 | INFO | goshawk_threshold_zone |   [563.2s] ...MOD pick #30: oid=39406 +0.6 ac
+2026-04-28 19:00:49 | INFO | goshawk_threshold_zone |   [566.0s] ...probe: projected total = 211.2 ac (target 500.0)
+2026-04-28 19:00:50 | INFO | goshawk_threshold_zone |   [566.8s] ...MOD pick #31: oid=39051 +0.7 ac
+2026-04-28 19:00:51 | INFO | goshawk_threshold_zone |   [567.6s] ...MOD pick #32: oid=39062 +0.5 ac
+2026-04-28 19:00:51 | INFO | goshawk_threshold_zone |   [568.3s] ...MOD pick #33: oid=39055 +1.4 ac
+2026-04-28 19:00:52 | INFO | goshawk_threshold_zone |   [569.2s] ...MOD pick #34: oid=39409 +0.6 ac
+2026-04-28 19:00:53 | INFO | goshawk_threshold_zone |   [570.0s] ...MOD pick #35: oid=39067 +0.9 ac
+2026-04-28 19:00:56 | INFO | goshawk_threshold_zone |   [573.4s] ...probe: projected total = 218.7 ac (target 500.0)
+2026-04-28 19:00:58 | INFO | goshawk_threshold_zone |   [575.1s] ...LOW pick #36: oid=29248 +0.8 ac
+2026-04-28 19:01:00 | INFO | goshawk_threshold_zone |   [576.8s] ...LOW pick #37: oid=28443 +0.7 ac
+2026-04-28 19:01:01 | INFO | goshawk_threshold_zone |   [578.2s] ...LOW pick #38: oid=33539 +0.9 ac
+2026-04-28 19:01:03 | INFO | goshawk_threshold_zone |   [579.5s] ...LOW pick #39: oid=33308 +3.8 ac
+2026-04-28 19:01:03 | INFO | goshawk_threshold_zone |   [580.4s] ...MOD pick #40: oid=8057 +2.0 ac
+2026-04-28 19:01:06 | INFO | goshawk_threshold_zone |   [583.3s] ...probe: projected total = 231.8 ac (target 500.0)
+2026-04-28 19:01:07 | INFO | goshawk_threshold_zone |   [584.3s] ...MOD pick #41: oid=8045 +2.5 ac
+2026-04-28 19:01:08 | INFO | goshawk_threshold_zone |   [585.1s] ...MOD pick #42: oid=8033 +0.7 ac
+2026-04-28 19:01:10 | INFO | goshawk_threshold_zone |   [586.5s] ...LOW pick #43: oid=10663 +0.6 ac
+2026-04-28 19:01:11 | INFO | goshawk_threshold_zone |   [588.0s] ...LOW pick #44: oid=28843 +0.8 ac
+2026-04-28 19:01:12 | INFO | goshawk_threshold_zone |   [589.0s] ...MOD pick #45: oid=38919 +0.7 ac
+2026-04-28 19:01:15 | INFO | goshawk_threshold_zone |   [592.0s] ...probe: projected total = 240.1 ac (target 500.0)
+2026-04-28 19:01:16 | INFO | goshawk_threshold_zone |   [593.4s] ...LOW pick #46: oid=4136 +0.5 ac
+2026-04-28 19:01:18 | INFO | goshawk_threshold_zone |   [594.8s] ...LOW pick #47: oid=4216 +0.8 ac
+2026-04-28 19:01:19 | INFO | goshawk_threshold_zone |   [595.7s] ...MOD pick #48: oid=8102 +2.5 ac
+2026-04-28 19:01:20 | INFO | goshawk_threshold_zone |   [596.7s] ...MOD pick #49: oid=7890 +0.7 ac
+2026-04-28 19:01:21 | INFO | goshawk_threshold_zone |   [597.7s] ...MOD pick #50: oid=8088 +3.6 ac
+2026-04-28 19:01:24 | INFO | goshawk_threshold_zone |   [600.7s] ...probe: projected total = 254.1 ac (target 500.0)
+2026-04-28 19:01:25 | INFO | goshawk_threshold_zone |   [602.1s] ...LOW pick #51: oid=10789 +0.5 ac
+2026-04-28 19:01:27 | INFO | goshawk_threshold_zone |   [603.5s] ...LOW pick #52: oid=10659 +0.5 ac
+2026-04-28 19:01:28 | INFO | goshawk_threshold_zone |   [604.8s] ...LOW pick #53: oid=33070 +0.8 ac
+2026-04-28 19:01:29 | INFO | goshawk_threshold_zone |   [605.6s] ...MOD pick #54: oid=52775 +0.7 ac
+2026-04-28 19:01:30 | INFO | goshawk_threshold_zone |   [606.9s] ...LOW pick #55: oid=33312 +13.9 ac
+2026-04-28 19:01:33 | INFO | goshawk_threshold_zone |   [609.9s] ...probe: projected total = 311.4 ac (target 500.0)
+2026-04-28 19:01:35 | INFO | goshawk_threshold_zone |   [611.9s] ...MOD pick #59: oid=31996 +0.8 ac
+2026-04-28 19:01:36 | INFO | goshawk_threshold_zone |   [613.0s] ...MOD pick #60: oid=31800 +0.6 ac
+2026-04-28 19:01:39 | INFO | goshawk_threshold_zone |   [616.1s] ...probe: projected total = 326.8 ac (target 500.0)
+2026-04-28 19:01:40 | INFO | goshawk_threshold_zone |   [617.3s] ...MOD pick #61: oid=52799 +1.1 ac
+2026-04-28 19:01:41 | INFO | goshawk_threshold_zone |   [618.4s] ...MOD pick #62: oid=52773 +0.8 ac
+2026-04-28 19:01:43 | INFO | goshawk_threshold_zone |   [619.5s] ...MOD pick #63: oid=52800 +22.4 ac
+2026-04-28 19:01:44 | INFO | goshawk_threshold_zone |   [620.8s] ...MOD pick #64: oid=31443 +2.5 ac
+2026-04-28 19:01:48 | INFO | goshawk_threshold_zone |   [625.1s] ...probe: projected total = 367.7 ac (target 500.0)
+2026-04-28 19:01:49 | INFO | goshawk_threshold_zone |   [626.4s] ...MOD pick #66: oid=41967 +0.7 ac
+2026-04-28 19:01:51 | INFO | goshawk_threshold_zone |   [627.7s] ...MOD pick #67: oid=31609 +1.8 ac
+2026-04-28 19:01:52 | INFO | goshawk_threshold_zone |   [629.1s] ...MOD pick #68: oid=31801 +4.5 ac
+2026-04-28 19:01:54 | INFO | goshawk_threshold_zone |   [630.8s] ...MOD pick #70: oid=31436 +2.1 ac
+2026-04-28 19:01:58 | INFO | goshawk_threshold_zone |   [634.7s] ...probe: projected total = 383.3 ac (target 500.0)
+2026-04-28 19:01:59 | INFO | goshawk_threshold_zone |   [636.0s] ...MOD pick #71: oid=31998 +0.6 ac
+2026-04-28 19:02:00 | INFO | goshawk_threshold_zone |   [637.4s] ...MOD pick #72: oid=31432 +0.8 ac
+2026-04-28 19:02:02 | INFO | goshawk_threshold_zone |   [638.8s] ...MOD pick #73: oid=31381 +0.9 ac
+2026-04-28 19:02:03 | INFO | goshawk_threshold_zone |   [640.0s] ...MOD pick #74: oid=32864 +1.2 ac
+2026-04-28 19:02:04 | INFO | goshawk_threshold_zone |   [641.3s] ...MOD pick #75: oid=32026 +1.0 ac
+2026-04-28 19:02:08 | INFO | goshawk_threshold_zone |   [644.8s] ...probe: projected total = 389.1 ac (target 500.0)
+2026-04-28 19:02:09 | INFO | goshawk_threshold_zone |   [646.0s] ...MOD pick #76: oid=32874 +14.5 ac
+2026-04-28 19:02:10 | INFO | goshawk_threshold_zone |   [647.3s] ...MOD pick #77: oid=31611 +3.4 ac
+2026-04-28 19:02:12 | INFO | goshawk_threshold_zone |   [649.1s] ...MOD pick #79: oid=31802 +2.4 ac
+2026-04-28 19:02:17 | INFO | goshawk_threshold_zone |   [654.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:02:25 | INFO | goshawk_threshold_zone |   [661.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:02:33 | INFO | goshawk_threshold_zone |   [669.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:02:41 | INFO | goshawk_threshold_zone |   [677.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:02:43 | INFO | goshawk_threshold_zone |   [680.3s] ...100 picks | high=75.3 mod=149.8 low=24.8 projected=423.5 / target=500.0
+2026-04-28 19:02:49 | INFO | goshawk_threshold_zone |   [685.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:02:56 | INFO | goshawk_threshold_zone |   [693.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:04 | INFO | goshawk_threshold_zone |   [701.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:13 | INFO | goshawk_threshold_zone |   [710.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:23 | INFO | goshawk_threshold_zone |   [719.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:26 | INFO | goshawk_threshold_zone |   [722.8s] ...125 picks | high=127.1 mod=149.8 low=24.8 projected=423.5 / target=500.0
+2026-04-28 19:03:32 | INFO | goshawk_threshold_zone |   [729.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:42 | INFO | goshawk_threshold_zone |   [738.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:51 | INFO | goshawk_threshold_zone |   [748.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:03:59 | INFO | goshawk_threshold_zone |   [756.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:08 | INFO | goshawk_threshold_zone |   [764.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:16 | INFO | goshawk_threshold_zone |   [772.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:23 | INFO | goshawk_threshold_zone |   [780.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:31 | INFO | goshawk_threshold_zone |   [787.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:38 | INFO | goshawk_threshold_zone |   [795.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:46 | INFO | goshawk_threshold_zone |   [802.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:04:53 | INFO | goshawk_threshold_zone |   [810.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:02 | INFO | goshawk_threshold_zone |   [818.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:11 | INFO | goshawk_threshold_zone |   [827.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:18 | INFO | goshawk_threshold_zone |   [834.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:25 | INFO | goshawk_threshold_zone |   [841.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:32 | INFO | goshawk_threshold_zone |   [849.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:33 | INFO | goshawk_threshold_zone |   [849.8s] ...150 picks | high=181.8 mod=149.8 low=24.8 projected=423.5 / target=500.0
+2026-04-28 19:05:39 | INFO | goshawk_threshold_zone |   [856.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:46 | INFO | goshawk_threshold_zone |   [862.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:51 | INFO | goshawk_threshold_zone |   [868.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:05:58 | INFO | goshawk_threshold_zone |   [875.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:05 | INFO | goshawk_threshold_zone |   [882.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:12 | INFO | goshawk_threshold_zone |   [888.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:18 | INFO | goshawk_threshold_zone |   [895.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:25 | INFO | goshawk_threshold_zone |   [901.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:31 | INFO | goshawk_threshold_zone |   [908.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:38 | INFO | goshawk_threshold_zone |   [915.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:45 | INFO | goshawk_threshold_zone |   [922.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:52 | INFO | goshawk_threshold_zone |   [928.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:06:59 | INFO | goshawk_threshold_zone |   [935.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:06 | INFO | goshawk_threshold_zone |   [942.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:13 | INFO | goshawk_threshold_zone |   [950.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:20 | INFO | goshawk_threshold_zone |   [957.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:28 | INFO | goshawk_threshold_zone |   [965.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:37 | INFO | goshawk_threshold_zone |   [973.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:45 | INFO | goshawk_threshold_zone |   [981.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:52 | INFO | goshawk_threshold_zone |   [989.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:07:59 | INFO | goshawk_threshold_zone |   [996.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:07 | INFO | goshawk_threshold_zone |   [1003.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:15 | INFO | goshawk_threshold_zone |   [1012.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:22 | INFO | goshawk_threshold_zone |   [1018.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:28 | INFO | goshawk_threshold_zone |   [1025.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:29 | INFO | goshawk_threshold_zone |   [1026.1s] ...175 picks | high=227.7 mod=149.8 low=24.8 projected=423.5 / target=500.0
+2026-04-28 19:08:36 | INFO | goshawk_threshold_zone |   [1032.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:43 | INFO | goshawk_threshold_zone |   [1040.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:51 | INFO | goshawk_threshold_zone |   [1047.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:08:58 | INFO | goshawk_threshold_zone |   [1055.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:06 | INFO | goshawk_threshold_zone |   [1062.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:13 | INFO | goshawk_threshold_zone |   [1070.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:20 | INFO | goshawk_threshold_zone |   [1077.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:28 | INFO | goshawk_threshold_zone |   [1084.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:35 | INFO | goshawk_threshold_zone |   [1091.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:42 | INFO | goshawk_threshold_zone |   [1098.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:48 | INFO | goshawk_threshold_zone |   [1105.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:09:55 | INFO | goshawk_threshold_zone |   [1112.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:02 | INFO | goshawk_threshold_zone |   [1119.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:10 | INFO | goshawk_threshold_zone |   [1126.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:17 | INFO | goshawk_threshold_zone |   [1134.4s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:24 | INFO | goshawk_threshold_zone |   [1141.3s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:32 | INFO | goshawk_threshold_zone |   [1148.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:39 | INFO | goshawk_threshold_zone |   [1155.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:46 | INFO | goshawk_threshold_zone |   [1163.0s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:10:54 | INFO | goshawk_threshold_zone |   [1170.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:03 | INFO | goshawk_threshold_zone |   [1180.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:11 | INFO | goshawk_threshold_zone |   [1187.5s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:19 | INFO | goshawk_threshold_zone |   [1195.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:27 | INFO | goshawk_threshold_zone |   [1203.7s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:35 | INFO | goshawk_threshold_zone |   [1211.8s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:36 | INFO | goshawk_threshold_zone |   [1212.7s] ...200 picks | high=297.5 mod=149.8 low=24.8 projected=423.5 / target=500.0
+2026-04-28 19:11:43 | INFO | goshawk_threshold_zone |   [1220.2s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:11:53 | INFO | goshawk_threshold_zone |   [1229.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:12:01 | INFO | goshawk_threshold_zone |   [1237.9s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:12:09 | INFO | goshawk_threshold_zone |   [1246.1s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:12:18 | INFO | goshawk_threshold_zone |   [1254.6s] ...probe: projected total = 423.5 ac (target 500.0)
+2026-04-28 19:12:26 | INFO | goshawk_threshold_zone |   [1263.0s] ...probe: projected total = 476.7 ac (target 500.0)
+2026-04-28 19:12:35 | INFO | goshawk_threshold_zone |   [1271.7s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:12:44 | INFO | goshawk_threshold_zone |   [1280.6s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:12:52 | INFO | goshawk_threshold_zone |   [1289.2s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:13:01 | INFO | goshawk_threshold_zone |   [1298.1s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:13:10 | INFO | goshawk_threshold_zone |   [1307.0s] ...probe: projected total = 485.4 ac (target 500.0)
+2026-04-28 19:13:20 | INFO | goshawk_threshold_zone |   [1317.1s] ...probe: projected total = 490.1 ac (target 500.0)
+2026-04-28 19:13:28 | INFO | goshawk_threshold_zone |   [1325.3s] ...probe: projected total = 490.1 ac (target 500.0)
+2026-04-28 19:13:37 | INFO | goshawk_threshold_zone |   [1333.7s] ...probe: projected total = 493.6 ac (target 500.0)
+2026-04-28 19:13:45 | INFO | goshawk_threshold_zone |   [1341.7s] ...probe: projected total = 494.9 ac (target 500.0)
+2026-04-28 19:13:53 | INFO | goshawk_threshold_zone |   [1349.6s] ...probe: projected total = 494.9 ac (target 500.0)
+2026-04-28 19:14:01 | INFO | goshawk_threshold_zone |   [1357.5s] ...probe: projected total = 495.8 ac (target 500.0)
+2026-04-28 19:14:09 | INFO | goshawk_threshold_zone |   [1365.5s] ...probe: projected total = 506.0 ac (target 500.0)
+2026-04-28 19:14:09 | INFO | goshawk_threshold_zone |   [1365.5s] growth done: 217 picks, finalizing geometry
+2026-04-28 19:14:18 | INFO | goshawk_threshold_zone |   Buffer: 125.54 | High(add): 367.04 | Mod(add): 149.80 | Low(add): 24.82 | Filled: 0.00 | Total: 506.01 | 1372.6s
+2026-04-28 19:14:18 | INFO | goshawk_threshold_zone | [3/10] Nest OID 53
+2026-04-28 19:14:19 | INFO | goshawk_threshold_zone |   [  0.7s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:14:25 | INFO | goshawk_threshold_zone |   [  7.4s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:14:37 | INFO | goshawk_threshold_zone |   [ 19.3s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:15:10 | INFO | goshawk_threshold_zone |   [ 51.8s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:16:13 | INFO | goshawk_threshold_zone |   [115.2s] LOW derived: 35405 polys kept (excluded 54620 HIGH+MOD UIDs)
+2026-04-28 19:16:59 | INFO | goshawk_threshold_zone |   [161.4s] erased buffer from HIGH habitat
+2026-04-28 19:17:59 | INFO | goshawk_threshold_zone |   [220.9s] erased buffer from MOD habitat
+2026-04-28 19:19:39 | INFO | goshawk_threshold_zone |   [320.9s] erased buffer from LOW habitat
+2026-04-28 19:20:55 | INFO | goshawk_threshold_zone |   [396.8s] acres calculated on habitat (planar)
+2026-04-28 19:21:30 | INFO | goshawk_threshold_zone |   [432.3s] near-distance computed
+2026-04-28 19:21:31 | INFO | goshawk_threshold_zone |   [432.7s] entering growth loop
+2026-04-28 19:21:31 | INFO | goshawk_threshold_zone |   [433.0s] ...MOD pick #1: oid=53218 +6.0 ac
+2026-04-28 19:21:31 | INFO | goshawk_threshold_zone |   [433.4s] ...MOD pick #2: oid=53185 +4.5 ac
+2026-04-28 19:21:32 | INFO | goshawk_threshold_zone |   [433.8s] ...MOD pick #3: oid=39364 +1.4 ac
+2026-04-28 19:21:32 | INFO | goshawk_threshold_zone |   [434.2s] ...MOD pick #4: oid=53222 +0.7 ac
+2026-04-28 19:21:33 | INFO | goshawk_threshold_zone |   [434.7s] ...MOD pick #5: oid=19406 +1.3 ac
+2026-04-28 19:21:34 | INFO | goshawk_threshold_zone |   [436.3s] ...probe: projected total = 146.0 ac (target 500.0)
+2026-04-28 19:21:35 | INFO | goshawk_threshold_zone |   [436.7s] ...MOD pick #6: oid=19387 +0.8 ac
+2026-04-28 19:21:35 | INFO | goshawk_threshold_zone |   [437.2s] ...MOD pick #7: oid=8026 +0.8 ac
+2026-04-28 19:21:36 | INFO | goshawk_threshold_zone |   [437.6s] ...MOD pick #8: oid=39269 +0.8 ac
+2026-04-28 19:21:36 | INFO | goshawk_threshold_zone |   [438.1s] ...MOD pick #9: oid=39693 +5.1 ac
+2026-04-28 19:21:36 | INFO | goshawk_threshold_zone |   [438.5s] ...MOD pick #10: oid=39275 +3.5 ac
+2026-04-28 19:21:38 | INFO | goshawk_threshold_zone |   [440.2s] ...probe: projected total = 162.0 ac (target 500.0)
+2026-04-28 19:21:39 | INFO | goshawk_threshold_zone |   [440.6s] ...MOD pick #11: oid=39266 +0.8 ac
+2026-04-28 19:21:39 | INFO | goshawk_threshold_zone |   [441.1s] ...MOD pick #12: oid=39691 +6.6 ac
+2026-04-28 19:21:40 | INFO | goshawk_threshold_zone |   [441.7s] ...MOD pick #13: oid=39347 +3.2 ac
+2026-04-28 19:21:40 | INFO | goshawk_threshold_zone |   [442.2s] ...MOD pick #14: oid=39701 +1.0 ac
+2026-04-28 19:21:41 | INFO | goshawk_threshold_zone |   [442.7s] ...MOD pick #15: oid=53217 +2.7 ac
+2026-04-28 19:21:43 | INFO | goshawk_threshold_zone |   [444.6s] ...probe: projected total = 184.7 ac (target 500.0)
+2026-04-28 19:21:43 | INFO | goshawk_threshold_zone |   [445.2s] ...MOD pick #16: oid=39274 +0.5 ac
+2026-04-28 19:21:44 | INFO | goshawk_threshold_zone |   [445.7s] ...MOD pick #17: oid=39706 +1.1 ac
+2026-04-28 19:21:44 | INFO | goshawk_threshold_zone |   [446.2s] ...MOD pick #18: oid=39705 +0.6 ac
+2026-04-28 19:21:45 | INFO | goshawk_threshold_zone |   [446.8s] ...MOD pick #19: oid=39367 +0.7 ac
+2026-04-28 19:21:45 | INFO | goshawk_threshold_zone |   [447.3s] ...MOD pick #20: oid=39267 +1.2 ac
+2026-04-28 19:21:47 | INFO | goshawk_threshold_zone |   [449.1s] ...probe: projected total = 188.8 ac (target 500.0)
+2026-04-28 19:21:48 | INFO | goshawk_threshold_zone |   [449.6s] ...MOD pick #21: oid=39331 +3.2 ac
+2026-04-28 19:21:48 | INFO | goshawk_threshold_zone |   [450.2s] ...MOD pick #22: oid=39378 +0.5 ac
+2026-04-28 19:21:49 | INFO | goshawk_threshold_zone |   [450.7s] ...MOD pick #23: oid=19557 +0.8 ac
+2026-04-28 19:21:49 | INFO | goshawk_threshold_zone |   [451.3s] ...MOD pick #24: oid=19552 +0.8 ac
+2026-04-28 19:21:50 | INFO | goshawk_threshold_zone |   [451.9s] ...MOD pick #25: oid=39371 +1.4 ac
+2026-04-28 19:21:52 | INFO | goshawk_threshold_zone |   [453.8s] ...probe: projected total = 196.8 ac (target 500.0)
+2026-04-28 19:21:52 | INFO | goshawk_threshold_zone |   [454.3s] ...MOD pick #26: oid=39708 +0.6 ac
+2026-04-28 19:21:53 | INFO | goshawk_threshold_zone |   [454.9s] ...MOD pick #27: oid=39383 +0.9 ac
+2026-04-28 19:21:54 | INFO | goshawk_threshold_zone |   [455.8s] ...LOW pick #28: oid=35055 +10.6 ac
+2026-04-28 19:21:56 | INFO | goshawk_threshold_zone |   [458.4s] ...probe: projected total = 235.8 ac (target 500.0)
+2026-04-28 19:21:57 | INFO | goshawk_threshold_zone |   [459.4s] ...MOD pick #32: oid=36613 +0.8 ac
+2026-04-28 19:21:58 | INFO | goshawk_threshold_zone |   [460.1s] ...MOD pick #33: oid=36478 +0.6 ac
+2026-04-28 19:21:59 | INFO | goshawk_threshold_zone |   [460.9s] ...MOD pick #34: oid=53301 +1.1 ac
+2026-04-28 19:22:00 | INFO | goshawk_threshold_zone |   [461.7s] ...MOD pick #35: oid=53266 +0.8 ac
+2026-04-28 19:22:02 | INFO | goshawk_threshold_zone |   [464.0s] ...probe: projected total = 247.5 ac (target 500.0)
+2026-04-28 19:22:03 | INFO | goshawk_threshold_zone |   [464.8s] ...MOD pick #36: oid=53302 +22.4 ac
+2026-04-28 19:22:04 | INFO | goshawk_threshold_zone |   [465.8s] ...MOD pick #37: oid=8497 +9.6 ac
+2026-04-28 19:22:05 | INFO | goshawk_threshold_zone |   [466.8s] ...MOD pick #38: oid=8491 +1.8 ac
+2026-04-28 19:22:06 | INFO | goshawk_threshold_zone |   [467.9s] ...MOD pick #39: oid=8473 +0.8 ac
+2026-04-28 19:22:07 | INFO | goshawk_threshold_zone |   [468.8s] ...MOD pick #40: oid=36271 +2.5 ac
+2026-04-28 19:22:10 | INFO | goshawk_threshold_zone |   [472.1s] ...probe: projected total = 298.6 ac (target 500.0)
+2026-04-28 19:22:11 | INFO | goshawk_threshold_zone |   [473.3s] ...MOD pick #42: oid=44624 +0.7 ac
+2026-04-28 19:22:12 | INFO | goshawk_threshold_zone |   [474.2s] ...MOD pick #43: oid=36358 +1.8 ac
+2026-04-28 19:22:13 | INFO | goshawk_threshold_zone |   [475.2s] ...MOD pick #44: oid=36479 +4.5 ac
+2026-04-28 19:22:17 | INFO | goshawk_threshold_zone |   [478.9s] ...probe: projected total = 312.3 ac (target 500.0)
+2026-04-28 19:22:18 | INFO | goshawk_threshold_zone |   [479.8s] ...MOD pick #46: oid=36264 +2.1 ac
+2026-04-28 19:22:19 | INFO | goshawk_threshold_zone |   [480.8s] ...MOD pick #47: oid=36615 +0.6 ac
+2026-04-28 19:22:20 | INFO | goshawk_threshold_zone |   [481.9s] ...MOD pick #48: oid=36260 +0.8 ac
+2026-04-28 19:22:21 | INFO | goshawk_threshold_zone |   [482.9s] ...MOD pick #49: oid=38019 +1.2 ac
+2026-04-28 19:22:22 | INFO | goshawk_threshold_zone |   [483.9s] ...MOD pick #50: oid=38029 +14.5 ac
+2026-04-28 19:22:25 | INFO | goshawk_threshold_zone |   [487.4s] ...probe: projected total = 344.7 ac (target 500.0)
+2026-04-28 19:22:26 | INFO | goshawk_threshold_zone |   [488.5s] ...MOD pick #51: oid=36221 +0.9 ac
+2026-04-28 19:22:28 | INFO | goshawk_threshold_zone |   [489.6s] ...MOD pick #52: oid=38022 +0.9 ac
+2026-04-28 19:22:29 | INFO | goshawk_threshold_zone |   [490.6s] ...MOD pick #53: oid=36643 +1.0 ac
+2026-04-28 19:22:30 | INFO | goshawk_threshold_zone |   [491.6s] ...MOD pick #54: oid=37071 +4.1 ac
+2026-04-28 19:22:31 | INFO | goshawk_threshold_zone |   [492.8s] ...MOD pick #55: oid=36403 +0.7 ac
+2026-04-28 19:22:34 | INFO | goshawk_threshold_zone |   [496.5s] ...probe: projected total = 357.6 ac (target 500.0)
+2026-04-28 19:22:36 | INFO | goshawk_threshold_zone |   [497.6s] ...MOD pick #56: oid=36870 +0.9 ac
+2026-04-28 19:22:37 | INFO | goshawk_threshold_zone |   [498.8s] ...MOD pick #57: oid=38023 +5.1 ac
+2026-04-28 19:22:38 | INFO | goshawk_threshold_zone |   [500.3s] ...MOD pick #59: oid=36360 +3.4 ac
+2026-04-28 19:22:39 | INFO | goshawk_threshold_zone |   [501.4s] ...MOD pick #60: oid=36208 +0.5 ac
+2026-04-28 19:22:43 | INFO | goshawk_threshold_zone |   [505.1s] ...probe: projected total = 370.1 ac (target 500.0)
+2026-04-28 19:22:44 | INFO | goshawk_threshold_zone |   [506.2s] ...MOD pick #61: oid=53277 +0.9 ac
+2026-04-28 19:22:45 | INFO | goshawk_threshold_zone |   [507.4s] ...MOD pick #62: oid=36480 +2.4 ac
+2026-04-28 19:22:50 | INFO | goshawk_threshold_zone |   [512.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:22:56 | INFO | goshawk_threshold_zone |   [517.9s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:22:58 | INFO | goshawk_threshold_zone |   [519.8s] ...75 picks | high=58.9 mod=139.0 low=10.6 projected=375.2 / target=500.0
+2026-04-28 19:23:02 | INFO | goshawk_threshold_zone |   [523.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:08 | INFO | goshawk_threshold_zone |   [529.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:14 | INFO | goshawk_threshold_zone |   [535.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:20 | INFO | goshawk_threshold_zone |   [541.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:26 | INFO | goshawk_threshold_zone |   [548.1s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:28 | INFO | goshawk_threshold_zone |   [550.4s] ...100 picks | high=116.6 mod=139.0 low=10.6 projected=375.2 / target=500.0
+2026-04-28 19:23:33 | INFO | goshawk_threshold_zone |   [554.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:39 | INFO | goshawk_threshold_zone |   [561.6s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:46 | INFO | goshawk_threshold_zone |   [568.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:23:53 | INFO | goshawk_threshold_zone |   [575.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:00 | INFO | goshawk_threshold_zone |   [582.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:03 | INFO | goshawk_threshold_zone |   [584.9s] ...125 picks | high=165.6 mod=139.0 low=10.6 projected=375.2 / target=500.0
+2026-04-28 19:24:07 | INFO | goshawk_threshold_zone |   [589.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:13 | INFO | goshawk_threshold_zone |   [595.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:18 | INFO | goshawk_threshold_zone |   [600.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:21 | INFO | goshawk_threshold_zone |   [602.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:24 | INFO | goshawk_threshold_zone |   [605.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:26 | INFO | goshawk_threshold_zone |   [608.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:29 | INFO | goshawk_threshold_zone |   [610.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:32 | INFO | goshawk_threshold_zone |   [613.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:35 | INFO | goshawk_threshold_zone |   [617.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:38 | INFO | goshawk_threshold_zone |   [620.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:41 | INFO | goshawk_threshold_zone |   [623.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:45 | INFO | goshawk_threshold_zone |   [626.6s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:48 | INFO | goshawk_threshold_zone |   [630.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:51 | INFO | goshawk_threshold_zone |   [633.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:54 | INFO | goshawk_threshold_zone |   [636.0s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:24:59 | INFO | goshawk_threshold_zone |   [640.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:04 | INFO | goshawk_threshold_zone |   [646.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:10 | INFO | goshawk_threshold_zone |   [652.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:16 | INFO | goshawk_threshold_zone |   [658.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:22 | INFO | goshawk_threshold_zone |   [664.0s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:27 | INFO | goshawk_threshold_zone |   [669.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:33 | INFO | goshawk_threshold_zone |   [675.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:39 | INFO | goshawk_threshold_zone |   [681.0s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:40 | INFO | goshawk_threshold_zone |   [681.8s] ...150 picks | high=213.6 mod=139.0 low=10.6 projected=375.2 / target=500.0
+2026-04-28 19:25:44 | INFO | goshawk_threshold_zone |   [686.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:50 | INFO | goshawk_threshold_zone |   [691.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:25:55 | INFO | goshawk_threshold_zone |   [697.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:00 | INFO | goshawk_threshold_zone |   [702.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:06 | INFO | goshawk_threshold_zone |   [707.9s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:11 | INFO | goshawk_threshold_zone |   [713.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:17 | INFO | goshawk_threshold_zone |   [719.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:23 | INFO | goshawk_threshold_zone |   [724.9s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:28 | INFO | goshawk_threshold_zone |   [730.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:34 | INFO | goshawk_threshold_zone |   [736.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:40 | INFO | goshawk_threshold_zone |   [741.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:45 | INFO | goshawk_threshold_zone |   [747.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:51 | INFO | goshawk_threshold_zone |   [753.1s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:26:57 | INFO | goshawk_threshold_zone |   [758.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:02 | INFO | goshawk_threshold_zone |   [764.1s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:08 | INFO | goshawk_threshold_zone |   [769.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:13 | INFO | goshawk_threshold_zone |   [775.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:19 | INFO | goshawk_threshold_zone |   [781.1s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:25 | INFO | goshawk_threshold_zone |   [786.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:30 | INFO | goshawk_threshold_zone |   [792.6s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:36 | INFO | goshawk_threshold_zone |   [798.4s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:42 | INFO | goshawk_threshold_zone |   [804.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:48 | INFO | goshawk_threshold_zone |   [810.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:27:54 | INFO | goshawk_threshold_zone |   [816.3s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:01 | INFO | goshawk_threshold_zone |   [822.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:01 | INFO | goshawk_threshold_zone |   [823.5s] ...175 picks | high=281.2 mod=139.0 low=10.6 projected=375.2 / target=500.0
+2026-04-28 19:28:07 | INFO | goshawk_threshold_zone |   [828.8s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:13 | INFO | goshawk_threshold_zone |   [834.9s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:19 | INFO | goshawk_threshold_zone |   [841.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:25 | INFO | goshawk_threshold_zone |   [847.2s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:31 | INFO | goshawk_threshold_zone |   [853.0s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:37 | INFO | goshawk_threshold_zone |   [859.0s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:43 | INFO | goshawk_threshold_zone |   [864.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:48 | INFO | goshawk_threshold_zone |   [870.1s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:28:54 | INFO | goshawk_threshold_zone |   [875.9s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:29:00 | INFO | goshawk_threshold_zone |   [881.7s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:29:05 | INFO | goshawk_threshold_zone |   [887.5s] ...probe: projected total = 375.2 ac (target 500.0)
+2026-04-28 19:29:11 | INFO | goshawk_threshold_zone |   [893.5s] ...probe: projected total = 415.8 ac (target 500.0)
+2026-04-28 19:29:17 | INFO | goshawk_threshold_zone |   [899.5s] ...probe: projected total = 424.8 ac (target 500.0)
+2026-04-28 19:29:24 | INFO | goshawk_threshold_zone |   [905.9s] ...probe: projected total = 476.7 ac (target 500.0)
+2026-04-28 19:29:30 | INFO | goshawk_threshold_zone |   [912.2s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:29:37 | INFO | goshawk_threshold_zone |   [918.8s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:29:43 | INFO | goshawk_threshold_zone |   [925.0s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:29:49 | INFO | goshawk_threshold_zone |   [931.4s] ...probe: projected total = 477.7 ac (target 500.0)
+2026-04-28 19:29:55 | INFO | goshawk_threshold_zone |   [937.6s] ...probe: projected total = 485.4 ac (target 500.0)
+2026-04-28 19:30:02 | INFO | goshawk_threshold_zone |   [944.0s] ...probe: projected total = 490.1 ac (target 500.0)
+2026-04-28 19:30:08 | INFO | goshawk_threshold_zone |   [950.4s] ...probe: projected total = 490.1 ac (target 500.0)
+2026-04-28 19:30:15 | INFO | goshawk_threshold_zone |   [956.7s] ...probe: projected total = 491.3 ac (target 500.0)
+2026-04-28 19:30:21 | INFO | goshawk_threshold_zone |   [962.7s] ...probe: projected total = 492.3 ac (target 500.0)
+2026-04-28 19:30:27 | INFO | goshawk_threshold_zone |   [969.2s] ...probe: projected total = 495.8 ac (target 500.0)
+2026-04-28 19:30:34 | INFO | goshawk_threshold_zone |   [976.4s] ...probe: projected total = 506.0 ac (target 500.0)
+2026-04-28 19:30:34 | INFO | goshawk_threshold_zone |   [976.4s] growth done: 199 picks, finalizing geometry
+2026-04-28 19:30:42 | INFO | goshawk_threshold_zone |   Buffer: 125.54 | High(add): 366.51 | Mod(add): 139.04 | Low(add): 10.59 | Filled: 0.00 | Total: 506.01 | 981.8s
+2026-04-28 19:30:42 | INFO | goshawk_threshold_zone | [4/10] Nest OID 58
+2026-04-28 19:30:42 | INFO | goshawk_threshold_zone |   [  0.7s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:30:50 | INFO | goshawk_threshold_zone |   [  8.1s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:31:03 | INFO | goshawk_threshold_zone |   [ 21.0s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:31:38 | INFO | goshawk_threshold_zone |   [ 56.3s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:32:59 | INFO | goshawk_threshold_zone |   [137.1s] LOW derived: 49631 polys kept (excluded 56849 HIGH+MOD UIDs)
+2026-04-28 19:34:20 | INFO | goshawk_threshold_zone |   [218.6s] erased buffer from HIGH habitat
+2026-04-28 19:35:40 | INFO | goshawk_threshold_zone |   [298.3s] erased buffer from MOD habitat
+2026-04-28 19:37:07 | INFO | goshawk_threshold_zone |   [385.2s] erased buffer from LOW habitat
+2026-04-28 19:38:34 | INFO | goshawk_threshold_zone |   [472.4s] acres calculated on habitat (planar)
+2026-04-28 19:38:55 | INFO | goshawk_threshold_zone |   [493.3s] near-distance computed
+2026-04-28 19:38:55 | INFO | goshawk_threshold_zone |   [493.5s] entering growth loop
+2026-04-28 19:38:55 | INFO | goshawk_threshold_zone |   [493.6s] ...1 picks | high=0.8 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 19:38:56 | INFO | goshawk_threshold_zone |   [494.6s] ...probe: projected total = 145.9 ac (target 500.0)
+2026-04-28 19:38:57 | INFO | goshawk_threshold_zone |   [495.2s] ...LOW pick #9: oid=32061 +0.6 ac
+2026-04-28 19:38:57 | INFO | goshawk_threshold_zone |   [495.5s] ...LOW pick #10: oid=49428 +0.6 ac
+2026-04-28 19:38:58 | INFO | goshawk_threshold_zone |   [496.2s] ...probe: projected total = 155.4 ac (target 500.0)
+2026-04-28 19:38:58 | INFO | goshawk_threshold_zone |   [496.4s] ...LOW pick #11: oid=24155 +0.6 ac
+2026-04-28 19:38:58 | INFO | goshawk_threshold_zone |   [496.7s] ...LOW pick #12: oid=32174 +0.5 ac
+2026-04-28 19:38:59 | INFO | goshawk_threshold_zone |   [497.0s] ...LOW pick #13: oid=32098 +2.4 ac
+2026-04-28 19:38:59 | INFO | goshawk_threshold_zone |   [497.1s] ...MOD pick #14: oid=36887 +2.0 ac
+2026-04-28 19:38:59 | INFO | goshawk_threshold_zone |   [497.3s] ...MOD pick #15: oid=36899 +1.1 ac
+2026-04-28 19:39:00 | INFO | goshawk_threshold_zone |   [498.1s] ...probe: projected total = 165.7 ac (target 500.0)
+2026-04-28 19:39:00 | INFO | goshawk_threshold_zone |   [498.2s] ...MOD pick #16: oid=36881 +0.6 ac
+2026-04-28 19:39:00 | INFO | goshawk_threshold_zone |   [498.4s] ...MOD pick #17: oid=36897 +0.7 ac
+2026-04-28 19:39:00 | INFO | goshawk_threshold_zone |   [498.7s] ...LOW pick #18: oid=49319 +2.1 ac
+2026-04-28 19:39:01 | INFO | goshawk_threshold_zone |   [499.0s] ...LOW pick #19: oid=32094 +1.5 ac
+2026-04-28 19:39:01 | INFO | goshawk_threshold_zone |   [499.2s] ...LOW pick #20: oid=32067 +0.7 ac
+2026-04-28 19:39:02 | INFO | goshawk_threshold_zone |   [499.9s] ...probe: projected total = 174.7 ac (target 500.0)
+2026-04-28 19:39:02 | INFO | goshawk_threshold_zone |   [500.2s] ...LOW pick #21: oid=32168 +1.0 ac
+2026-04-28 19:39:02 | INFO | goshawk_threshold_zone |   [500.4s] ...LOW pick #22: oid=32122 +1.5 ac
+2026-04-28 19:39:02 | INFO | goshawk_threshold_zone |   [500.7s] ...LOW pick #23: oid=49237 +1.5 ac
+2026-04-28 19:39:03 | INFO | goshawk_threshold_zone |   [501.0s] ...LOW pick #24: oid=32063 +1.5 ac
+2026-04-28 19:39:03 | INFO | goshawk_threshold_zone |   [501.2s] ...LOW pick #25: oid=32134 +6.5 ac
+2026-04-28 19:39:04 | INFO | goshawk_threshold_zone |   [502.1s] ...probe: projected total = 195.8 ac (target 500.0)
+2026-04-28 19:39:04 | INFO | goshawk_threshold_zone |   [502.3s] ...MOD pick #26: oid=36901 +1.4 ac
+2026-04-28 19:39:04 | INFO | goshawk_threshold_zone |   [502.6s] ...LOW pick #27: oid=32077 +0.7 ac
+2026-04-28 19:39:05 | INFO | goshawk_threshold_zone |   [502.9s] ...LOW pick #28: oid=24534 +0.5 ac
+2026-04-28 19:39:05 | INFO | goshawk_threshold_zone |   [503.2s] ...LOW pick #29: oid=32066 +1.7 ac
+2026-04-28 19:39:05 | INFO | goshawk_threshold_zone |   [503.5s] ...LOW pick #30: oid=25085 +2.8 ac
+2026-04-28 19:39:06 | INFO | goshawk_threshold_zone |   [504.3s] ...probe: projected total = 206.7 ac (target 500.0)
+2026-04-28 19:39:06 | INFO | goshawk_threshold_zone |   [504.5s] ...LOW pick #31: oid=32121 +1.0 ac
+2026-04-28 19:39:06 | INFO | goshawk_threshold_zone |   [504.8s] ...LOW pick #32: oid=32101 +1.3 ac
+2026-04-28 19:39:07 | INFO | goshawk_threshold_zone |   [505.1s] ...LOW pick #33: oid=47993 +11.4 ac
+2026-04-28 19:39:07 | INFO | goshawk_threshold_zone |   [505.4s] ...LOW pick #34: oid=24747 +0.5 ac
+2026-04-28 19:39:07 | INFO | goshawk_threshold_zone |   [505.7s] ...LOW pick #35: oid=32123 +0.8 ac
+2026-04-28 19:39:08 | INFO | goshawk_threshold_zone |   [506.5s] ...probe: projected total = 224.7 ac (target 500.0)
+2026-04-28 19:39:09 | INFO | goshawk_threshold_zone |   [507.1s] ...LOW pick #38: oid=24716 +0.6 ac
+2026-04-28 19:39:09 | INFO | goshawk_threshold_zone |   [507.4s] ...LOW pick #39: oid=32153 +0.5 ac
+2026-04-28 19:39:10 | INFO | goshawk_threshold_zone |   [508.4s] ...probe: projected total = 231.6 ac (target 500.0)
+2026-04-28 19:39:10 | INFO | goshawk_threshold_zone |   [508.6s] ...MOD pick #41: oid=36979 +0.5 ac
+2026-04-28 19:39:11 | INFO | goshawk_threshold_zone |   [508.9s] ...MOD pick #42: oid=36931 +0.7 ac
+2026-04-28 19:39:11 | INFO | goshawk_threshold_zone |   [509.2s] ...LOW pick #43: oid=32078 +1.4 ac
+2026-04-28 19:39:11 | INFO | goshawk_threshold_zone |   [509.5s] ...LOW pick #44: oid=32102 +0.6 ac
+2026-04-28 19:39:11 | INFO | goshawk_threshold_zone |   [509.8s] ...LOW pick #45: oid=32114 +0.7 ac
+2026-04-28 19:39:12 | INFO | goshawk_threshold_zone |   [510.6s] ...probe: projected total = 238.3 ac (target 500.0)
+2026-04-28 19:39:13 | INFO | goshawk_threshold_zone |   [511.0s] ...50 picks | high=30.2 mod=7.1 low=45.7 projected=238.3 / target=500.0
+2026-04-28 19:39:14 | INFO | goshawk_threshold_zone |   [512.0s] ...probe: projected total = 249.9 ac (target 500.0)
+2026-04-28 19:39:15 | INFO | goshawk_threshold_zone |   [513.6s] ...probe: projected total = 271.3 ac (target 500.0)
+2026-04-28 19:39:17 | INFO | goshawk_threshold_zone |   [515.5s] ...probe: projected total = 287.8 ac (target 500.0)
+2026-04-28 19:39:19 | INFO | goshawk_threshold_zone |   [517.0s] ...probe: projected total = 312.9 ac (target 500.0)
+2026-04-28 19:39:20 | INFO | goshawk_threshold_zone |   [518.6s] ...probe: projected total = 352.5 ac (target 500.0)
+2026-04-28 19:39:21 | INFO | goshawk_threshold_zone |   [519.2s] ...75 picks | high=99.8 mod=7.1 low=45.7 projected=352.5 / target=500.0
+2026-04-28 19:39:22 | INFO | goshawk_threshold_zone |   [520.2s] ...probe: projected total = 359.5 ac (target 500.0)
+2026-04-28 19:39:24 | INFO | goshawk_threshold_zone |   [522.1s] ...probe: projected total = 376.5 ac (target 500.0)
+2026-04-28 19:39:26 | INFO | goshawk_threshold_zone |   [524.0s] ...probe: projected total = 389.9 ac (target 500.0)
+2026-04-28 19:39:26 | INFO | goshawk_threshold_zone |   [524.4s] ...MOD pick #87: oid=37019 +1.2 ac
+2026-04-28 19:39:26 | INFO | goshawk_threshold_zone |   [524.7s] ...MOD pick #88: oid=37022 +0.5 ac
+2026-04-28 19:39:27 | INFO | goshawk_threshold_zone |   [525.0s] ...MOD pick #89: oid=36891 +0.9 ac
+2026-04-28 19:39:27 | INFO | goshawk_threshold_zone |   [525.2s] ...MOD pick #90: oid=36865 +1.0 ac
+2026-04-28 19:39:28 | INFO | goshawk_threshold_zone |   [526.3s] ...probe: projected total = 391.5 ac (target 500.0)
+2026-04-28 19:39:28 | INFO | goshawk_threshold_zone |   [526.6s] ...MOD pick #91: oid=48144 +2.0 ac
+2026-04-28 19:39:29 | INFO | goshawk_threshold_zone |   [527.1s] ...MOD pick #94: oid=38065 +2.2 ac
+2026-04-28 19:39:29 | INFO | goshawk_threshold_zone |   [527.5s] ...MOD pick #95: oid=38064 +2.3 ac
+2026-04-28 19:39:30 | INFO | goshawk_threshold_zone |   [528.8s] ...probe: projected total = 396.8 ac (target 500.0)
+2026-04-28 19:39:31 | INFO | goshawk_threshold_zone |   [529.1s] ...MOD pick #96: oid=37012 +0.5 ac
+2026-04-28 19:39:31 | INFO | goshawk_threshold_zone |   [529.4s] ...MOD pick #97: oid=36972 +0.7 ac
+2026-04-28 19:39:31 | INFO | goshawk_threshold_zone |   [529.7s] ...MOD pick #98: oid=38066 +1.4 ac
+2026-04-28 19:39:32 | INFO | goshawk_threshold_zone |   [530.0s] ...100 picks | high=130.1 mod=20.0 low=45.7 projected=396.8 / target=500.0
+2026-04-28 19:39:33 | INFO | goshawk_threshold_zone |   [531.1s] ...probe: projected total = 405.8 ac (target 500.0)
+2026-04-28 19:39:35 | INFO | goshawk_threshold_zone |   [533.2s] ...probe: projected total = 422.9 ac (target 500.0)
+2026-04-28 19:39:36 | INFO | goshawk_threshold_zone |   [533.9s] ...MOD pick #108: oid=37194 +3.9 ac
+2026-04-28 19:39:37 | INFO | goshawk_threshold_zone |   [535.6s] ...probe: projected total = 435.1 ac (target 500.0)
+2026-04-28 19:39:40 | INFO | goshawk_threshold_zone |   [538.1s] ...probe: projected total = 467.0 ac (target 500.0)
+2026-04-28 19:39:42 | INFO | goshawk_threshold_zone |   [540.6s] ...probe: projected total = 475.5 ac (target 500.0)
+2026-04-28 19:39:43 | INFO | goshawk_threshold_zone |   [541.2s] ...MOD pick #122: oid=48163 +0.6 ac
+2026-04-28 19:39:43 | INFO | goshawk_threshold_zone |   [541.6s] ...MOD pick #123: oid=38071 +1.4 ac
+2026-04-28 19:39:44 | INFO | goshawk_threshold_zone |   [542.0s] ...MOD pick #124: oid=37166 +2.1 ac
+2026-04-28 19:39:44 | INFO | goshawk_threshold_zone |   [542.3s] ...MOD pick #125: oid=37839 +0.7 ac
+2026-04-28 19:39:46 | INFO | goshawk_threshold_zone |   [543.9s] ...probe: projected total = 480.8 ac (target 500.0)
+2026-04-28 19:39:49 | INFO | goshawk_threshold_zone |   [547.5s] ...probe: projected total = 498.3 ac (target 500.0)
+2026-04-28 19:39:53 | INFO | goshawk_threshold_zone |   [551.0s] ...probe: projected total = 500.8 ac (target 500.0)
+2026-04-28 19:39:53 | INFO | goshawk_threshold_zone |   [551.0s] growth done: 135 picks, finalizing geometry
+2026-04-28 19:39:56 | INFO | goshawk_threshold_zone |   Buffer: 125.53 | High(add): 190.04 | Mod(add): 28.66 | Low(add): 45.71 | Filled: 110.88 | Total: 500.83 | 552.7s
+2026-04-28 19:39:56 | INFO | goshawk_threshold_zone | [5/10] Nest OID 74
+2026-04-28 19:39:56 | INFO | goshawk_threshold_zone |   [  0.3s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:39:57 | INFO | goshawk_threshold_zone |   [  1.6s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:40:00 | INFO | goshawk_threshold_zone |   [  4.3s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:40:07 | INFO | goshawk_threshold_zone |   [ 11.5s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:40:23 | INFO | goshawk_threshold_zone |   [ 27.6s] LOW derived: 45807 polys kept (excluded 45995 HIGH+MOD UIDs)
+2026-04-28 19:40:39 | INFO | goshawk_threshold_zone |   [ 43.4s] erased buffer from HIGH habitat
+2026-04-28 19:41:14 | INFO | goshawk_threshold_zone |   [ 78.9s] erased buffer from MOD habitat
+2026-04-28 19:41:56 | INFO | goshawk_threshold_zone |   [120.4s] erased buffer from LOW habitat
+2026-04-28 19:42:15 | INFO | goshawk_threshold_zone |   [139.2s] acres calculated on habitat (planar)
+2026-04-28 19:42:25 | INFO | goshawk_threshold_zone |   [149.7s] near-distance computed
+2026-04-28 19:42:25 | INFO | goshawk_threshold_zone |   [150.0s] entering growth loop
+2026-04-28 19:42:26 | INFO | goshawk_threshold_zone |   [150.0s] ...1 picks | high=3.0 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 19:42:27 | INFO | goshawk_threshold_zone |   [151.1s] ...probe: projected total = 135.3 ac (target 500.0)
+2026-04-28 19:42:27 | INFO | goshawk_threshold_zone |   [151.4s] ...MOD pick #8: oid=12889 +4.6 ac
+2026-04-28 19:42:27 | INFO | goshawk_threshold_zone |   [151.5s] ...MOD pick #9: oid=34707 +4.7 ac
+2026-04-28 19:42:27 | INFO | goshawk_threshold_zone |   [151.7s] ...MOD pick #10: oid=12863 +1.1 ac
+2026-04-28 19:42:28 | INFO | goshawk_threshold_zone |   [152.4s] ...probe: projected total = 152.6 ac (target 500.0)
+2026-04-28 19:42:28 | INFO | goshawk_threshold_zone |   [152.6s] ...MOD pick #11: oid=12751 +0.9 ac
+2026-04-28 19:42:28 | INFO | goshawk_threshold_zone |   [152.8s] ...MOD pick #12: oid=12872 +1.6 ac
+2026-04-28 19:42:28 | INFO | goshawk_threshold_zone |   [152.9s] ...MOD pick #13: oid=12888 +0.5 ac
+2026-04-28 19:42:29 | INFO | goshawk_threshold_zone |   [153.1s] ...MOD pick #14: oid=23817 +10.7 ac
+2026-04-28 19:42:29 | INFO | goshawk_threshold_zone |   [153.3s] ...MOD pick #15: oid=12758 +2.1 ac
+2026-04-28 19:42:30 | INFO | goshawk_threshold_zone |   [154.0s] ...probe: projected total = 175.4 ac (target 500.0)
+2026-04-28 19:42:30 | INFO | goshawk_threshold_zone |   [154.3s] ...MOD pick #17: oid=12750 +0.6 ac
+2026-04-28 19:42:30 | INFO | goshawk_threshold_zone |   [154.5s] ...MOD pick #18: oid=22888 +0.7 ac
+2026-04-28 19:42:30 | INFO | goshawk_threshold_zone |   [154.7s] ...MOD pick #19: oid=12754 +2.7 ac
+2026-04-28 19:42:30 | INFO | goshawk_threshold_zone |   [154.9s] ...MOD pick #20: oid=12752 +2.4 ac
+2026-04-28 19:42:31 | INFO | goshawk_threshold_zone |   [155.7s] ...probe: projected total = 184.9 ac (target 500.0)
+2026-04-28 19:42:31 | INFO | goshawk_threshold_zone |   [155.9s] ...MOD pick #21: oid=23933 +3.8 ac
+2026-04-28 19:42:32 | INFO | goshawk_threshold_zone |   [156.3s] ...LOW pick #22: oid=37858 +0.7 ac
+2026-04-28 19:42:32 | INFO | goshawk_threshold_zone |   [156.6s] ...LOW pick #23: oid=37868 +0.6 ac
+2026-04-28 19:42:33 | INFO | goshawk_threshold_zone |   [157.0s] ...LOW pick #24: oid=37843 +1.4 ac
+2026-04-28 19:42:33 | INFO | goshawk_threshold_zone |   [157.4s] ...LOW pick #25: oid=21703 +1.9 ac
+2026-04-28 19:42:34 | INFO | goshawk_threshold_zone |   [158.2s] ...probe: projected total = 198.1 ac (target 500.0)
+2026-04-28 19:42:34 | INFO | goshawk_threshold_zone |   [158.8s] ...MOD pick #30: oid=12738 +0.9 ac
+2026-04-28 19:42:35 | INFO | goshawk_threshold_zone |   [159.8s] ...probe: projected total = 209.0 ac (target 500.0)
+2026-04-28 19:42:36 | INFO | goshawk_threshold_zone |   [160.2s] ...LOW pick #31: oid=37849 +0.7 ac
+2026-04-28 19:42:36 | INFO | goshawk_threshold_zone |   [160.6s] ...LOW pick #32: oid=21841 +1.5 ac
+2026-04-28 19:42:36 | INFO | goshawk_threshold_zone |   [160.9s] ...LOW pick #33: oid=21833 +0.8 ac
+2026-04-28 19:42:37 | INFO | goshawk_threshold_zone |   [161.3s] ...LOW pick #34: oid=21736 +1.0 ac
+2026-04-28 19:42:37 | INFO | goshawk_threshold_zone |   [161.7s] growth done: 34 picks, finalizing geometry
+2026-04-28 19:42:39 | INFO | goshawk_threshold_zone |   Buffer: 125.52 | High(add): 11.28 | Mod(add): 37.21 | Low(add): 8.73 | Filled: 26.91 | Total: 209.65 | 162.4s  WARNING: Could not reach target acres contiguously.
+2026-04-28 19:42:39 | INFO | goshawk_threshold_zone | [6/10] Nest OID 75
+2026-04-28 19:42:39 | INFO | goshawk_threshold_zone |   [  0.3s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:42:41 | INFO | goshawk_threshold_zone |   [  1.8s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:42:43 | INFO | goshawk_threshold_zone |   [  4.7s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:42:51 | INFO | goshawk_threshold_zone |   [ 12.5s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:43:08 | INFO | goshawk_threshold_zone |   [ 29.1s] LOW derived: 46599 polys kept (excluded 46393 HIGH+MOD UIDs)
+2026-04-28 19:43:26 | INFO | goshawk_threshold_zone |   [ 47.1s] erased buffer from HIGH habitat
+2026-04-28 19:44:01 | INFO | goshawk_threshold_zone |   [ 82.4s] erased buffer from MOD habitat
+2026-04-28 19:44:47 | INFO | goshawk_threshold_zone |   [128.2s] erased buffer from LOW habitat
+2026-04-28 19:45:06 | INFO | goshawk_threshold_zone |   [147.5s] acres calculated on habitat (planar)
+2026-04-28 19:45:17 | INFO | goshawk_threshold_zone |   [158.6s] near-distance computed
+2026-04-28 19:45:18 | INFO | goshawk_threshold_zone |   [158.8s] entering growth loop
+2026-04-28 19:45:18 | INFO | goshawk_threshold_zone |   [158.9s] ...MOD pick #1: oid=34970 +1.9 ac
+2026-04-28 19:45:18 | INFO | goshawk_threshold_zone |   [159.1s] ...MOD pick #2: oid=24173 +14.3 ac
+2026-04-28 19:45:19 | INFO | goshawk_threshold_zone |   [160.1s] ...probe: projected total = 152.4 ac (target 500.0)
+2026-04-28 19:45:19 | INFO | goshawk_threshold_zone |   [160.3s] ...MOD pick #6: oid=13116 +1.1 ac
+2026-04-28 19:45:19 | INFO | goshawk_threshold_zone |   [160.6s] ...MOD pick #7: oid=24174 +10.7 ac
+2026-04-28 19:45:20 | INFO | goshawk_threshold_zone |   [160.8s] ...MOD pick #8: oid=23229 +0.7 ac
+2026-04-28 19:45:20 | INFO | goshawk_threshold_zone |   [161.0s] ...MOD pick #9: oid=24290 +3.8 ac
+2026-04-28 19:45:20 | INFO | goshawk_threshold_zone |   [161.3s] ...LOW pick #10: oid=36110 +1.6 ac
+2026-04-28 19:45:21 | INFO | goshawk_threshold_zone |   [162.1s] ...probe: projected total = 179.4 ac (target 500.0)
+2026-04-28 19:45:21 | INFO | goshawk_threshold_zone |   [162.5s] ...LOW pick #11: oid=22599 +0.6 ac
+2026-04-28 19:45:22 | INFO | goshawk_threshold_zone |   [162.8s] ...LOW pick #12: oid=35852 +0.9 ac
+2026-04-28 19:45:22 | INFO | goshawk_threshold_zone |   [163.1s] ...LOW pick #13: oid=21751 +0.9 ac
+2026-04-28 19:45:22 | INFO | goshawk_threshold_zone |   [163.4s] ...LOW pick #14: oid=35850 +1.1 ac
+2026-04-28 19:45:23 | INFO | goshawk_threshold_zone |   [163.7s] ...LOW pick #15: oid=35876 +1.3 ac
+2026-04-28 19:45:23 | INFO | goshawk_threshold_zone |   [164.5s] ...probe: projected total = 189.0 ac (target 500.0)
+2026-04-28 19:45:24 | INFO | goshawk_threshold_zone |   [164.8s] ...LOW pick #16: oid=22469 +0.6 ac
+2026-04-28 19:45:24 | INFO | goshawk_threshold_zone |   [165.1s] ...LOW pick #17: oid=35857 +0.7 ac
+2026-04-28 19:45:24 | INFO | goshawk_threshold_zone |   [165.4s] ...LOW pick #18: oid=35710 +0.6 ac
+2026-04-28 19:45:25 | INFO | goshawk_threshold_zone |   [165.8s] ...LOW pick #19: oid=35944 +1.3 ac
+2026-04-28 19:45:25 | INFO | goshawk_threshold_zone |   [166.2s] ...LOW pick #20: oid=35690 +4.7 ac
+2026-04-28 19:45:26 | INFO | goshawk_threshold_zone |   [167.2s] ...probe: projected total = 209.1 ac (target 500.0)
+2026-04-28 19:45:26 | INFO | goshawk_threshold_zone |   [167.5s] ...LOW pick #21: oid=45958 +0.5 ac
+2026-04-28 19:45:27 | INFO | goshawk_threshold_zone |   [167.9s] ...LOW pick #22: oid=45961 +0.6 ac
+2026-04-28 19:45:27 | INFO | goshawk_threshold_zone |   [168.3s] ...LOW pick #23: oid=35607 +1.0 ac
+2026-04-28 19:45:27 | INFO | goshawk_threshold_zone |   [168.7s] ...LOW pick #24: oid=35878 +0.8 ac
+2026-04-28 19:45:28 | INFO | goshawk_threshold_zone |   [169.1s] ...LOW pick #25: oid=36001 +0.7 ac
+2026-04-28 19:45:29 | INFO | goshawk_threshold_zone |   [169.9s] ...probe: projected total = 216.9 ac (target 500.0)
+2026-04-28 19:45:29 | INFO | goshawk_threshold_zone |   [170.3s] ...LOW pick #26: oid=35679 +3.4 ac
+2026-04-28 19:45:29 | INFO | goshawk_threshold_zone |   [170.6s] ...LOW pick #27: oid=35779 +0.9 ac
+2026-04-28 19:45:30 | INFO | goshawk_threshold_zone |   [171.0s] ...LOW pick #28: oid=35713 +1.2 ac
+2026-04-28 19:45:30 | INFO | goshawk_threshold_zone |   [171.4s] ...LOW pick #29: oid=35763 +0.5 ac
+2026-04-28 19:45:31 | INFO | goshawk_threshold_zone |   [171.8s] ...LOW pick #30: oid=35647 +0.5 ac
+2026-04-28 19:45:31 | INFO | goshawk_threshold_zone |   [172.7s] ...probe: projected total = 229.7 ac (target 500.0)
+2026-04-28 19:45:32 | INFO | goshawk_threshold_zone |   [173.0s] ...LOW pick #31: oid=35655 +0.8 ac
+2026-04-28 19:45:32 | INFO | goshawk_threshold_zone |   [173.4s] ...LOW pick #32: oid=35699 +0.7 ac
+2026-04-28 19:45:33 | INFO | goshawk_threshold_zone |   [173.8s] ...LOW pick #33: oid=35970 +0.5 ac
+2026-04-28 19:45:33 | INFO | goshawk_threshold_zone |   [174.1s] ...LOW pick #34: oid=36015 +0.8 ac
+2026-04-28 19:45:33 | INFO | goshawk_threshold_zone |   [174.6s] ...LOW pick #35: oid=35881 +0.5 ac
+2026-04-28 19:45:34 | INFO | goshawk_threshold_zone |   [175.4s] ...probe: projected total = 238.2 ac (target 500.0)
+2026-04-28 19:45:35 | INFO | goshawk_threshold_zone |   [175.8s] ...LOW pick #36: oid=36047 +0.6 ac
+2026-04-28 19:45:35 | INFO | goshawk_threshold_zone |   [176.2s] ...LOW pick #37: oid=36122 +1.2 ac
+2026-04-28 19:45:35 | INFO | goshawk_threshold_zone |   [176.6s] ...LOW pick #38: oid=36129 +0.8 ac
+2026-04-28 19:45:36 | INFO | goshawk_threshold_zone |   [176.9s] ...LOW pick #39: oid=36019 +2.5 ac
+2026-04-28 19:45:36 | INFO | goshawk_threshold_zone |   [177.3s] ...LOW pick #40: oid=35971 +0.8 ac
+2026-04-28 19:45:37 | INFO | goshawk_threshold_zone |   [178.3s] ...probe: projected total = 268.5 ac (target 500.0)
+2026-04-28 19:45:37 | INFO | goshawk_threshold_zone |   [178.7s] ...LOW pick #41: oid=36118 +0.5 ac
+2026-04-28 19:45:38 | INFO | goshawk_threshold_zone |   [179.1s] ...LOW pick #42: oid=35975 +0.8 ac
+2026-04-28 19:45:38 | INFO | goshawk_threshold_zone |   [179.5s] ...LOW pick #43: oid=36059 +0.9 ac
+2026-04-28 19:45:39 | INFO | goshawk_threshold_zone |   [179.9s] ...LOW pick #44: oid=36240 +0.5 ac
+2026-04-28 19:45:39 | INFO | goshawk_threshold_zone |   [180.3s] ...LOW pick #45: oid=35866 +0.7 ac
+2026-04-28 19:45:40 | INFO | goshawk_threshold_zone |   [181.3s] ...probe: projected total = 271.4 ac (target 500.0)
+2026-04-28 19:45:41 | INFO | goshawk_threshold_zone |   [181.7s] growth done: 45 picks, finalizing geometry
+2026-04-28 19:45:42 | INFO | goshawk_threshold_zone |   Buffer: 125.53 | High(add): 3.40 | Mod(add): 32.47 | Low(add): 37.06 | Filled: 72.93 | Total: 271.39 | 182.6s  WARNING: Could not reach target acres contiguously.
+2026-04-28 19:45:42 | INFO | goshawk_threshold_zone | [7/10] Nest OID 76
+2026-04-28 19:45:43 | INFO | goshawk_threshold_zone |   [  0.4s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:45:44 | INFO | goshawk_threshold_zone |   [  1.9s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:45:47 | INFO | goshawk_threshold_zone |   [  4.9s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:45:55 | INFO | goshawk_threshold_zone |   [ 12.5s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:46:11 | INFO | goshawk_threshold_zone |   [ 28.9s] LOW derived: 46013 polys kept (excluded 46233 HIGH+MOD UIDs)
+2026-04-28 19:46:28 | INFO | goshawk_threshold_zone |   [ 45.6s] erased buffer from HIGH habitat
+2026-04-28 19:47:02 | INFO | goshawk_threshold_zone |   [ 79.6s] erased buffer from MOD habitat
+2026-04-28 19:47:48 | INFO | goshawk_threshold_zone |   [125.2s] erased buffer from LOW habitat
+2026-04-28 19:48:06 | INFO | goshawk_threshold_zone |   [143.8s] acres calculated on habitat (planar)
+2026-04-28 19:48:17 | INFO | goshawk_threshold_zone |   [154.4s] near-distance computed
+2026-04-28 19:48:17 | INFO | goshawk_threshold_zone |   [154.6s] entering growth loop
+2026-04-28 19:48:17 | INFO | goshawk_threshold_zone |   [154.7s] ...1 picks | high=1.5 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 19:48:17 | INFO | goshawk_threshold_zone |   [155.0s] ...MOD pick #5: oid=24143 +9.7 ac
+2026-04-28 19:48:18 | INFO | goshawk_threshold_zone |   [155.7s] ...probe: projected total = 145.4 ac (target 500.0)
+2026-04-28 19:48:18 | INFO | goshawk_threshold_zone |   [155.9s] ...MOD pick #6: oid=13169 +0.8 ac
+2026-04-28 19:48:18 | INFO | goshawk_threshold_zone |   [156.1s] ...MOD pick #7: oid=34722 +1.5 ac
+2026-04-28 19:48:19 | INFO | goshawk_threshold_zone |   [156.2s] ...MOD pick #8: oid=13069 +2.7 ac
+2026-04-28 19:48:19 | INFO | goshawk_threshold_zone |   [156.4s] ...MOD pick #9: oid=13066 +0.6 ac
+2026-04-28 19:48:19 | INFO | goshawk_threshold_zone |   [156.6s] ...MOD pick #10: oid=24144 +10.7 ac
+2026-04-28 19:48:20 | INFO | goshawk_threshold_zone |   [157.4s] ...probe: projected total = 169.6 ac (target 500.0)
+2026-04-28 19:48:20 | INFO | goshawk_threshold_zone |   [157.6s] ...MOD pick #11: oid=13067 +2.4 ac
+2026-04-28 19:48:20 | INFO | goshawk_threshold_zone |   [157.8s] ...MOD pick #12: oid=23207 +0.7 ac
+2026-04-28 19:48:20 | INFO | goshawk_threshold_zone |   [158.0s] ...MOD pick #13: oid=24260 +3.8 ac
+2026-04-28 19:48:21 | INFO | goshawk_threshold_zone |   [158.4s] ...LOW pick #14: oid=45418 +1.0 ac
+2026-04-28 19:48:21 | INFO | goshawk_threshold_zone |   [158.7s] ...LOW pick #15: oid=21846 +0.6 ac
+2026-04-28 19:48:22 | INFO | goshawk_threshold_zone |   [159.6s] ...probe: projected total = 181.8 ac (target 500.0)
+2026-04-28 19:48:22 | INFO | goshawk_threshold_zone |   [159.9s] ...LOW pick #16: oid=38508 +0.6 ac
+2026-04-28 19:48:23 | INFO | goshawk_threshold_zone |   [160.3s] ...LOW pick #17: oid=22378 +0.7 ac
+2026-04-28 19:48:23 | INFO | goshawk_threshold_zone |   [160.6s] ...LOW pick #18: oid=45411 +1.0 ac
+2026-04-28 19:48:24 | INFO | goshawk_threshold_zone |   [161.9s] ...probe: projected total = 190.7 ac (target 500.0)
+2026-04-28 19:48:25 | INFO | goshawk_threshold_zone |   [162.3s] ...MOD pick #23: oid=13055 +0.9 ac
+2026-04-28 19:48:25 | INFO | goshawk_threshold_zone |   [162.6s] ...LOW pick #24: oid=22669 +0.5 ac
+2026-04-28 19:48:25 | INFO | goshawk_threshold_zone |   [163.0s] ...LOW pick #25: oid=22338 +0.9 ac
+2026-04-28 19:48:26 | INFO | goshawk_threshold_zone |   [163.8s] ...probe: projected total = 199.4 ac (target 500.0)
+2026-04-28 19:48:26 | INFO | goshawk_threshold_zone |   [164.1s] ...LOW pick #26: oid=38332 +0.6 ac
+2026-04-28 19:48:27 | INFO | goshawk_threshold_zone |   [164.5s] ...LOW pick #27: oid=21754 +1.0 ac
+2026-04-28 19:48:27 | INFO | goshawk_threshold_zone |   [164.8s] ...LOW pick #28: oid=22192 +1.0 ac
+2026-04-28 19:48:27 | INFO | goshawk_threshold_zone |   [165.2s] ...LOW pick #29: oid=38091 +1.2 ac
+2026-04-28 19:48:28 | INFO | goshawk_threshold_zone |   [165.5s] ...LOW pick #30: oid=22485 +0.6 ac
+2026-04-28 19:48:29 | INFO | goshawk_threshold_zone |   [166.4s] ...probe: projected total = 203.7 ac (target 500.0)
+2026-04-28 19:48:29 | INFO | goshawk_threshold_zone |   [166.8s] ...LOW pick #31: oid=22221 +0.5 ac
+2026-04-28 19:48:29 | INFO | goshawk_threshold_zone |   [167.1s] growth done: 31 picks, finalizing geometry
+2026-04-28 19:48:31 | INFO | goshawk_threshold_zone |   Buffer: 125.52 | High(add): 7.21 | Mod(add): 33.79 | Low(add): 10.39 | Filled: 29.32 | Total: 206.23 | 167.9s  WARNING: Could not reach target acres contiguously.
+2026-04-28 19:48:31 | INFO | goshawk_threshold_zone | [8/10] Nest OID 86
+2026-04-28 19:48:32 | INFO | goshawk_threshold_zone |   [  0.4s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:48:33 | INFO | goshawk_threshold_zone |   [  2.2s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:48:36 | INFO | goshawk_threshold_zone |   [  4.3s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:48:41 | INFO | goshawk_threshold_zone |   [  9.8s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:48:52 | INFO | goshawk_threshold_zone |   [ 20.5s] LOW derived: 23360 polys kept (excluded 30863 HIGH+MOD UIDs)
+2026-04-28 19:49:06 | INFO | goshawk_threshold_zone |   [ 34.3s] erased buffer from HIGH habitat
+2026-04-28 19:49:28 | INFO | goshawk_threshold_zone |   [ 56.9s] erased buffer from MOD habitat
+2026-04-28 19:49:57 | INFO | goshawk_threshold_zone |   [ 86.0s] erased buffer from LOW habitat
+2026-04-28 19:50:09 | INFO | goshawk_threshold_zone |   [ 98.1s] acres calculated on habitat (planar)
+2026-04-28 19:50:16 | INFO | goshawk_threshold_zone |   [105.0s] near-distance computed
+2026-04-28 19:50:16 | INFO | goshawk_threshold_zone |   [105.2s] entering growth loop
+2026-04-28 19:50:17 | INFO | goshawk_threshold_zone |   [105.3s] ...1 picks | high=34.1 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 19:50:18 | INFO | goshawk_threshold_zone |   [106.7s] ...probe: projected total = 187.3 ac (target 500.0)
+2026-04-28 19:50:18 | INFO | goshawk_threshold_zone |   [107.1s] ...MOD pick #7: oid=20319 +1.2 ac
+2026-04-28 19:50:19 | INFO | goshawk_threshold_zone |   [107.4s] ...MOD pick #8: oid=19455 +1.2 ac
+2026-04-28 19:50:19 | INFO | goshawk_threshold_zone |   [107.6s] ...MOD pick #9: oid=19436 +1.0 ac
+2026-04-28 19:50:20 | INFO | goshawk_threshold_zone |   [108.7s] ...probe: projected total = 203.2 ac (target 500.0)
+2026-04-28 19:50:20 | INFO | goshawk_threshold_zone |   [109.0s] ...MOD pick #11: oid=21367 +0.6 ac
+2026-04-28 19:50:21 | INFO | goshawk_threshold_zone |   [109.3s] ...MOD pick #12: oid=22041 +0.9 ac
+2026-04-28 19:50:21 | INFO | goshawk_threshold_zone |   [109.6s] ...MOD pick #13: oid=19418 +1.6 ac
+2026-04-28 19:50:21 | INFO | goshawk_threshold_zone |   [109.8s] ...MOD pick #14: oid=19656 +0.5 ac
+2026-04-28 19:50:21 | INFO | goshawk_threshold_zone |   [110.1s] ...MOD pick #15: oid=20312 +0.7 ac
+2026-04-28 19:50:22 | INFO | goshawk_threshold_zone |   [111.0s] ...probe: projected total = 209.0 ac (target 500.0)
+2026-04-28 19:50:23 | INFO | goshawk_threshold_zone |   [111.3s] ...MOD pick #16: oid=20372 +0.5 ac
+2026-04-28 19:50:23 | INFO | goshawk_threshold_zone |   [111.6s] ...MOD pick #17: oid=19663 +3.0 ac
+2026-04-28 19:50:23 | INFO | goshawk_threshold_zone |   [111.9s] ...MOD pick #18: oid=22042 +2.7 ac
+2026-04-28 19:50:24 | INFO | goshawk_threshold_zone |   [112.3s] ...MOD pick #20: oid=20373 +3.9 ac
+2026-04-28 19:50:24 | INFO | goshawk_threshold_zone |   [113.1s] ...probe: projected total = 227.6 ac (target 500.0)
+2026-04-28 19:50:25 | INFO | goshawk_threshold_zone |   [113.9s] ...25 picks | high=54.2 mod=17.9 low=0.0 projected=227.6 / target=500.0
+2026-04-28 19:50:26 | INFO | goshawk_threshold_zone |   [114.9s] ...probe: projected total = 239.3 ac (target 500.0)
+2026-04-28 19:50:27 | INFO | goshawk_threshold_zone |   [115.3s] ...MOD pick #26: oid=19425 +3.5 ac
+2026-04-28 19:50:27 | INFO | goshawk_threshold_zone |   [115.6s] ...MOD pick #27: oid=20380 +1.1 ac
+2026-04-28 19:50:27 | INFO | goshawk_threshold_zone |   [115.9s] ...MOD pick #28: oid=19402 +1.0 ac
+2026-04-28 19:50:28 | INFO | goshawk_threshold_zone |   [116.2s] ...MOD pick #29: oid=19470 +0.6 ac
+2026-04-28 19:50:28 | INFO | goshawk_threshold_zone |   [116.6s] ...MOD pick #30: oid=22048 +1.0 ac
+2026-04-28 19:50:29 | INFO | goshawk_threshold_zone |   [117.6s] ...probe: projected total = 250.1 ac (target 500.0)
+2026-04-28 19:50:29 | INFO | goshawk_threshold_zone |   [118.0s] ...MOD pick #31: oid=22097 +0.7 ac
+2026-04-28 19:50:30 | INFO | goshawk_threshold_zone |   [118.3s] ...MOD pick #32: oid=22049 +3.4 ac
+2026-04-28 19:50:30 | INFO | goshawk_threshold_zone |   [118.7s] ...MOD pick #33: oid=20377 +0.5 ac
+2026-04-28 19:50:30 | INFO | goshawk_threshold_zone |   [119.0s] ...MOD pick #34: oid=19399 +1.1 ac
+2026-04-28 19:50:31 | INFO | goshawk_threshold_zone |   [119.3s] ...MOD pick #35: oid=20282 +1.2 ac
+2026-04-28 19:50:32 | INFO | goshawk_threshold_zone |   [120.4s] ...probe: projected total = 261.6 ac (target 500.0)
+2026-04-28 19:50:32 | INFO | goshawk_threshold_zone |   [120.7s] ...MOD pick #36: oid=20293 +2.2 ac
+2026-04-28 19:50:33 | INFO | goshawk_threshold_zone |   [121.2s] ...MOD pick #38: oid=19389 +1.1 ac
+2026-04-28 19:50:33 | INFO | goshawk_threshold_zone |   [121.6s] ...MOD pick #39: oid=19397 +2.5 ac
+2026-04-28 19:50:33 | INFO | goshawk_threshold_zone |   [121.9s] ...MOD pick #40: oid=19385 +0.8 ac
+2026-04-28 19:50:34 | INFO | goshawk_threshold_zone |   [122.9s] ...probe: projected total = 271.6 ac (target 500.0)
+2026-04-28 19:50:35 | INFO | goshawk_threshold_zone |   [123.3s] ...MOD pick #41: oid=19634 +2.8 ac
+2026-04-28 19:50:35 | INFO | goshawk_threshold_zone |   [124.0s] ...MOD pick #44: oid=24175 +0.9 ac
+2026-04-28 19:50:36 | INFO | goshawk_threshold_zone |   [124.3s] ...MOD pick #45: oid=20251 +1.4 ac
+2026-04-28 19:50:37 | INFO | goshawk_threshold_zone |   [125.4s] ...probe: projected total = 291.7 ac (target 500.0)
+2026-04-28 19:50:37 | INFO | goshawk_threshold_zone |   [125.8s] ...MOD pick #46: oid=20237 +0.8 ac
+2026-04-28 19:50:37 | INFO | goshawk_threshold_zone |   [126.1s] ...MOD pick #47: oid=19633 +1.1 ac
+2026-04-28 19:50:38 | INFO | goshawk_threshold_zone |   [126.5s] ...MOD pick #48: oid=19257 +1.5 ac
+2026-04-28 19:50:38 | INFO | goshawk_threshold_zone |   [127.1s] ...LOW pick #49: oid=20869 +5.4 ac
+2026-04-28 19:50:39 | INFO | goshawk_threshold_zone |   [127.7s] ...LOW pick #50: oid=19389 +0.7 ac
+2026-04-28 19:50:40 | INFO | goshawk_threshold_zone |   [128.9s] ...probe: projected total = 305.9 ac (target 500.0)
+2026-04-28 19:50:42 | INFO | goshawk_threshold_zone |   [131.1s] ...probe: projected total = 322.9 ac (target 500.0)
+2026-04-28 19:50:43 | INFO | goshawk_threshold_zone |   [131.7s] ...MOD pick #57: oid=20334 +0.6 ac
+2026-04-28 19:50:43 | INFO | goshawk_threshold_zone |   [132.2s] ...MOD pick #58: oid=20336 +0.6 ac
+2026-04-28 19:50:44 | INFO | goshawk_threshold_zone |   [132.6s] ...MOD pick #59: oid=20330 +0.9 ac
+2026-04-28 19:50:45 | INFO | goshawk_threshold_zone |   [134.0s] ...probe: projected total = 334.3 ac (target 500.0)
+2026-04-28 19:50:46 | INFO | goshawk_threshold_zone |   [134.4s] ...MOD pick #61: oid=20381 +0.6 ac
+2026-04-28 19:50:46 | INFO | goshawk_threshold_zone |   [134.8s] ...MOD pick #62: oid=19980 +0.8 ac
+2026-04-28 19:50:47 | INFO | goshawk_threshold_zone |   [135.3s] ...MOD pick #63: oid=20325 +0.9 ac
+2026-04-28 19:50:47 | INFO | goshawk_threshold_zone |   [135.6s] ...MOD pick #64: oid=24202 +1.5 ac
+2026-04-28 19:50:47 | INFO | goshawk_threshold_zone |   [136.1s] ...MOD pick #65: oid=24191 +1.0 ac
+2026-04-28 19:50:49 | INFO | goshawk_threshold_zone |   [137.5s] ...probe: projected total = 340.5 ac (target 500.0)
+2026-04-28 19:50:49 | INFO | goshawk_threshold_zone |   [137.9s] ...MOD pick #66: oid=21051 +0.5 ac
+2026-04-28 19:50:50 | INFO | goshawk_threshold_zone |   [138.3s] ...MOD pick #67: oid=21127 +0.7 ac
+2026-04-28 19:50:52 | INFO | goshawk_threshold_zone |   [140.2s] ...probe: projected total = 348.5 ac (target 500.0)
+2026-04-28 19:50:52 | INFO | goshawk_threshold_zone |   [140.6s] ...MOD pick #71: oid=24226 +1.1 ac
+2026-04-28 19:50:53 | INFO | goshawk_threshold_zone |   [141.5s] ...75 picks | high=86.4 mod=56.4 low=6.1 projected=348.5 / target=500.0
+2026-04-28 19:50:54 | INFO | goshawk_threshold_zone |   [142.9s] ...probe: projected total = 359.5 ac (target 500.0)
+2026-04-28 19:50:55 | INFO | goshawk_threshold_zone |   [143.4s] ...MOD pick #76: oid=24206 +0.9 ac
+2026-04-28 19:50:55 | INFO | goshawk_threshold_zone |   [144.1s] ...MOD pick #78: oid=23136 +1.9 ac
+2026-04-28 19:50:56 | INFO | goshawk_threshold_zone |   [144.6s] ...MOD pick #79: oid=24263 +11.1 ac
+2026-04-28 19:50:56 | INFO | goshawk_threshold_zone |   [145.1s] ...MOD pick #80: oid=21770 +0.5 ac
+2026-04-28 19:50:58 | INFO | goshawk_threshold_zone |   [146.5s] ...probe: projected total = 382.3 ac (target 500.0)
+2026-04-28 19:50:58 | INFO | goshawk_threshold_zone |   [147.0s] ...MOD pick #81: oid=24245 +1.0 ac
+2026-04-28 19:50:59 | INFO | goshawk_threshold_zone |   [147.6s] ...MOD pick #82: oid=22058 +12.0 ac
+2026-04-28 19:51:02 | INFO | goshawk_threshold_zone |   [150.8s] ...probe: projected total = 459.4 ac (target 500.0)
+2026-04-28 19:51:05 | INFO | goshawk_threshold_zone |   [153.9s] ...probe: projected total = 474.6 ac (target 500.0)
+2026-04-28 19:51:08 | INFO | goshawk_threshold_zone |   [157.0s] ...probe: projected total = 483.6 ac (target 500.0)
+2026-04-28 19:51:09 | INFO | goshawk_threshold_zone |   [157.5s] ...MOD pick #96: oid=21761 +0.6 ac
+2026-04-28 19:51:09 | INFO | goshawk_threshold_zone |   [158.0s] ...MOD pick #97: oid=22060 +0.7 ac
+2026-04-28 19:51:10 | INFO | goshawk_threshold_zone |   [158.5s] ...MOD pick #98: oid=21802 +0.6 ac
+2026-04-28 19:51:10 | INFO | goshawk_threshold_zone |   [159.1s] ...MOD pick #99: oid=24212 +0.7 ac
+2026-04-28 19:51:11 | INFO | goshawk_threshold_zone |   [159.6s] ...MOD pick #100: oid=22054 +0.6 ac
+2026-04-28 19:51:13 | INFO | goshawk_threshold_zone |   [161.3s] ...probe: projected total = 492.4 ac (target 500.0)
+2026-04-28 19:51:13 | INFO | goshawk_threshold_zone |   [161.8s] ...MOD pick #101: oid=23157 +0.5 ac
+2026-04-28 19:51:14 | INFO | goshawk_threshold_zone |   [162.3s] ...MOD pick #102: oid=21840 +1.7 ac
+2026-04-28 19:51:15 | INFO | goshawk_threshold_zone |   [163.4s] ...MOD pick #105: oid=23133 +1.5 ac
+2026-04-28 19:51:16 | INFO | goshawk_threshold_zone |   [165.1s] ...probe: projected total = 503.3 ac (target 500.0)
+2026-04-28 19:51:16 | INFO | goshawk_threshold_zone |   [165.1s] growth done: 105 picks, finalizing geometry
+2026-04-28 19:51:19 | INFO | goshawk_threshold_zone |   Buffer: 125.53 | High(add): 100.70 | Mod(add): 90.80 | Low(add): 6.09 | Filled: 180.21 | Total: 503.32 | 166.7s
+2026-04-28 19:51:19 | INFO | goshawk_threshold_zone | [9/10] Nest OID 99
+2026-04-28 19:51:19 | INFO | goshawk_threshold_zone |   [  0.3s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 19:51:22 | INFO | goshawk_threshold_zone |   [  3.2s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 19:51:26 | INFO | goshawk_threshold_zone |   [  7.5s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 19:51:39 | INFO | goshawk_threshold_zone |   [ 20.2s] source veg filtered to within 5 Miles of nest
+2026-04-28 19:52:02 | INFO | goshawk_threshold_zone |   [ 43.1s] LOW derived: 42509 polys kept (excluded 58367 HIGH+MOD UIDs)
+2026-04-28 19:52:35 | INFO | goshawk_threshold_zone |   [ 76.3s] erased buffer from HIGH habitat
+2026-04-28 19:53:25 | INFO | goshawk_threshold_zone |   [125.9s] erased buffer from MOD habitat
+2026-04-28 19:54:09 | INFO | goshawk_threshold_zone |   [170.0s] erased buffer from LOW habitat
+2026-04-28 19:55:08 | INFO | goshawk_threshold_zone |   [228.8s] acres calculated on habitat (planar)
+2026-04-28 19:55:45 | INFO | goshawk_threshold_zone |   [266.2s] near-distance computed
+2026-04-28 19:55:46 | INFO | goshawk_threshold_zone |   [266.7s] entering growth loop
+2026-04-28 19:55:46 | INFO | goshawk_threshold_zone |   [266.9s] ...1 picks | high=13.4 mod=0.0 low=0.0 projected=125.5 / target=500.0
+2026-04-28 19:55:49 | INFO | goshawk_threshold_zone |   [270.6s] ...probe: projected total = 155.2 ac (target 500.0)
+2026-04-28 19:55:53 | INFO | goshawk_threshold_zone |   [274.2s] ...probe: projected total = 163.8 ac (target 500.0)
+2026-04-28 19:55:57 | INFO | goshawk_threshold_zone |   [278.1s] ...probe: projected total = 181.6 ac (target 500.0)
+2026-04-28 19:55:59 | INFO | goshawk_threshold_zone |   [280.1s] ...MOD pick #19: oid=53636 +0.5 ac
+2026-04-28 19:56:00 | INFO | goshawk_threshold_zone |   [280.8s] ...MOD pick #20: oid=44186 +3.3 ac
+2026-04-28 19:56:02 | INFO | goshawk_threshold_zone |   [283.2s] ...probe: projected total = 191.8 ac (target 500.0)
+2026-04-28 19:56:03 | INFO | goshawk_threshold_zone |   [283.8s] ...MOD pick #21: oid=44183 +1.2 ac
+2026-04-28 19:56:03 | INFO | goshawk_threshold_zone |   [284.5s] ...MOD pick #22: oid=44225 +0.5 ac
+2026-04-28 19:56:04 | INFO | goshawk_threshold_zone |   [285.2s] ...MOD pick #23: oid=44512 +0.5 ac
+2026-04-28 19:56:05 | INFO | goshawk_threshold_zone |   [285.8s] ...MOD pick #24: oid=44144 +1.6 ac
+2026-04-28 19:56:05 | INFO | goshawk_threshold_zone |   [286.4s] ...MOD pick #25: oid=44400 +0.6 ac
+2026-04-28 19:56:08 | INFO | goshawk_threshold_zone |   [288.7s] ...probe: projected total = 198.4 ac (target 500.0)
+2026-04-28 19:56:08 | INFO | goshawk_threshold_zone |   [289.3s] ...MOD pick #26: oid=46361 +0.6 ac
+2026-04-28 19:56:10 | INFO | goshawk_threshold_zone |   [290.7s] ...MOD pick #29: oid=46356 +0.8 ac
+2026-04-28 19:56:12 | INFO | goshawk_threshold_zone |   [293.4s] ...probe: projected total = 207.2 ac (target 500.0)
+2026-04-28 19:56:13 | INFO | goshawk_threshold_zone |   [294.0s] ...MOD pick #31: oid=44539 +0.9 ac
+2026-04-28 19:56:15 | INFO | goshawk_threshold_zone |   [296.0s] ...LOW pick #35: oid=18696 +0.7 ac
+2026-04-28 19:56:17 | INFO | goshawk_threshold_zone |   [298.4s] ...probe: projected total = 213.3 ac (target 500.0)
+2026-04-28 19:56:18 | INFO | goshawk_threshold_zone |   [298.8s] ...LOW pick #36: oid=18907 +1.5 ac
+2026-04-28 19:56:18 | INFO | goshawk_threshold_zone |   [299.4s] ...LOW pick #38: oid=18920 +0.5 ac
+2026-04-28 19:56:19 | INFO | goshawk_threshold_zone |   [299.9s] ...LOW pick #39: oid=18664 +1.1 ac
+2026-04-28 19:56:19 | INFO | goshawk_threshold_zone |   [300.4s] ...LOW pick #40: oid=21901 +0.7 ac
+2026-04-28 19:56:20 | INFO | goshawk_threshold_zone |   [301.6s] ...probe: projected total = 220.6 ac (target 500.0)
+2026-04-28 19:56:21 | INFO | goshawk_threshold_zone |   [302.1s] ...MOD pick #42: oid=33858 +1.3 ac
+2026-04-28 19:56:21 | INFO | goshawk_threshold_zone |   [302.5s] ...MOD pick #43: oid=37679 +1.9 ac
+2026-04-28 19:56:22 | INFO | goshawk_threshold_zone |   [303.0s] ...MOD pick #45: oid=36163 +0.5 ac
+2026-04-28 19:56:24 | INFO | goshawk_threshold_zone |   [304.7s] ...probe: projected total = 228.5 ac (target 500.0)
+2026-04-28 19:56:24 | INFO | goshawk_threshold_zone |   [305.1s] ...LOW pick #46: oid=21117 +0.5 ac
+2026-04-28 19:56:24 | INFO | goshawk_threshold_zone |   [305.5s] ...MOD pick #47: oid=36166 +0.9 ac
+2026-04-28 19:56:25 | INFO | goshawk_threshold_zone |   [305.8s] ...MOD pick #48: oid=36181 +1.7 ac
+2026-04-28 19:56:25 | INFO | goshawk_threshold_zone |   [306.1s] ...50 picks | high=48.5 mod=17.0 low=5.0 projected=228.5 / target=500.0
+2026-04-28 19:56:26 | INFO | goshawk_threshold_zone |   [307.4s] ...probe: projected total = 238.6 ac (target 500.0)
+2026-04-28 19:56:27 | INFO | goshawk_threshold_zone |   [307.7s] ...MOD pick #51: oid=36172 +0.6 ac
+2026-04-28 19:56:27 | INFO | goshawk_threshold_zone |   [308.1s] ...MOD pick #52: oid=35557 +5.1 ac
+2026-04-28 19:56:27 | INFO | goshawk_threshold_zone |   [308.6s] ...MOD pick #54: oid=36190 +2.0 ac
+2026-04-28 19:56:28 | INFO | goshawk_threshold_zone |   [309.0s] ...MOD pick #55: oid=36182 +0.8 ac
+2026-04-28 19:56:29 | INFO | goshawk_threshold_zone |   [310.2s] ...probe: projected total = 253.5 ac (target 500.0)
+2026-04-28 19:56:29 | INFO | goshawk_threshold_zone |   [310.5s] ...MOD pick #56: oid=36210 +5.5 ac
+2026-04-28 19:56:30 | INFO | goshawk_threshold_zone |   [310.9s] ...MOD pick #57: oid=35974 +0.7 ac
+2026-04-28 19:56:30 | INFO | goshawk_threshold_zone |   [311.2s] ...MOD pick #58: oid=35990 +3.1 ac
+2026-04-28 19:56:30 | INFO | goshawk_threshold_zone |   [311.6s] ...MOD pick #59: oid=35558 +0.5 ac
+2026-04-28 19:56:31 | INFO | goshawk_threshold_zone |   [312.0s] ...MOD pick #60: oid=35538 +0.7 ac
+2026-04-28 19:56:33 | INFO | goshawk_threshold_zone |   [313.8s] ...probe: projected total = 270.7 ac (target 500.0)
+2026-04-28 19:56:33 | INFO | goshawk_threshold_zone |   [314.3s] ...MOD pick #61: oid=35539 +0.6 ac
+2026-04-28 19:56:34 | INFO | goshawk_threshold_zone |   [314.7s] ...MOD pick #62: oid=35560 +0.6 ac
+2026-04-28 19:56:34 | INFO | goshawk_threshold_zone |   [315.2s] ...MOD pick #63: oid=36018 +0.5 ac
+2026-04-28 19:56:35 | INFO | goshawk_threshold_zone |   [315.9s] ...LOW pick #64: oid=21095 +0.6 ac
+2026-04-28 19:56:36 | INFO | goshawk_threshold_zone |   [316.8s] ...LOW pick #65: oid=28079 +0.6 ac
+2026-04-28 19:56:37 | INFO | goshawk_threshold_zone |   [318.6s] ...probe: projected total = 275.2 ac (target 500.0)
+2026-04-28 19:56:38 | INFO | goshawk_threshold_zone |   [319.1s] ...MOD pick #66: oid=36199 +1.4 ac
+2026-04-28 19:56:39 | INFO | goshawk_threshold_zone |   [319.9s] ...LOW pick #67: oid=21900 +0.6 ac
+2026-04-28 19:56:40 | INFO | goshawk_threshold_zone |   [320.7s] ...MOD pick #68: oid=37673 +2.0 ac
+2026-04-28 19:56:40 | INFO | goshawk_threshold_zone |   [321.1s] ...MOD pick #69: oid=37653 +3.0 ac
+2026-04-28 19:56:40 | INFO | goshawk_threshold_zone |   [321.5s] ...MOD pick #70: oid=37553 +1.1 ac
+2026-04-28 19:56:42 | INFO | goshawk_threshold_zone |   [322.7s] ...probe: projected total = 289.1 ac (target 500.0)
+2026-04-28 19:56:42 | INFO | goshawk_threshold_zone |   [323.1s] ...MOD pick #71: oid=34000 +0.6 ac
+2026-04-28 19:56:42 | INFO | goshawk_threshold_zone |   [323.6s] ...LOW pick #72: oid=18927 +0.6 ac
+2026-04-28 19:56:43 | INFO | goshawk_threshold_zone |   [323.9s] ...MOD pick #73: oid=34021 +0.8 ac
+2026-04-28 19:56:43 | INFO | goshawk_threshold_zone |   [324.3s] ...MOD pick #74: oid=34014 +0.7 ac
+2026-04-28 19:56:43 | INFO | goshawk_threshold_zone |   [324.4s] ...75 picks | high=50.2 mod=47.3 low=7.3 projected=289.1 / target=500.0
+2026-04-28 19:56:45 | INFO | goshawk_threshold_zone |   [325.7s] ...probe: projected total = 299.2 ac (target 500.0)
+2026-04-28 19:56:45 | INFO | goshawk_threshold_zone |   [326.4s] ...MOD pick #78: oid=33845 +0.8 ac
+2026-04-28 19:56:46 | INFO | goshawk_threshold_zone |   [326.7s] ...MOD pick #79: oid=33687 +0.6 ac
+2026-04-28 19:56:46 | INFO | goshawk_threshold_zone |   [327.3s] ...LOW pick #80: oid=24617 +0.5 ac
+2026-04-28 19:56:47 | INFO | goshawk_threshold_zone |   [328.6s] ...probe: projected total = 303.8 ac (target 500.0)
+2026-04-28 19:56:48 | INFO | goshawk_threshold_zone |   [329.2s] ...LOW pick #81: oid=24540 +1.7 ac
+2026-04-28 19:56:49 | INFO | goshawk_threshold_zone |   [329.7s] ...LOW pick #82: oid=24626 +1.0 ac
+2026-04-28 19:56:49 | INFO | goshawk_threshold_zone |   [330.3s] ...LOW pick #83: oid=24529 +2.4 ac
+2026-04-28 19:56:50 | INFO | goshawk_threshold_zone |   [331.1s] ...LOW pick #85: oid=24616 +1.2 ac
+2026-04-28 19:56:51 | INFO | goshawk_threshold_zone |   [332.4s] ...probe: projected total = 308.0 ac (target 500.0)
+2026-04-28 19:56:52 | INFO | goshawk_threshold_zone |   [332.9s] ...LOW pick #86: oid=24539 +1.0 ac
+2026-04-28 19:56:52 | INFO | goshawk_threshold_zone |   [333.3s] ...LOW pick #87: oid=24612 +2.2 ac
+2026-04-28 19:56:53 | INFO | goshawk_threshold_zone |   [333.8s] ...LOW pick #88: oid=24615 +0.7 ac
+2026-04-28 19:56:53 | INFO | goshawk_threshold_zone |   [334.3s] ...LOW pick #89: oid=24522 +0.8 ac
+2026-04-28 19:56:54 | INFO | goshawk_threshold_zone |   [334.8s] ...LOW pick #90: oid=24526 +5.5 ac
+2026-04-28 19:56:55 | INFO | goshawk_threshold_zone |   [336.3s] ...probe: projected total = 326.1 ac (target 500.0)
+2026-04-28 19:56:56 | INFO | goshawk_threshold_zone |   [336.8s] ...LOW pick #91: oid=27958 +0.6 ac
+2026-04-28 19:56:56 | INFO | goshawk_threshold_zone |   [337.4s] ...LOW pick #92: oid=18934 +1.2 ac
+2026-04-28 19:56:57 | INFO | goshawk_threshold_zone |   [338.0s] ...LOW pick #93: oid=20635 +3.8 ac
+2026-04-28 19:56:57 | INFO | goshawk_threshold_zone |   [338.5s] ...LOW pick #94: oid=20302 +0.5 ac
+2026-04-28 19:56:58 | INFO | goshawk_threshold_zone |   [338.9s] ...MOD pick #95: oid=37573 +0.7 ac
+2026-04-28 19:56:59 | INFO | goshawk_threshold_zone |   [340.3s] ...probe: projected total = 341.4 ac (target 500.0)
+2026-04-28 19:57:00 | INFO | goshawk_threshold_zone |   [340.8s] ...LOW pick #96: oid=24619 +1.7 ac
+2026-04-28 19:57:00 | INFO | goshawk_threshold_zone |   [341.4s] ...LOW pick #97: oid=21895 +0.6 ac
+2026-04-28 19:57:01 | INFO | goshawk_threshold_zone |   [342.0s] ...LOW pick #98: oid=42250 +0.6 ac
+2026-04-28 19:57:01 | INFO | goshawk_threshold_zone |   [342.6s] ...LOW pick #99: oid=24534 +0.8 ac
+2026-04-28 19:57:02 | INFO | goshawk_threshold_zone |   [343.2s] ...LOW pick #100: oid=24521 +0.7 ac
+2026-04-28 19:57:04 | INFO | goshawk_threshold_zone |   [344.9s] ...probe: projected total = 349.5 ac (target 500.0)
+2026-04-28 19:57:04 | INFO | goshawk_threshold_zone |   [345.6s] ...LOW pick #101: oid=24609 +0.6 ac
+2026-04-28 19:57:05 | INFO | goshawk_threshold_zone |   [346.2s] ...MOD pick #103: oid=44309 +0.8 ac
+2026-04-28 19:57:06 | INFO | goshawk_threshold_zone |   [346.8s] ...LOW pick #104: oid=24512 +0.6 ac
+2026-04-28 19:57:06 | INFO | goshawk_threshold_zone |   [347.4s] ...LOW pick #105: oid=20303 +1.3 ac
+2026-04-28 19:57:08 | INFO | goshawk_threshold_zone |   [349.4s] ...probe: projected total = 357.9 ac (target 500.0)
+2026-04-28 19:57:09 | INFO | goshawk_threshold_zone |   [350.0s] ...LOW pick #106: oid=24610 +0.6 ac
+2026-04-28 19:57:10 | INFO | goshawk_threshold_zone |   [350.7s] ...LOW pick #107: oid=20959 +0.7 ac
+2026-04-28 19:57:10 | INFO | goshawk_threshold_zone |   [351.2s] ...MOD pick #108: oid=36004 +0.5 ac
+2026-04-28 19:57:11 | INFO | goshawk_threshold_zone |   [351.8s] ...LOW pick #109: oid=20598 +0.8 ac
+2026-04-28 19:57:11 | INFO | goshawk_threshold_zone |   [352.2s] ...MOD pick #110: oid=34582 +0.7 ac
+2026-04-28 19:57:13 | INFO | goshawk_threshold_zone |   [353.7s] ...probe: projected total = 362.9 ac (target 500.0)
+2026-04-28 19:57:13 | INFO | goshawk_threshold_zone |   [354.3s] ...LOW pick #111: oid=20636 +0.6 ac
+2026-04-28 19:57:14 | INFO | goshawk_threshold_zone |   [354.8s] ...LOW pick #112: oid=20304 +0.6 ac
+2026-04-28 19:57:14 | INFO | goshawk_threshold_zone |   [355.4s] ...LOW pick #113: oid=21793 +1.4 ac
+2026-04-28 19:57:15 | INFO | goshawk_threshold_zone |   [355.8s] ...MOD pick #114: oid=37549 +1.6 ac
+2026-04-28 19:57:15 | INFO | goshawk_threshold_zone |   [356.2s] ...MOD pick #115: oid=37545 +0.5 ac
+2026-04-28 19:57:17 | INFO | goshawk_threshold_zone |   [357.7s] ...probe: projected total = 373.9 ac (target 500.0)
+2026-04-28 19:57:17 | INFO | goshawk_threshold_zone |   [358.3s] ...LOW pick #116: oid=20961 +1.0 ac
+2026-04-28 19:57:18 | INFO | goshawk_threshold_zone |   [358.7s] ...MOD pick #117: oid=36036 +2.3 ac
+2026-04-28 19:57:18 | INFO | goshawk_threshold_zone |   [359.1s] ...MOD pick #118: oid=35561 +0.8 ac
+2026-04-28 19:57:18 | INFO | goshawk_threshold_zone |   [359.6s] ...MOD pick #119: oid=36222 +1.0 ac
+2026-04-28 19:57:19 | INFO | goshawk_threshold_zone |   [360.0s] ...MOD pick #120: oid=36048 +0.6 ac
+2026-04-28 19:57:21 | INFO | goshawk_threshold_zone |   [361.7s] ...probe: projected total = 387.9 ac (target 500.0)
+2026-04-28 19:57:21 | INFO | goshawk_threshold_zone |   [362.1s] ...MOD pick #121: oid=35677 +1.0 ac
+2026-04-28 19:57:21 | INFO | goshawk_threshold_zone |   [362.6s] ...MOD pick #122: oid=36054 +1.0 ac
+2026-04-28 19:57:22 | INFO | goshawk_threshold_zone |   [363.2s] ...LOW pick #123: oid=20630 +0.9 ac
+2026-04-28 19:57:23 | INFO | goshawk_threshold_zone |   [363.9s] ...LOW pick #124: oid=20306 +1.1 ac
+2026-04-28 19:57:23 | INFO | goshawk_threshold_zone |   [364.6s] ...LOW pick #125: oid=19979 +0.8 ac
+2026-04-28 19:57:25 | INFO | goshawk_threshold_zone |   [366.3s] ...probe: projected total = 395.0 ac (target 500.0)
+2026-04-28 19:57:26 | INFO | goshawk_threshold_zone |   [367.0s] ...LOW pick #126: oid=21794 +0.6 ac
+2026-04-28 19:57:27 | INFO | goshawk_threshold_zone |   [367.7s] ...LOW pick #127: oid=20629 +3.1 ac
+2026-04-28 19:57:27 | INFO | goshawk_threshold_zone |   [368.1s] ...MOD pick #128: oid=34970 +0.5 ac
+2026-04-28 19:57:28 | INFO | goshawk_threshold_zone |   [368.7s] ...LOW pick #129: oid=20021 +2.3 ac
+2026-04-28 19:57:28 | INFO | goshawk_threshold_zone |   [369.2s] ...MOD pick #130: oid=34590 +0.6 ac
+2026-04-28 19:57:30 | INFO | goshawk_threshold_zone |   [370.8s] ...probe: projected total = 405.6 ac (target 500.0)
+2026-04-28 19:57:30 | INFO | goshawk_threshold_zone |   [371.6s] ...LOW pick #131: oid=20968 +1.4 ac
+2026-04-28 19:57:31 | INFO | goshawk_threshold_zone |   [372.0s] ...MOD pick #132: oid=36019 +0.9 ac
+2026-04-28 19:57:31 | INFO | goshawk_threshold_zone |   [372.4s] ...MOD pick #133: oid=37581 +0.8 ac
+2026-04-28 19:57:32 | INFO | goshawk_threshold_zone |   [372.8s] ...MOD pick #134: oid=37592 +0.8 ac
+2026-04-28 19:57:32 | INFO | goshawk_threshold_zone |   [373.3s] ...MOD pick #135: oid=36042 +0.5 ac
+2026-04-28 19:57:34 | INFO | goshawk_threshold_zone |   [375.1s] ...probe: projected total = 417.7 ac (target 500.0)
+2026-04-28 19:57:35 | INFO | goshawk_threshold_zone |   [375.9s] ...LOW pick #136: oid=20964 +0.8 ac
+2026-04-28 19:57:36 | INFO | goshawk_threshold_zone |   [376.6s] ...LOW pick #137: oid=20475 +0.9 ac
+2026-04-28 19:57:36 | INFO | goshawk_threshold_zone |   [377.4s] ...LOW pick #138: oid=20603 +1.4 ac
+2026-04-28 19:57:37 | INFO | goshawk_threshold_zone |   [378.1s] ...LOW pick #139: oid=20273 +1.2 ac
+2026-04-28 19:57:38 | INFO | goshawk_threshold_zone |   [378.9s] ...LOW pick #140: oid=20601 +1.2 ac
+2026-04-28 19:57:40 | INFO | goshawk_threshold_zone |   [380.9s] ...probe: projected total = 447.9 ac (target 500.0)
+2026-04-28 19:57:40 | INFO | goshawk_threshold_zone |   [381.5s] ...LOW pick #141: oid=20646 +1.5 ac
+2026-04-28 19:57:41 | INFO | goshawk_threshold_zone |   [382.3s] ...LOW pick #142: oid=20662 +0.5 ac
+2026-04-28 19:57:42 | INFO | goshawk_threshold_zone |   [383.0s] ...LOW pick #143: oid=20746 +0.6 ac
+2026-04-28 19:57:43 | INFO | goshawk_threshold_zone |   [383.7s] ...MOD pick #145: oid=35063 +0.7 ac
+2026-04-28 19:57:44 | INFO | goshawk_threshold_zone |   [385.6s] ...probe: projected total = 459.7 ac (target 500.0)
+2026-04-28 19:57:45 | INFO | goshawk_threshold_zone |   [386.0s] ...MOD pick #146: oid=35071 +0.6 ac
+2026-04-28 19:57:45 | INFO | goshawk_threshold_zone |   [386.5s] ...MOD pick #147: oid=34572 +0.5 ac
+2026-04-28 19:57:46 | INFO | goshawk_threshold_zone |   [387.3s] ...LOW pick #148: oid=20656 +0.6 ac
+2026-04-28 19:57:47 | INFO | goshawk_threshold_zone |   [388.1s] ...LOW pick #149: oid=20971 +2.4 ac
+2026-04-28 19:57:47 | INFO | goshawk_threshold_zone |   [388.6s] ...MOD pick #150: oid=36096 +1.6 ac
+2026-04-28 19:57:49 | INFO | goshawk_threshold_zone |   [390.5s] ...probe: projected total = 471.6 ac (target 500.0)
+2026-04-28 19:57:50 | INFO | goshawk_threshold_zone |   [391.0s] ...MOD pick #151: oid=35751 +0.8 ac
+2026-04-28 19:57:50 | INFO | goshawk_threshold_zone |   [391.4s] ...MOD pick #152: oid=35779 +0.9 ac
+2026-04-28 19:57:51 | INFO | goshawk_threshold_zone |   [391.9s] ...MOD pick #153: oid=36093 +0.7 ac
+2026-04-28 19:57:51 | INFO | goshawk_threshold_zone |   [392.4s] ...MOD pick #154: oid=36102 +0.6 ac
+2026-04-28 19:57:52 | INFO | goshawk_threshold_zone |   [392.9s] ...MOD pick #155: oid=36103 +0.7 ac
+2026-04-28 19:57:54 | INFO | goshawk_threshold_zone |   [394.7s] ...probe: projected total = 478.2 ac (target 500.0)
+2026-04-28 19:57:54 | INFO | goshawk_threshold_zone |   [395.2s] ...MOD pick #156: oid=36107 +0.6 ac
+2026-04-28 19:57:55 | INFO | goshawk_threshold_zone |   [395.6s] ...MOD pick #157: oid=36115 +1.7 ac
+2026-04-28 19:57:55 | INFO | goshawk_threshold_zone |   [396.2s] ...MOD pick #158: oid=36129 +0.9 ac
+2026-04-28 19:57:56 | INFO | goshawk_threshold_zone |   [396.8s] ...MOD pick #159: oid=36283 +0.5 ac
+2026-04-28 19:57:56 | INFO | goshawk_threshold_zone |   [397.3s] ...MOD pick #160: oid=35925 +0.6 ac
+2026-04-28 19:57:58 | INFO | goshawk_threshold_zone |   [399.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:57:59 | INFO | goshawk_threshold_zone |   [399.8s] ...MOD pick #161: oid=36296 +0.7 ac
+2026-04-28 19:57:59 | INFO | goshawk_threshold_zone |   [400.3s] ...MOD pick #162: oid=36144 +0.6 ac
+2026-04-28 19:58:00 | INFO | goshawk_threshold_zone |   [400.8s] ...MOD pick #163: oid=37619 +3.9 ac
+2026-04-28 19:58:00 | INFO | goshawk_threshold_zone |   [401.3s] ...MOD pick #164: oid=36148 +0.9 ac
+2026-04-28 19:58:01 | INFO | goshawk_threshold_zone |   [401.8s] ...MOD pick #165: oid=36297 +0.6 ac
+2026-04-28 19:58:03 | INFO | goshawk_threshold_zone |   [404.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:03 | INFO | goshawk_threshold_zone |   [404.6s] ...MOD pick #166: oid=37596 +10.0 ac
+2026-04-28 19:58:05 | INFO | goshawk_threshold_zone |   [405.7s] ...MOD pick #169: oid=36284 +1.5 ac
+2026-04-28 19:58:05 | INFO | goshawk_threshold_zone |   [406.3s] ...MOD pick #170: oid=34877 +0.6 ac
+2026-04-28 19:58:07 | INFO | goshawk_threshold_zone |   [408.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:08 | INFO | goshawk_threshold_zone |   [409.2s] ...MOD pick #171: oid=35213 +0.6 ac
+2026-04-28 19:58:09 | INFO | goshawk_threshold_zone |   [409.8s] ...MOD pick #172: oid=36134 +0.8 ac
+2026-04-28 19:58:09 | INFO | goshawk_threshold_zone |   [410.5s] ...MOD pick #173: oid=35214 +0.8 ac
+2026-04-28 19:58:10 | INFO | goshawk_threshold_zone |   [411.2s] ...MOD pick #174: oid=35546 +0.7 ac
+2026-04-28 19:58:11 | INFO | goshawk_threshold_zone |   [411.8s] ...MOD pick #175: oid=35573 +0.9 ac
+2026-04-28 19:58:13 | INFO | goshawk_threshold_zone |   [413.8s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:13 | INFO | goshawk_threshold_zone |   [414.4s] ...MOD pick #176: oid=35572 +0.7 ac
+2026-04-28 19:58:14 | INFO | goshawk_threshold_zone |   [415.0s] ...MOD pick #177: oid=35576 +2.0 ac
+2026-04-28 19:58:15 | INFO | goshawk_threshold_zone |   [415.6s] ...MOD pick #178: oid=53632 +11.1 ac
+2026-04-28 19:58:15 | INFO | goshawk_threshold_zone |   [416.2s] ...MOD pick #179: oid=36298 +3.8 ac
+2026-04-28 19:58:16 | INFO | goshawk_threshold_zone |   [416.8s] ...MOD pick #180: oid=36275 +1.3 ac
+2026-04-28 19:58:18 | INFO | goshawk_threshold_zone |   [419.1s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:19 | INFO | goshawk_threshold_zone |   [419.7s] ...MOD pick #181: oid=35911 +0.7 ac
+2026-04-28 19:58:19 | INFO | goshawk_threshold_zone |   [420.4s] ...MOD pick #182: oid=35921 +1.0 ac
+2026-04-28 19:58:20 | INFO | goshawk_threshold_zone |   [421.3s] ...MOD pick #184: oid=53606 +2.6 ac
+2026-04-28 19:58:21 | INFO | goshawk_threshold_zone |   [421.9s] ...MOD pick #185: oid=53595 +10.8 ac
+2026-04-28 19:58:23 | INFO | goshawk_threshold_zone |   [424.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:24 | INFO | goshawk_threshold_zone |   [425.4s] ...MOD pick #186: oid=43964 +1.2 ac
+2026-04-28 19:58:25 | INFO | goshawk_threshold_zone |   [426.0s] ...MOD pick #187: oid=43712 +6.1 ac
+2026-04-28 19:58:28 | INFO | goshawk_threshold_zone |   [429.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:31 | INFO | goshawk_threshold_zone |   [432.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:33 | INFO | goshawk_threshold_zone |   [433.7s] ...200 picks | high=85.6 mod=139.8 low=64.0 projected=483.1 / target=500.0
+2026-04-28 19:58:35 | INFO | goshawk_threshold_zone |   [436.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:36 | INFO | goshawk_threshold_zone |   [437.4s] ...MOD pick #202: oid=43933 +5.9 ac
+2026-04-28 19:58:37 | INFO | goshawk_threshold_zone |   [438.0s] ...MOD pick #203: oid=43913 +1.4 ac
+2026-04-28 19:58:38 | INFO | goshawk_threshold_zone |   [438.7s] ...MOD pick #204: oid=43923 +0.5 ac
+2026-04-28 19:58:38 | INFO | goshawk_threshold_zone |   [439.3s] ...MOD pick #205: oid=43912 +0.8 ac
+2026-04-28 19:58:41 | INFO | goshawk_threshold_zone |   [441.9s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:42 | INFO | goshawk_threshold_zone |   [442.9s] ...MOD pick #207: oid=43909 +1.1 ac
+2026-04-28 19:58:42 | INFO | goshawk_threshold_zone |   [443.6s] ...MOD pick #208: oid=43903 +1.1 ac
+2026-04-28 19:58:43 | INFO | goshawk_threshold_zone |   [444.2s] ...MOD pick #209: oid=43914 +0.5 ac
+2026-04-28 19:58:44 | INFO | goshawk_threshold_zone |   [444.9s] ...MOD pick #210: oid=43944 +2.1 ac
+2026-04-28 19:58:46 | INFO | goshawk_threshold_zone |   [447.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:47 | INFO | goshawk_threshold_zone |   [448.0s] ...MOD pick #211: oid=43942 +1.2 ac
+2026-04-28 19:58:48 | INFO | goshawk_threshold_zone |   [448.7s] ...MOD pick #212: oid=43850 +0.7 ac
+2026-04-28 19:58:48 | INFO | goshawk_threshold_zone |   [449.3s] ...MOD pick #213: oid=43966 +0.6 ac
+2026-04-28 19:58:49 | INFO | goshawk_threshold_zone |   [450.0s] ...MOD pick #214: oid=43713 +1.2 ac
+2026-04-28 19:58:50 | INFO | goshawk_threshold_zone |   [450.7s] ...MOD pick #215: oid=43971 +1.8 ac
+2026-04-28 19:58:52 | INFO | goshawk_threshold_zone |   [453.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:58:53 | INFO | goshawk_threshold_zone |   [454.2s] ...MOD pick #216: oid=43786 +2.3 ac
+2026-04-28 19:58:54 | INFO | goshawk_threshold_zone |   [455.0s] ...MOD pick #217: oid=43980 +3.1 ac
+2026-04-28 19:58:55 | INFO | goshawk_threshold_zone |   [455.8s] ...MOD pick #218: oid=36301 +1.4 ac
+2026-04-28 19:58:55 | INFO | goshawk_threshold_zone |   [456.6s] ...MOD pick #219: oid=43882 +0.5 ac
+2026-04-28 19:58:56 | INFO | goshawk_threshold_zone |   [457.5s] ...MOD pick #220: oid=44092 +4.5 ac
+2026-04-28 19:58:59 | INFO | goshawk_threshold_zone |   [460.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:00 | INFO | goshawk_threshold_zone |   [461.5s] ...MOD pick #221: oid=43885 +1.3 ac
+2026-04-28 19:59:01 | INFO | goshawk_threshold_zone |   [462.3s] ...MOD pick #222: oid=35229 +0.9 ac
+2026-04-28 19:59:04 | INFO | goshawk_threshold_zone |   [465.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:04 | INFO | goshawk_threshold_zone |   [465.6s] ...MOD pick #223: oid=37597 +0.8 ac
+2026-04-28 19:59:07 | INFO | goshawk_threshold_zone |   [468.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:08 | INFO | goshawk_threshold_zone |   [469.0s] ...MOD pick #224: oid=35575 +0.6 ac
+2026-04-28 19:59:10 | INFO | goshawk_threshold_zone |   [471.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:11 | INFO | goshawk_threshold_zone |   [472.1s] ...MOD pick #225: oid=35099 +0.5 ac
+2026-04-28 19:59:14 | INFO | goshawk_threshold_zone |   [474.9s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:14 | INFO | goshawk_threshold_zone |   [475.6s] ...MOD pick #226: oid=37622 +1.7 ac
+2026-04-28 19:59:17 | INFO | goshawk_threshold_zone |   [478.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:18 | INFO | goshawk_threshold_zone |   [479.0s] ...MOD pick #227: oid=37623 +4.2 ac
+2026-04-28 19:59:20 | INFO | goshawk_threshold_zone |   [481.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:23 | INFO | goshawk_threshold_zone |   [484.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:26 | INFO | goshawk_threshold_zone |   [487.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:29 | INFO | goshawk_threshold_zone |   [490.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:30 | INFO | goshawk_threshold_zone |   [491.1s] ...MOD pick #231: oid=43981 +0.7 ac
+2026-04-28 19:59:33 | INFO | goshawk_threshold_zone |   [494.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:34 | INFO | goshawk_threshold_zone |   [494.7s] ...MOD pick #232: oid=37561 +1.0 ac
+2026-04-28 19:59:36 | INFO | goshawk_threshold_zone |   [497.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:37 | INFO | goshawk_threshold_zone |   [498.1s] ...MOD pick #233: oid=37471 +0.5 ac
+2026-04-28 19:59:40 | INFO | goshawk_threshold_zone |   [500.7s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:40 | INFO | goshawk_threshold_zone |   [501.4s] ...MOD pick #234: oid=37604 +1.4 ac
+2026-04-28 19:59:43 | INFO | goshawk_threshold_zone |   [504.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:44 | INFO | goshawk_threshold_zone |   [504.8s] ...MOD pick #235: oid=37559 +0.6 ac
+2026-04-28 19:59:47 | INFO | goshawk_threshold_zone |   [507.7s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:47 | INFO | goshawk_threshold_zone |   [508.4s] ...MOD pick #236: oid=37411 +0.8 ac
+2026-04-28 19:59:50 | INFO | goshawk_threshold_zone |   [510.9s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:51 | INFO | goshawk_threshold_zone |   [511.6s] ...MOD pick #237: oid=37352 +0.7 ac
+2026-04-28 19:59:53 | INFO | goshawk_threshold_zone |   [514.2s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:56 | INFO | goshawk_threshold_zone |   [517.2s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 19:59:57 | INFO | goshawk_threshold_zone |   [517.9s] ...MOD pick #239: oid=37350 +0.7 ac
+2026-04-28 20:00:00 | INFO | goshawk_threshold_zone |   [520.8s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:01 | INFO | goshawk_threshold_zone |   [521.7s] ...MOD pick #240: oid=37472 +0.8 ac
+2026-04-28 20:00:03 | INFO | goshawk_threshold_zone |   [524.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:04 | INFO | goshawk_threshold_zone |   [525.1s] ...MOD pick #241: oid=37477 +1.9 ac
+2026-04-28 20:00:07 | INFO | goshawk_threshold_zone |   [527.8s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:07 | INFO | goshawk_threshold_zone |   [528.6s] ...MOD pick #242: oid=37357 +0.7 ac
+2026-04-28 20:00:10 | INFO | goshawk_threshold_zone |   [531.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:11 | INFO | goshawk_threshold_zone |   [532.5s] ...LOW pick #243: oid=28095 +1.1 ac
+2026-04-28 20:00:14 | INFO | goshawk_threshold_zone |   [535.1s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:17 | INFO | goshawk_threshold_zone |   [538.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:18 | INFO | goshawk_threshold_zone |   [539.0s] ...MOD pick #245: oid=43896 +1.3 ac
+2026-04-28 20:00:20 | INFO | goshawk_threshold_zone |   [541.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:22 | INFO | goshawk_threshold_zone |   [542.7s] ...LOW pick #246: oid=27871 +0.6 ac
+2026-04-28 20:00:24 | INFO | goshawk_threshold_zone |   [545.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:25 | INFO | goshawk_threshold_zone |   [546.6s] ...LOW pick #247: oid=25495 +0.8 ac
+2026-04-28 20:00:28 | INFO | goshawk_threshold_zone |   [549.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:31 | INFO | goshawk_threshold_zone |   [552.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:35 | INFO | goshawk_threshold_zone |   [556.2s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:35 | INFO | goshawk_threshold_zone |   [556.5s] ...250 picks | high=112.9 mod=191.6 low=66.5 projected=483.1 / target=500.0
+2026-04-28 20:00:39 | INFO | goshawk_threshold_zone |   [559.8s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:42 | INFO | goshawk_threshold_zone |   [563.3s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:45 | INFO | goshawk_threshold_zone |   [566.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:48 | INFO | goshawk_threshold_zone |   [569.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:51 | INFO | goshawk_threshold_zone |   [572.4s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:55 | INFO | goshawk_threshold_zone |   [576.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:00:56 | INFO | goshawk_threshold_zone |   [576.9s] ...MOD pick #256: oid=45751 +0.7 ac
+2026-04-28 20:00:59 | INFO | goshawk_threshold_zone |   [580.1s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:00 | INFO | goshawk_threshold_zone |   [581.4s] ...MOD pick #257: oid=46087 +1.9 ac
+2026-04-28 20:01:04 | INFO | goshawk_threshold_zone |   [584.9s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:05 | INFO | goshawk_threshold_zone |   [585.7s] ...MOD pick #258: oid=46096 +1.0 ac
+2026-04-28 20:01:08 | INFO | goshawk_threshold_zone |   [588.8s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:11 | INFO | goshawk_threshold_zone |   [592.0s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:14 | INFO | goshawk_threshold_zone |   [595.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:15 | INFO | goshawk_threshold_zone |   [596.4s] ...MOD pick #261: oid=46094 +0.6 ac
+2026-04-28 20:01:18 | INFO | goshawk_threshold_zone |   [599.6s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:19 | INFO | goshawk_threshold_zone |   [600.5s] ...MOD pick #262: oid=46126 +0.5 ac
+2026-04-28 20:01:22 | INFO | goshawk_threshold_zone |   [603.5s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:23 | INFO | goshawk_threshold_zone |   [604.3s] ...MOD pick #263: oid=46074 +0.6 ac
+2026-04-28 20:01:26 | INFO | goshawk_threshold_zone |   [607.1s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:27 | INFO | goshawk_threshold_zone |   [607.9s] ...MOD pick #264: oid=46112 +0.6 ac
+2026-04-28 20:01:30 | INFO | goshawk_threshold_zone |   [610.9s] ...probe: projected total = 483.1 ac (target 500.0)
+2026-04-28 20:01:31 | INFO | goshawk_threshold_zone |   [612.1s] ...LOW pick #265: oid=20664 +1.0 ac
+2026-04-28 20:01:34 | INFO | goshawk_threshold_zone |   [615.0s] ...probe: projected total = 484.3 ac (target 500.0)
+2026-04-28 20:01:35 | INFO | goshawk_threshold_zone |   [616.3s] ...LOW pick #266: oid=21796 +2.9 ac
+2026-04-28 20:01:38 | INFO | goshawk_threshold_zone |   [619.1s] ...probe: projected total = 488.9 ac (target 500.0)
+2026-04-28 20:01:39 | INFO | goshawk_threshold_zone |   [620.3s] ...LOW pick #267: oid=20733 +0.7 ac
+2026-04-28 20:01:42 | INFO | goshawk_threshold_zone |   [623.2s] ...probe: projected total = 491.3 ac (target 500.0)
+2026-04-28 20:01:43 | INFO | goshawk_threshold_zone |   [624.0s] ...MOD pick #268: oid=35010 +0.7 ac
+2026-04-28 20:01:46 | INFO | goshawk_threshold_zone |   [626.7s] ...probe: projected total = 494.1 ac (target 500.0)
+2026-04-28 20:01:47 | INFO | goshawk_threshold_zone |   [627.9s] ...LOW pick #269: oid=20972 +1.6 ac
+2026-04-28 20:01:49 | INFO | goshawk_threshold_zone |   [630.6s] ...probe: projected total = 498.1 ac (target 500.0)
+2026-04-28 20:01:51 | INFO | goshawk_threshold_zone |   [631.8s] ...LOW pick #270: oid=19980 +1.3 ac
+2026-04-28 20:01:54 | INFO | goshawk_threshold_zone |   [634.8s] ...probe: projected total = 500.9 ac (target 500.0)
+2026-04-28 20:01:54 | INFO | goshawk_threshold_zone |   [634.8s] growth done: 270 picks, finalizing geometry
+2026-04-28 20:01:58 | INFO | goshawk_threshold_zone |   Buffer: 125.54 | High(add): 123.36 | Mod(add): 198.31 | Low(add): 74.00 | Filled: 0.00 | Total: 500.95 | 637.6s
+2026-04-28 20:01:58 | INFO | goshawk_threshold_zone | [10/10] Nest OID 121
+2026-04-28 20:01:58 | INFO | goshawk_threshold_zone |   [  0.3s] buffer ok (125.5 ac, need 374.5 more)
+2026-04-28 20:02:01 | INFO | goshawk_threshold_zone |   [  2.9s] HIGH habitat filtered to within 5 Miles of nest
+2026-04-28 20:02:05 | INFO | goshawk_threshold_zone |   [  7.0s] MOD habitat filtered to within 5 Miles of nest
+2026-04-28 20:02:16 | INFO | goshawk_threshold_zone |   [ 18.3s] source veg filtered to within 5 Miles of nest
+2026-04-28 20:02:35 | INFO | goshawk_threshold_zone |   [ 36.9s] LOW derived: 22950 polys kept (excluded 50782 HIGH+MOD UIDs)
+2026-04-28 20:03:08 | INFO | goshawk_threshold_zone |   [ 69.9s] erased buffer from HIGH habitat
+2026-04-28 20:04:04 | INFO | goshawk_threshold_zone |   [126.6s] erased buffer from MOD habitat
+2026-04-28 20:04:42 | INFO | goshawk_threshold_zone |   [164.7s] erased buffer from LOW habitat
+2026-04-28 20:05:03 | INFO | goshawk_threshold_zone |   [185.6s] acres calculated on habitat (planar)
